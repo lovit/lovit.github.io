@@ -27,5 +27,5 @@ layout: page
 [clustering4docs]: https://github.com/lovit/clustering4docs
 [clustering_visualization]: https://github.com/lovit/clustering_visualization
 [wpm]: https://github.com/lovit/WordPieceModel
-[fast_editdistance]: https://github.com/lovit/fastcosine/
-
+[fast_editdistance]: https://github.com/lovit/fast_hangle_levenshtein/
+[fastcosine]: https://github.com/lovit/fastcosine/
