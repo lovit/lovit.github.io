@@ -11,7 +11,7 @@ use_math: true
 
 k-means 는 다른 군집화 알고리즘과 비교하여 매우 빠른 계산 속도를 보임에도 불구하고 안정적인 성능을 보여주기 때문에 큰 규모의 데이터 군집화에 적합합니다. 특히 문서 군집화의 경우에는 문서의 개수가 수만건에서 수천만건 정도 되는 경우가 많기 때문에 다른 알고리즘보다도 k-means 가 더 많이 선호됩니다. k-means 문제는 정확히는, k-partition problem 입니다. 데이터를 k 개의 겹치지 않은 부분데이터 (partition)로 분할하는 것입니다. 이 때 나뉘어지는 k 개의 partiton 에 대하여, "같은 partition 에 속한 데이터 간에는 서로 비슷하며, 서로 다른 partition 에 속한 데이터 간에는 이질적"이도록 만드는 것이 군집화라 생각할 수 있습니다. k-means problem 은 각 군집 (partition)의 평균 벡터와 각 군집에 속한 데이터 간의 거리 제곱의 합 (분산, variance)이 최소가 되는 partition 을 찾는 문제입니다. 
 
-\\[\sum _{i=1}^{k}\sum _{\mathbf {x} \in S_{i}}\left\|\mathbf {x} -{\boldsymbol {\mu }}_{i}\right\|^{2}\\]
+$$\sum _{i=1}^{k}\sum _{\mathbf {x} \in S_{i}}\left\|\mathbf {x} -{\boldsymbol {\mu }}_{i}\right\|^{2}$$
 
 우리가 잘 알고 있는 k-means 알고리즘 중 하나는 Lloyd k-means 입니다. 이는 다음의 순서로 이뤄져 있습니다. 
 
@@ -38,11 +38,11 @@ def k_means(X, n_clusters, init='k-means++', precompute_distances='auto',
     
 k-means++ 은 다음처럼 작동합니다. 
 
-1. 첫 initial point \\[c_1\\] 은 임의로 선택합니다. 
-2. 이후의 initial point \\[c_t\\] 는 이전에 선택한 \\[c_{t-1}\\] 과의 거리인 \\[d(c_{t-1}, c_{t})\\] 를 이용합니다. 다음의 확률에 따라 임의로 하나의 점을 선택합니다. \\[\frac{d(c_{t-1}, c_t)}{\sum d(c_{t-1}, c_{t^`})}\\]
+1. 첫 initial point $$c_1$$ 은 임의로 선택합니다. 
+2. 이후의 initial point $$c_t$$ 는 이전에 선택한 $$c_{t-1}$$ 과의 거리인 $$d(c_{t-1}, c_{t})$$ 를 이용합니다. 다음의 확률에 따라 임의로 하나의 점을 선택합니다. $$\frac{d(c_{t-1}, c_t)}{\sum d(c_{t-1}, c_{t^`})}$$
 3. k 개의 initial points 를 선택할 때까지 step 2 를 반복합니다. 
 
-Step 2 의 확률의 의미는 이전에 선택한 점 \\[c_{t-1}\\] 과 거리가 멀수록 선택될 확률이 높다는 의미입니다. 이렇게 함으로써 비슷한 점들이 initial points 로 선택되지 않게 하려던 것입니다. 그러나 k-means++ 도 문제점을 지니고 있습니다. Cosine 을 이용하는 문서 군집화 과정을 살펴봅시다. 문서 간 거리는 Euclidean distance 보다 Cosine distance 가 더 적합합니다. Bag of words model 을 이용한다면 문서가 sparse vector 로 표현되기 때문에 공통된 단어의 개수에 대한 정보를 포함하는 Jaccard, Cosine 과 같은 metrics 이 적합합니다^3. 그럼 우리는 샘플데이터를 이용하여 문서 간 거리의 분포를 살펴보겠습니다. 샘플데이터는 3만여건의 하루 치 뉴스를 Bag of words model 로 표현한 데이터입니다. 9,774 개의 단어로 표현된 문서 집합입니다.  
+Step 2 의 확률의 의미는 이전에 선택한 점 $$c_{t-1}$$ 과 거리가 멀수록 선택될 확률이 높다는 의미입니다. 이렇게 함으로써 비슷한 점들이 initial points 로 선택되지 않게 하려던 것입니다. 그러나 k-means++ 도 문제점을 지니고 있습니다. Cosine 을 이용하는 문서 군집화 과정을 살펴봅시다. 문서 간 거리는 Euclidean distance 보다 Cosine distance 가 더 적합합니다. Bag of words model 을 이용한다면 문서가 sparse vector 로 표현되기 때문에 공통된 단어의 개수에 대한 정보를 포함하는 Jaccard, Cosine 과 같은 metrics 이 적합합니다^3. 그럼 우리는 샘플데이터를 이용하여 문서 간 거리의 분포를 살펴보겠습니다. 샘플데이터는 3만여건의 하루 치 뉴스를 Bag of words model 로 표현한 데이터입니다. 9,774 개의 단어로 표현된 문서 집합입니다.  
 
 {% highlight python %}
 print(x.shape)
