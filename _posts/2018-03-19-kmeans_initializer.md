@@ -35,7 +35,9 @@ Lloyd k-means 는 빠르게 k-means problem 을 풀 수 있지만, 몇 가지 �
 
 ## k-means++
 
-이번 포스트에서는 문서 군집화에 대하여 initial points 설정에 대한 이야기를 하려 합니다. k-means 는 initial points 가 제대로 설정되지 않으면 불안정한 군집화 결과를 학습한다 알려져 있습니다. 사실 k-means 의 학습 결과가 좋지 않는 경우는 initial points 로 비슷한 점들이 여러 개 선택 된 경우입니다. 이 경우만 아니라면 k-means 는 빠른 수렴속도와 안정적인 성능을 보여줍니다. 그렇기 때문에 질 좋은 initial points 를 선택하려는 연구들이 진행되었습니다. 그 중에서도 가장 널리 알려진 방법이 k-means++ 입니다 (scalable k-means^2 은 Spark 와 같은 분산 환경 버전의 k-means++ 입니다). Python 의 scikit-learn 의 k_means 에는 사용자가 결정할 다양한 option 이 있습니다. 이 중에서 init='k-means++' 이라는 부분이 보입니다. 다른 옵션으로는, 사용자가 임의로 설정한 seed points 를 이용하던지, random sampling 을 할 수도 있습니다. 
+약 150 만 개의 문서집합을 k=1,000 의 k-means 로 학습 할 일이 있었습니다. scikit-learn 의 k-means 를 이용하려 하였지만, 10 시간이 지나도 initialize 단계가 끝나지 않았습니다 (verbose=True 로 설정하면 initialize 와 iteration 단계가 출력됩니다). 무엇인가 문제가 있다는 생각을 하였고, initializer 를 뜯어보게 되었습니다.
+
+k-means 는 initial points 가 제대로 설정되지 않으면 불안정한 군집화 결과를 학습한다 알려져 있습니다. 사실 k-means 의 학습 결과가 좋지 않는 경우는 initial points 로 비슷한 점들이 여러 개 선택 된 경우입니다. 이 경우만 아니라면 k-means 는 빠른 수렴속도와 안정적인 성능을 보여줍니다. 그렇기 때문에 질 좋은 initial points 를 선택하려는 연구들이 진행되었습니다. 그 중에서도 가장 널리 알려진 방법이 k-means++ 입니다 (scalable k-means^2 은 Spark 와 같은 분산 환경 버전의 k-means++ 입니다). Python 의 scikit-learn 의 k_means 에는 사용자가 결정할 다양한 option 이 있습니다. 이 중에서 init='k-means++' 이라는 부분이 보입니다. 다른 옵션으로는, 사용자가 임의로 설정한 seed points 를 이용하던지, random sampling 을 할 수도 있습니다. 
 
 {% highlight python %}
 def k_means(X, n_clusters, init='k-means++', precompute_distances='auto',
@@ -93,10 +95,52 @@ hist, bin_edges = histogram(dist, bins=20)
     [0.850 ~ 0.900] :    2469531   (8.21 %)
     [0.900 ~ 0.950] :    7754535   (25.77 %)
     [0.950 ~ 1.000] :   17396917   (57.81 %)
+
+그 외에도 k-means++ 은 한가지 단점이 있습니다. k-means++ 는 initial point $$c_t$$ 를 선택하기 위하여 이전에 선택한 $$c_{t-1}$$ 만을 고려합니다. 그렇게 되면 $$c_{t}$$ 는 $$c_{t-2}$$ 와 비슷한 점일 수도 있습니다. 비슷한 점은 반드시 선택되지 않는다는 보장을 할 수가 없습니다. 
     
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_ball_cut.png)
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_pp.png)
+
+정리하면, k-means++ 이 pairwise distance distribution 이 uniform distribution 에 가까울 때에는 무의미한 계산을 하고 있으며, 그마저도 최악의 경우를 보장하는 것은 아니라는 것을 알 수 있습니다. 
+
+## Ball cut. One of solutions
+
+이를 해결하는 한 가지 방법입니다. 특히 user - content history 나 Bag of words model 과 같이 pairwise distribution 이 uniform distribution 에 가까울 때 효과적인 방법입니다. 대부분의 pairwise distance 가 maximum value (Cosine distance 의 경우 1)에 가깝다면 데이터의 일부의 점만 선택하여, 비슷한 점들만 제외를 하여도 충분히 멀리 떨어진 (dispersed) 점들을 initial points 로 선택할 수 있다는 성질을 이용할 것입니다. 
+
+1. 전체데이터 $$D$$ 에서 $$\alpha \times k$$ 개의 점들을 임의로 선택하여 $$D_{init}$$ 을 만듭니다. 
+2. $$D_{init}$$ 에서 한 개의 점 $$c_i$$ 를 임의로 선택합니다. 
+3. $$D_{init}$$ 에서 $$c_i$$ 와의 거리가 t 이하인 점들을 제거합니다. 
+4. $$D_{init}$$ 이 공집합이 아니며, k 개의 점을 선택할 때 까지 step 2 - 3 을 반복합니다. 
+5. 만약 k 개의 점을 선택하지 못하였다면, $$D$$ - $$D_{init}$$ 에서 나머지 점들을 random sampling 합니다. 
+
+이는 아래 그림과 같은 효과를 가져옵니다. $$D_{init}$$ 에서 선택하는 점들은 적어도 거리가 t 이상인 점들로 구성이 됩니다. 그리고 위의 표와 같이 대부분의 거리가 maximum value 에 가깝다면 $$\alpha$$ 를 2 ~ 5 정도로 선택하여도 $$D_{init}$$ 가 공집합이 되는 일은 잘 일어나지 않습니다. 적어도 최악의 경우가 발생할 가능성이 k-means++ 보다 많이 줄어드는 것이죠. 
 
 ![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_ball_cut.png)
+
+더하여 계산 비용도 많이 줄어듭니다. 우리가 1M 의 데이터에 대하여 k=1,000 으로 k-means 를 학습할 경우, k-means++ 은 (사실상 random sampling 임에도 불구하고) $$10^15$$ 의 거리 계산을 합니다. 하지만 위 방법은 $$\alpha ^2 \times k^3$$ 번의 계산만으로 잘 퍼져있는 initial points 를 선택할 수 있습니다. $$\alpha = 2$$ 라면 $$4 \times 10^9$$ 번의 계산만으로도 충분합니다 (k-means++ 의 실제 비용은 거리계산에 cumulative distribution function 에서의 random sampling 비용을 더해야 합니다). 
+
+## Performance
+
+제안된 방법이 얼마나 빠른지에 대하여 IMDB reviews 를 이용하여 테스트를 하였습니다. 122M 개의 문서 집합에 대하여 100 개의 initial points 를 선택하였습니다. 
+
+| Dataset name | Num of docs | Num of terms | Num of nonzero | Sparsity |
+| --- | --- | --- | --- | --- |
+| IMDB reviews | 1,228,348 | 68,049 | 181,411,713 | 0.9978 |
+
+제안된 방법은 $$\alpha$$ 를 크게 잡을수록 조금씩 느려지긴 합니다만, 데이터의 개수가 k 보다 매우 클 경우에는 사실 상관도 없습니다. k-means++ 을 이용했을 때는 430 초 가까이 걸리는 계산이 1 사실은 1초도 걸리지 않습니다. 
+
+| Alpha | Second | Faster (times) |
+| --- | --- | --- |
+| 1.5 | 0.1915 | x 2253.45 |
+| 3 | 0.2414 | x 1787.64 |
+| 5 | 0.3124 | x 1381.36 |
+| 10 | 0.4978 | x 866.89 |
+| k-means++ | 431.5358 | x 1 |
+
+사실 이 결과도 random sampling 과 비슷합니다. 애초에 널리 떨어진 점들에서 random sampling 을 하면 널리 떨어진 점들밖에 선택되지 않기 때문입니다. 하지만 우리가 원하는 것은 비슷한 점들이 initial points 로 선택되지 않는 최소한의 (값싼) 안정장치 입니다. 계산비용이 압도적으로 적으면서도 질 좋은 initial points 를 충분히 선택할 수 있습니다. 
+
+## Packages
+
+이와 관련된 코드는 [github clustering4docs](https://github.com/lovit/clustering4docs) 에 올려뒀습니다.
 
 
 ## Reference    
