@@ -96,7 +96,7 @@ hist, bin_edges = histogram(dist, bins=20)
     [0.900 ~ 0.950] :    7754535   (25.77 %)
     [0.950 ~ 1.000] :   17396917   (57.81 %)
 
-그 외에도 k-means++ 은 한가지 단점이 있습니다. k-means++ 는 initial point $$c_t$$ 를 선택하기 위하여 이전에 선택한 $$c_{t-1}$$ 만을 고려합니다. 그렇게 되면 $$c_{t}$$ 는 $$c_{t-2}$$ 와 비슷한 점일 수도 있습니다. 비슷한 점은 반드시 선택되지 않는다는 보장을 할 수가 없습니다. 
+그 외에도 k-means++ 은 한가지 단점이 있습니다. k-means++ 는 initial point $$c_t$$ 를 선택하기 위하여 이전에 선택한 $$c_{t-1}$$ 만을 고려합니다. 그렇게 되면 $$c_{t+1}$$ 는 $$c_{t-1}$$ 와 비슷한 점일 수도 있습니다. 비슷한 점은 반드시 선택되지 않는다는 보장을 할 수가 없습니다. 
     
 ![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_pp.png)
 
@@ -116,7 +116,7 @@ hist, bin_edges = histogram(dist, bins=20)
 
 ![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_ball_cut.png)
 
-더하여 계산 비용도 많이 줄어듭니다. 우리가 1M 의 데이터에 대하여 k=1,000 으로 k-means 를 학습할 경우, k-means++ 은 (사실상 random sampling 임에도 불구하고) $$10^15$$ 의 거리 계산을 합니다. 하지만 위 방법은 $$\alpha ^2 \times k^3$$ 번의 계산만으로 잘 퍼져있는 initial points 를 선택할 수 있습니다. $$\alpha = 2$$ 라면 $$4 \times 10^9$$ 번의 계산만으로도 충분합니다 (k-means++ 의 실제 비용은 거리계산에 cumulative distribution function 에서의 random sampling 비용을 더해야 합니다). 
+더하여 계산 비용도 많이 줄어듭니다. 우리가 1M 의 데이터에 대하여 k=1,000 으로 k-means 를 학습할 경우, k-means++ 은 (사실상 random sampling 임에도 불구하고) $$10^{15}$$ 의 거리 계산을 합니다. 하지만 위 방법은 $$\alpha ^2 \times k^3$$ 번의 계산만으로 잘 퍼져있는 initial points 를 선택할 수 있습니다. $$\alpha = 2$$ 라면 $$4 \times 10^9$$ 번의 계산만으로도 충분합니다 (k-means++ 의 실제 비용은 거리계산에 cumulative distribution function 에서의 random sampling 비용을 더해야 합니다). 
 
 ## Performance
 
@@ -136,11 +136,11 @@ hist, bin_edges = histogram(dist, bins=20)
 | 10 | 0.4978 | x 866.89 |
 | k-means++ | 431.5358 | x 1 |
 
-사실 이 결과도 random sampling 과 비슷합니다. 애초에 널리 떨어진 점들에서 random sampling 을 하면 널리 떨어진 점들밖에 선택되지 않기 때문입니다. 하지만 우리가 원하는 것은 비슷한 점들이 initial points 로 선택되지 않는 최소한의 (값싼) 안정장치 입니다. 계산비용이 압도적으로 적으면서도 질 좋은 initial points 를 충분히 선택할 수 있습니다. 
+사실 이 결과도 random sampling 과 비슷합니다. Initial points 간의 pairwise distance 를 계산하면 대부분 maximum value 에 가깝에 나타납니다. 심지어 random sampling 을 해도 그렇습니다. (만약 비슷한 점이 2 ~ 3 개 나타났다면 정말 적은 확률의 사건이 발생한거죠. 운명이에요.) 애초에 널리 떨어진 점들에서 random sampling 을 하면 널리 떨어진 점들밖에 선택되지 않기 때문입니다. 하지만 우리가 원하는 것은 비슷한 점들이 initial points 로 선택되지 않는 최소한의 (값싼) 안정장치 입니다. 계산비용이 압도적으로 적으면서도 질 좋은 initial points 를 충분히 선택할 수 있습니다. 
 
 ## Packages
 
-이와 관련된 코드는 [github clustering4docs](https://github.com/lovit/clustering4docs) 에 올려뒀습니다.
+이와 관련된 코드는 [github 의 clustering4docs](https://github.com/lovit/clustering4docs) 에 올려뒀습니다.
 
 
 ## Reference    
