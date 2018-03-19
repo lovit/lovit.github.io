@@ -8,6 +8,13 @@ tags:
 - kmeans
 ---
 
+## Abstract
+
+Lloyd k-means 는 initial points 가 제대로 설정된다면 빠르고 안정적인 수렴을 보입니다. Lloyd k-means 의 입장에서 최악의 initial points 는 비슷한 점이 뽑히는 경우입니다. 이를 방지하기 위하여 다양한 initializer 가 제안되었으며, k-means++ 이 가장 널리 이용됩니다. 하지만, 데이터의 특성에 따라서는 k-means++ 가 제대로 작동하지 않을 수 있습니다. 이번 포스트에서는 k-means++ 가 잘 작동하지 않는 경우 이를 해결하기 위한 방법에 대하여 알아봅니다. 
+
+
+## k-means Introduction
+
 k-means 는 다른 군집화 알고리즘과 비교하여 매우 빠른 계산 속도를 보임에도 불구하고 안정적인 성능을 보여주기 때문에 큰 규모의 데이터 군집화에 적합합니다. 특히 문서 군집화의 경우에는 문서의 개수가 수만건에서 수천만건 정도 되는 경우가 많기 때문에 다른 알고리즘보다도 k-means 가 더 많이 선호됩니다. k-means 문제는 정확히는, k-partition problem 입니다. 데이터를 k 개의 겹치지 않은 부분데이터 (partition)로 분할하는 것입니다. 이 때 나뉘어지는 k 개의 partiton 에 대하여, "같은 partition 에 속한 데이터 간에는 서로 비슷하며, 서로 다른 partition 에 속한 데이터 간에는 이질적"이도록 만드는 것이 군집화라 생각할 수 있습니다. k-means problem 은 각 군집 (partition)의 평균 벡터와 각 군집에 속한 데이터 간의 거리 제곱의 합 (분산, variance)이 최소가 되는 partition 을 찾는 문제입니다. 
 
 $$\sum _{i=1}^{k}\sum _{\mathbf {x} \in S_{i}}\left\|\mathbf {x} -{\boldsymbol {\mu }}_{i}\right\|^{2}$$
@@ -25,6 +32,8 @@ Lloyd k-means 는 빠르게 k-means problem 을 풀 수 있지만, 몇 가지 �
     (2) iteration 횟수
     (3) distance measure
     (4) 적절한 k 의 개수 설정
+
+## k-means++
 
 이번 포스트에서는 문서 군집화에 대하여 initial points 설정에 대한 이야기를 하려 합니다. k-means 는 initial points 가 제대로 설정되지 않으면 불안정한 군집화 결과를 학습한다 알려져 있습니다. 사실 k-means 의 학습 결과가 좋지 않는 경우는 initial points 로 비슷한 점들이 여러 개 선택 된 경우입니다. 이 경우만 아니라면 k-means 는 빠른 수렴속도와 안정적인 성능을 보여줍니다. 그렇기 때문에 질 좋은 initial points 를 선택하려는 연구들이 진행되었습니다. 그 중에서도 가장 널리 알려진 방법이 k-means++ 입니다 (scalable k-means^2 은 Spark 와 같은 분산 환경 버전의 k-means++ 입니다). Python 의 scikit-learn 의 k_means 에는 사용자가 결정할 다양한 option 이 있습니다. 이 중에서 init='k-means++' 이라는 부분이 보입니다. 다른 옵션으로는, 사용자가 임의로 설정한 seed points 를 이용하던지, random sampling 을 할 수도 있습니다. 
 
@@ -85,9 +94,9 @@ hist, bin_edges = histogram(dist, bins=20)
     [0.900 ~ 0.950] :    7754535   (25.77 %)
     [0.950 ~ 1.000] :   17396917   (57.81 %)
     
-![](./figures/kmeans_initializer_pp.png)
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_ball_cut.png)
 
-![](./figures/kmeans_initializer_ball_cut.png)
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_ball_cut.png)
 
 
 ## Reference    
