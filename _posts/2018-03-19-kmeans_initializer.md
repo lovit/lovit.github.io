@@ -6,6 +6,7 @@ categories:
 - machine learning
 tags:
 - kmeans
+use_math: true
 ---
 
 k-means 는 다른 군집화 알고리즘과 비교하여 매우 빠른 계산 속도를 보임에도 불구하고 안정적인 성능을 보여주기 때문에 큰 규모의 데이터 군집화에 적합합니다. 특히 문서 군집화의 경우에는 문서의 개수가 수만건에서 수천만건 정도 되는 경우가 많기 때문에 다른 알고리즘보다도 k-means 가 더 많이 선호됩니다. k-means 문제는 정확히는, k-partition problem 입니다. 데이터를 k 개의 겹치지 않은 부분데이터 (partition)로 분할하는 것입니다. 이 때 나뉘어지는 k 개의 partiton 에 대하여, "같은 partition 에 속한 데이터 간에는 서로 비슷하며, 서로 다른 partition 에 속한 데이터 간에는 이질적"이도록 만드는 것이 군집화라 생각할 수 있습니다. k-means problem 은 각 군집 (partition)의 평균 벡터와 각 군집에 속한 데이터 간의 거리 제곱의 합 (분산, variance)이 최소가 되는 partition 을 찾는 문제입니다. 
