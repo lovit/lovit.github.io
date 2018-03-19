@@ -85,7 +85,10 @@ hist, bin_edges = histogram(dist, bins=20)
     [0.900 ~ 0.950] :    7754535   (25.77 %)
     [0.950 ~ 1.000] :   17396917   (57.81 %)
     
-    
+![](./figures/kmeans_initializer_pp.png)
+
+![](./figures/kmeans_initializer_ball_cut.png)
+
 
 ## Reference    
 1. Arthur, D., & Vassilvitskii, S. (2007, January). k-means++: The advantages of careful seeding. In Proceedings of the eighteenth annual ACM-SIAM symposium on Discrete algorithms (pp. 1027-1035). Society for Industrial and Applied Mathematics.
