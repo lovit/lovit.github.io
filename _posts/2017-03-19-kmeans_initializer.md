@@ -3,6 +3,7 @@ title: k-means initial points 선택 방법
 date: 2017-03-19 17:00:00
 categories:
 - nlp
+- machine learning
 tags:
 - kmeans
 ---
