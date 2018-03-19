@@ -27,10 +27,12 @@ Lloyd k-means 는 빠르게 k-means problem 을 풀 수 있지만, 몇 가지 �
 
 이번 포스트에서는 문서 군집화에 대하여 initial points 설정에 대한 이야기를 하려 합니다. k-means 는 initial points 가 제대로 설정되지 않으면 불안정한 군집화 결과를 학습한다 알려져 있습니다. 사실 k-means 의 학습 결과가 좋지 않는 경우는 initial points 로 비슷한 점들이 여러 개 선택 된 경우입니다. 이 경우만 아니라면 k-means 는 빠른 수렴속도와 안정적인 성능을 보여줍니다. 그렇기 때문에 질 좋은 initial points 를 선택하려는 연구들이 진행되었습니다. 그 중에서도 가장 널리 알려진 방법이 k-means++ 입니다 (scalable k-means^2 은 Spark 와 같은 분산 환경 버전의 k-means++ 입니다). Python 의 scikit-learn 의 k_means 에는 사용자가 결정할 다양한 option 이 있습니다. 이 중에서 init='k-means++' 이라는 부분이 보입니다. 다른 옵션으로는, 사용자가 임의로 설정한 seed points 를 이용하던지, random sampling 을 할 수도 있습니다. 
 
-    def k_means(X, n_clusters, init='k-means++', precompute_distances='auto',
-                n_init=10, max_iter=300, verbose=False,
-                tol=1e-4, random_state=None, copy_x=True, n_jobs=1,
-                algorithm="auto", return_n_iter=False):
+{% highlight python %}
+def k_means(X, n_clusters, init='k-means++', precompute_distances='auto',
+            n_init=10, max_iter=300, verbose=False,
+            tol=1e-4, random_state=None, copy_x=True, n_jobs=1,
+            algorithm="auto", return_n_iter=False):
+{% endhighlight %}
     
 k-means++ 은 다음처럼 작동합니다. 
 
@@ -40,18 +42,22 @@ k-means++ 은 다음처럼 작동합니다.
 
 Step 2 의 확률의 의미는 이전에 선택한 점 $c_{t-1}$ 과 거리가 멀수록 선택될 확률이 높다는 의미입니다. 이렇게 함으로써 비슷한 점들이 initial points 로 선택되지 않게 하려던 것입니다. 그러나 k-means++ 도 문제점을 지니고 있습니다. Cosine 을 이용하는 문서 군집화 과정을 살펴봅시다. 문서 간 거리는 Euclidean distance 보다 Cosine distance 가 더 적합합니다. Bag of words model 을 이용한다면 문서가 sparse vector 로 표현되기 때문에 공통된 단어의 개수에 대한 정보를 포함하는 Jaccard, Cosine 과 같은 metrics 이 적합합니다^3. 그럼 우리는 샘플데이터를 이용하여 문서 간 거리의 분포를 살펴보겠습니다. 샘플데이터는 3만여건의 하루 치 뉴스를 Bag of words model 로 표현한 데이터입니다. 9,774 개의 단어로 표현된 문서 집합입니다.  
 
-    print(x.shape)
-    #(30091, 9774)
+{% highlight python %}
+print(x.shape)
+#(30091, 9774)
+{% endhighlight %}
 
 이 데이터에 대하여 1,000 개의 문서를 random sampling 하여 다른 문서 간의 거리를 계산합니다 (모든 문서 간 거리를 계산하면 오래 걸리니까요). 
 
-    from sklearn.metrics import pairwise_distances
-    from numpy.random import permutation
-    from numpy import histogram
+{% highlight python %}
+from sklearn.metrics import pairwise_distances
+from numpy.random import permutation
+from numpy import histogram
 
-    sample_idx = permutation(x.shape[0])[:1000]
-    dist = pairwise_distances(x, x[sample_idx,:], metric='cosine')
-    hist, bin_edges = histogram(dist, bins=20)
+sample_idx = permutation(x.shape[0])[:1000]
+dist = pairwise_distances(x, x[sample_idx,:], metric='cosine')
+hist, bin_edges = histogram(dist, bins=20)
+{% endhighlight %}
     
 문서 간 거리 분포를 살펴보면 거리가 0.85 이상인 경우가 91.79 % 에 해당합니다. 이는 고차원 벡터에서의 거리 척도의 특징입니다. 고차원에서는 Euclidean 이던지, Cosine 이던지 "가까운 거리는 의미가 있으나, 먼 거리는 의미가 없습니다". 이에 대해서는 나중에 더 자세히 이야기하겠습니다. 결국, 대부분의 문서 간 거리가 0.85 ~ 1.00 이라는 의미이고, k-means++ 의 step 2 과정에서 계산된 sampling probability 는 사실 uniform distribution 에 가깝습니다. 그런데, 모든 점들 간의 거리를 계산하고, 이를 cumulative distribution 으로 바꾸어 random sampling 을 수행하는 과정은 생각보다도 비싼 계산과정입니다. 즉 문서 군집화 과정에서 k-means++ 을 이용한다는 것은 "매우 비싼 random sampling" 을 수행하는 것입니다.
     
