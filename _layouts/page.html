@@ -4,3 +4,6 @@ layout: layout
 
 {% assign __ = site.data.languages[site.language] %}
 {% include page.html %}
+{ % if page.use_math % }
+  { % include mathjax_support % } 
+{ % endif % }
