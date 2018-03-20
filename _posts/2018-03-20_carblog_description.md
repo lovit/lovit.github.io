@@ -30,64 +30,6 @@ Carblog 는 데이터분석 사례의 프로젝트이름 입니다. Carblog 는 
 | 제네시스 | 락벤드 / 피부치료 / 탄산수제조기 / 터미네이터4 / 메이플스토리 캐릭터 기술 |
 | 티볼리 | 리조트 이름 / 코펜하겐 티볼리 공원 / 루이뷔동 백이름 / 이탈리아 도시 |
 
-그렇다면 우리는 왜 이 많은 주제의 문서들을 제거해야 할까요? 
+그렇다면 우리는 왜 이 많은 주제의 문서들을 제거해야 할까요? 아래는 달 별로 K3 를 포함한 문서의 개수에 대한 line chart 입니다. 사실 기아자동차의 K3 는 2012 년에 출시되었습니다. 2011 년도에는 슈퍼스타 K3 가 한창 진행되던 시기입니다. 이 때 생성된 블로그들은 사실 차량 관련 문서가 아니라 슈퍼스타 K3 에 관련된 문서인 것이죠. 또한 2011 년도 이전에도 매달 500 여건 정도의 K3 를 포함한 문서가 발생합니다. 슈퍼스타 외에도 다른 의미의 K3 가 있음이 분명합니다. 
 
-<svg width="960" height="500"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
 
-var svg = d3.select("svg"),
-    margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = +svg.attr("width") - margin.left - margin.right,
-    height = +svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var parseTime = d3.timeParse("%y-%m");
-
-var x = d3.scaleTime()
-    .rangeRound([0, width]);
-
-var y = d3.scaleLinear()
-    .rangeRound([height, 0]);
-
-var line = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
-
-d3.tsv("/resources/carblog_k3_monthly.tsv", function(d) {
-  d.date = parseTime(d.date);
-  d.close = +d.close;
-  return d;
-}, function(error, data) {
-  if (error) throw error;
-
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain(d3.extent(data, function(d) { return d.close; }));
-
-  g.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x))
-    .select(".domain")
-      .remove();
-
-  g.append("g")
-      .call(d3.axisLeft(y))
-    .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", "0.71em")
-      .attr("text-anchor", "end")
-      .text("Number of documents");
-
-  g.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
-      .attr("d", line);
-});
-
-</script>
