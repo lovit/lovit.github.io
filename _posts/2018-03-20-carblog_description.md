@@ -107,7 +107,7 @@ var line = d3.line()
 
 d3.tsv("https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/resources/carblog_k3_monthly.tsv", function(d) {
   d.date = parseTime(d.date);
-  d.close = +d.close;
+  d.numdocs = +d.numdocs;
   return d;
 }, function(error, data) {
   if (error) throw error;
