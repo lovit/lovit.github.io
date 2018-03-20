@@ -103,17 +103,17 @@ var y = d3.scaleLinear()
 
 var line = d3.line()
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .y(function(d) { return y(d.numdocs); });
 
 d3.tsv("https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/resources/carblog_k3_monthly.tsv", function(d) {
   d.date = parseTime(d.date);
-  d.numdocs = +d.numdocs;
+  d.numdocs = +d.numdocs  ;
   return d;
 }, function(error, data) {
   if (error) throw error;
 
   x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain(d3.extent(data, function(d) { return d.close; }));
+  y.domain(d3.extent(data, function(d) { return d.numdocs; }));
 
   g.append("g")
       .attr("transform", "translate(0," + height + ")")
