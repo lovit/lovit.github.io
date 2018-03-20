@@ -118,7 +118,7 @@ d3.tsv("/resources/carblog_k3_monthly.tsv", function(d) {
 
 </script>
 
-<div id="k3chart"></div>
+<div id="k3chart"><svg width="960" height="500"></svg></div>
 
 
 우리는 차량 외 주제의 문서들을 제거해야 정확한 버즈 분석을 수행할 수 있겠군요. 이제부터는 각 **질의어를 카테고리**라 명하겠습니다. 이후 "Carblog" 태그가 붙은 문서들에서 이용되는 카테고리라는 의미는 해당 질의어가 포함된 문서집합 입니다. 
