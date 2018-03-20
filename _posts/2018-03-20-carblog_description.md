@@ -93,7 +93,7 @@ var svg = d3.select("div#k3chart").selectAll("svg"),
     height = +svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var parseTime = d3.timeParse("%y-%m");
+var parseTime = d3.timeParse("%Y-%m");
 
 var x = d3.scaleTime()
     .rangeRound([0, width]);
