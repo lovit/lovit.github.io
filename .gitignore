@@ -3,3 +3,6 @@
 # Jupyter
 jupyter/*
 *.ipynb
+
+# resource test
+_posts/resources/index.html
