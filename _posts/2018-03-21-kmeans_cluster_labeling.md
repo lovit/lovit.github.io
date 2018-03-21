@@ -34,6 +34,8 @@ Lloyd k-means 는 대체로 빠르고 안정적인 학습 결과를 보여줍니
 
 (1) - (4) 는 알고리즘이 학습에 이용하는 패러매터의 이슈입니다만, 학습된 군집에 레이블을 부여하는 것은 해석, 혹은 모델과 사람 사이의 interaction 이슈입니다. 이번 포스트에서는 **(5) 학습된 클러스터의 레이블 부여**에 대하여 다뤄봅니다.
 
+## From text to k-means (Scikit-learn)
+
 scikit-learn 에서 제공하는 k-means 를 이용하여 문서를 군집화 하는 방법은 아래와 같습니다. list of str 형식의 문서 집합을 vectorizer 를 통하여 doc - term matrix 로 변환합니다. tf-idf 형식으로 표현하고 싶다면, CountVectorizer 대신 TfidfVectorizer 를 이용하면 됩니다. normalize() 는 X 의 각 row 를 크기가 1인 unit vector 로 변환하기 위함입니다. 이에 대한 자세한 이야기는 "Spherical k-means for document clustering" 포스트를 참조해주세요. 우리는 일단 scikit-learn 의 k-means 를 이용하여 문서 군집화를 학습했다는 가정하에, 그 뒷 이야기를 할 것입니다. 
 
 {% highlight python %}
