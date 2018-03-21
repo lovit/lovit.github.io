@@ -30,6 +30,7 @@ Lloyd k-means 는 대체로 빠르고 안정적인 학습 결과를 보여줍니
     (2) iteration 횟수
     (3) distance measure
     (4) 적절한 k 의 개수 설정
+    (5) 학습된 클러스터의 레이블 부여
 
 이번 포스트에서는 **(1) initial points 설정**에 대하여 다뤄봅니다.
 
@@ -43,9 +44,9 @@ Python 의 scikit-learn 의 k-means 에는 사용자가 결정할 수 있는 다
 
 {% highlight python %}
 def k_means(X, n_clusters, init='k-means++', precompute_distances='auto',
-            n_init=10, max_iter=300, verbose=False,
-            tol=1e-4, random_state=None, copy_x=True, n_jobs=1,
-            algorithm="auto", return_n_iter=False):
+    n_init=10, max_iter=300, verbose=False,
+    tol=1e-4, random_state=None, copy_x=True, n_jobs=1,
+    algorithm="auto", return_n_iter=False):
 {% endhighlight %}
     
 k-means++ 은 다음의 과정으로 이뤄져 있습니다. 
