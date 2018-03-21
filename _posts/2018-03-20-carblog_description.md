@@ -84,6 +84,13 @@ Carblog 는 데이터분석 사례의 프로젝트이름 입니다. Carblog 는 
 1. Class imbalanced 인 minor topic 추출을 통한 차량 외 문서 제거
 1. 미등록단어 문제를 해결하는 토크나이저
 
+## Thanks to
+
+Carblog 분석 프로젝트를 함께 하는 [Dongyoung Min]에게 감사를 드립니다.
+
+[Dongyoung Min]: https://github.com/dongyoung-min
+
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
