@@ -44,3 +44,57 @@ $$\theta$$ 는 logistic regression 의 coefficient vector 입니다. $$\theta_{k
 
 $$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(-\theta_1^Tx)}{\sum_k exp(-\theta_k^Tx)} \\ \cdots \\ \frac{exp(-\theta_n^Tx)}{\sum_k exp(-\theta_k^Tx)} \end{bmatrix}$$
 
+우리는 인공데이터를 만들어서 softmax regression 의 특징을 좀 더 살펴보겠습니다. 데이터 생성 파일은 [링크][data_generator]로 올려두었습니다. 총 5 개의 클래스에 대하여 각 클래스 별로 100 개의 2 차원 데이터를 만들었습니다. 방사형으로 퍼진 형태입니다. X 는 데이터, Y 는 각 데이터의 클래스입니다.
+
+{% highlight python %}
+X, Y = generate_spherical(n_class=5, n_per_class=100, dimension=2)
+{% endhighlight %}
+
+이를 matplotlib 을 이용하여 scatter plot 을 그려봅니다. 만약 Jupyter notebook 에서 작업중이시라면 %matplotlib inline 을 꼭 적어주세요. 
+
+{% highlight python %}
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+plt.scatter(X[:,0], X[:,1], s=2, c=Y)
+plt.show()
+{% endhighlight %}
+
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_data.png)
+
+Scikit-learn 에서 logistic / softmax regression 은 모두 sklearn.linear_model.LogisticRegression 에 구현되어 있습니다. Y 의 값의 종류가 3 개 이상이면 softmax regression 을 학습힙니다. 
+
+{% highlight python %}
+from sklearn.linear_model import LogisticRegression
+
+logistic = LogisticRegression()
+logistic.fit(X, Y)
+{% endhighlight %}
+
+Coefficients 는 LogisticRegression.coef_ 에 저장되어 있습니다. 앞선 설명대로라면 coefficient 는 각 클래스의 대표벡터여야 합니다. 5 개의 클래스에 대한 2차원 방향벡터가 학습됩니다. coef 의 row 는 클래스의 대표벡터입니다. 
+
+{% highlight python %}
+coef = logistic.coef_
+print(coef.shape) # (5,2)
+{% endhighlight %}
+
+이를 위 데이터 scatter plot 에 함께 겹쳐 그립니다. 대표벡터는 star marker 를 이용합니다. 
+
+{% highlight python %}
+plt.scatter(X[:,0], X[:,1], s=2, c=Y)
+plt.scatter(coef[:,0], coef[:,1], s=100, c=class_colors, marker='*')
+plt.show()
+{% endhighlight %}
+
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_data_w_classvector.png)
+
+각 클래스의 데이터가 서로 다른 방향으로 골고루 펼쳐져 있기 때문에 클래스의 대표벡터들이 각 클래스의 분포와 비슷하게 잘 퍼져있습니다. 하지만 데이터가 아래의 그림처럼 전체 공간의 한쪽에만 몰려 있다면, 방향벡터가 각 클래스의 데이터와 같은 방향인 것은 아닙니다. 데이터 분포의 경계에 있는 두 클래스의 대표벡터는 빈 공간에 위치합니다. 이는 softmax regression 에 데이터가 입력될 때 대표벡터와의 내적의 상대적인 크기가 더 중요하기 때문입니다. 대표벡터들은 널리 퍼져있어야 (서로 다른 방향벡터를 가져야) 각 클래스에 속할 확률이 확연히 다르게 나타나기 때문에 이처럼 학습됩니다. 
+
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_oneside_data_w_classvector.png)
+
+## Read more
+
+우리는 아직 정규화 (regularization)에 대하여 이야기하지 않았습니다. L1, L2 regularization 을 이용하여 모델을 해석이 용이하게 만들기도 하고, 과적합 (over-fitting)을 방지하기도 합니다. 이에 대해서는 다음 포스트에서 알아봅니다. 
+
+
+[data_generator]: https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/resources/logistic_data_generator.py
