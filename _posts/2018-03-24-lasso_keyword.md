@@ -1,5 +1,5 @@
 ---
-title: Keyword extraction using LASSO regression
+title: Logistic regression with L1, L2 regularization and keyword extraction
 date: 2018-03-24 13:00:00
 categories:
 - nlp
