@@ -121,8 +121,7 @@ menu:
   about: /about/
   archives: /archives/
   tags: /tags/
-  navigator: /navigator/
-  #sitemap: /sitemap.xml
+  sitemap: /navigator/
   #commonweal: /404.html
 
 
@@ -139,7 +138,6 @@ menu_icons:
   categories: th
   schedule: calendar
   tags: tags
-  archives: archive
   navigator: archive
   sitemap: sitemap
   commonweal: heartbeat
