@@ -140,6 +140,7 @@ menu_icons:
   schedule: calendar
   tags: tags
   archives: archive
+  navigator: archive
   sitemap: sitemap
   commonweal: heartbeat
 
