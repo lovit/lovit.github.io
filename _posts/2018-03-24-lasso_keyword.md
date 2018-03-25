@@ -32,7 +32,7 @@ $$cost = \sum_{i}^{n} \left(y_i - \frac{1}{1 + exp(-\theta^Tx)} \right) + \lambd
 
 이보다 overfitting 과 regularization 의 관계를 잘 설명하는 예시는 regression 예시입니다. 아래 그림은 [Wikipedia 의 regularization page][wikipedia] 의 그림입니다. 녹색 선은 regularization 비용이 큰 경우, 파란 선은 비용이 작은 경우 입니다. 좋은 모델은 학습데이터에 대해서 y 를 잘 맞추기만 하면 되는 것은 아닙니다. 모델이 간략하여 학습데이터가 없는 부분에서도 잘 틀리지 않을 수 있어야 합니다. regularization 은 모델을 복잡하지 않게 만드는 역할을 합니다.
 
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Regularization.svg/623px-Regularization.svg.png)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Regularization.svg/623px-Regularization.svg.png){: width="50%" height="50%"}
 
 ## Logistic regression with L1 regularization
 
