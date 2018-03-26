@@ -15,9 +15,9 @@ tags:
 
 ## KoNLPy
 
-[KoNLPy][konlpy] 는 다양한 언어 (C++, Scala, Java)로 구현되어 있는 형태소분석기들을 Python 환경에서 이용할 수 있도록 도와줍니다. 특히 분석기들마다 서로 다른 인터페이스를 통일하였기 때문에 매우 편리합니다. KoNLPy (ver 0.4.4) 에는 Hannanum, Kkma, Mecab, Twitter 네 가지 형태소 분석기가 포함되어 있습니다.
+형태소분석은 주어진 문장에 대하여 각 문장을 구성하는 형태소들을 분해/인식하는 과정입니다. 물론 문장 속의 띄어쓰기로 나눠서 인식할 수도 있습니다. 하지만 한국어 텍스트 분석에서는 그리 좋은 방법은 아닙니다. 그 이유에 대해서는 [토크나이저/품사판별기][pos_and_oov] 포스트에서 이야기합니다. 
 
-형태소분석은 주어진 문장에 대하여 각 문장을 구성하는 형태소들을 분해/인식하는 과정입니다. 문장을 pos() 에 입력하면 문장을 구성하는 형태소들을 확인할 수 있습니다. 특히 '테스트문장' 같은 복합 명사는 단일 명사들로 분해됩니다.
+[KoNLPy][konlpy] 는 다양한 언어 (C++, Scala, Java)로 구현되어 있는 형태소분석기들을 Python 환경에서 이용할 수 있도록 도와줍니다. 특히 분석기들마다 서로 다른 인터페이스를 통일하였기 때문에 매우 편리합니다. KoNLPy (ver 0.4.4) 에는 Hannanum, Kkma, Mecab, Twitter 네 가지 형태소 분석기가 포함되어 있습니다. 문장을 pos() 에 입력하면 문장을 구성하는 형태소들을 확인할 수 있습니다. 특히 '테스트문장' 같은 복합 명사는 단일 명사들로 분해됩니다.
 
 {% highlight python %}
 from konlpy.tag import Twitter
@@ -342,6 +342,7 @@ print(idx2vocab[4300:4400])
 
 [word2vec_post]: {{ site.baseurl }}{ link _posts/2018-03-26_word_doc_embedding.md }
 [konlpy]: http://konlpy.org/
+[pos_and_oov]: {{ site.baseurl }}{ link _posts/2018-03-26-pos_and_oov.md }
 [komoran]: https://github.com/shin285/KOMORAN
 [soynlp]: https://github.com/lovit/soynlp/
 [sparse_matrix]: {{ site.baseurl }}{ link _posts/2018-03-27-sparse_mtarix_handling.md }
