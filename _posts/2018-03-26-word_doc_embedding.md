@@ -36,7 +36,7 @@ Word2Vec 은 window classification 처럼, 긴 문장에 스캐너가 이동하�
 
 ![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_logistic_structure.png)
 
-Word2Vec 의 학습은 의미공간에서의 각 단어의 위치좌표를 수정하는 것입니다. 각 단어의 위치좌표는 random vector 로 초기화됩니다. 당연히 위의 softmax regression 공식이 잘 맞지 않습니다. $$P(cat \vert [a, little, sit, on])$$ 이 커지도록 각 단어의 좌표를 조절해야 합니다. [a, little, sit, on] 의 평균벡터를 context vector, $$v_I$$ 라 하면, 'cat' 의 위치벡터는 $$v_I$$ 와 비슷하고, 다른 단어의 벡터는 $$v_I$$ 와 달라야 합니다. Softmax regression 이니까요. $$v_I$$ 와 비슷한 위치에 있는 cat 이 아닌 단어들은 밀어버리면 $$P(cat \vert v_I)$$ 가 좀 더 커집니다. 그리고 내적을 크게 만들기 위해서 cat 의 벡터 크기도 좀 늘리면서요.
+Word2Vec 의 학습은 의미공간에서의 각 단어의 위치좌표를 수정하는 것입니다. 각 단어의 위치좌표는 random vector 로 초기화 합니다. 이때는 당연히 위의 softmax regression 공식이 잘 맞지 않습니다. $$P(cat \vert [a, little, sit, on])$$ 이 커지도록 각 단어의 좌표를 조절해야 합니다. [a, little, sit, on] 의 평균벡터를 context vector, $$v_I$$ 라 하면, 'cat' 의 위치벡터는 $$v_I$$ 와 비슷하고, 다른 단어의 벡터는 $$v_I$$ 와 달라야 합니다. Softmax regression 이니까요. $$v_I$$ 와 비슷한 위치에 있는 cat 이 아닌 단어들은 밀어버리면 $$P(cat \vert v_I)$$ 가 좀 더 커집니다. 그리고 내적을 크게 만들기 위해서 cat 의 벡터 크기도 좀 늘리면서요.
 
 ![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_softmax.png)
 
