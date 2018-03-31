@@ -7,17 +7,19 @@ tags:
 - visualiztion
 ---
 
-Python 에서 chart, plot 을 그리는 도구로 널리 알려진 것들 중에는 matplotlib, [seaborn][seaborn], [plotly][plotly], [gglot][gglot] 등이 있습니다. 그 중에서 **[Bokeh][bokeh]** 는 [d3][d3] 라이브러리를 Python 혹은 Jupyter notebook 환경에서 이용할 수 있도록 도와줍니다. Bokeh 의 documentation 과 tutorials 은 설명이 매우 친절합니다. 하지만 quick starting 보다 더 quick 하게 이용하고 싶어, 자주 쓰는 기능과 설명을 정리하였습니다. 이 포스트에는 각 라이브러리의 비교가 포함되어있지 않습니다. 
+Python 에서 chart, plot 을 그리는 도구로 널리 알려진 것들 중에는 matplotlib, [seaborn][seaborn], [plotly][plotly], [ggplot][ggplot] 등이 있습니다. 그 중에서 **[Bokeh][bokeh]** 는 Python 혹은 Jupyter notebook 환경에서 d3 만큼이나 멋진 plot 을 그릴 수 있도록 도와줍니다. Bokeh 의 documentation 과 tutorials 은 설명이 매우 친절합니다. 하지만 quick starting 보다 더 quick 하게 이용하고 싶어, 자주 쓰는 기능과 설명을 정리하였습니다. 이 포스트에는 각 라이브러리의 비교가 포함되어있지 않습니다. 
 
 ## Bokeh?
 
-이 포스트에는 Bokeh 공식 홈페이지의 튜토리얼 코드가 포함되어 있습니다. 튜토리얼 코드를 따라 연습하며, 제가 기억하고 싶은 내용에 대하여 커멘트를 추가하였습니다. 제대로 Bokeh 를 공부하시려거든 [공식 홈페이지][bokeh]로 곧바로 가보세요! 이런 친절한 튜토리얼 코드를 제공해주는 모든 개발자분들 감사합니다!
+이 포스트에는 Bokeh 공식 홈페이지의 튜토리얼 코드가 포함되어 있습니다. 튜토리얼 코드를 따라 연습하며, 기억하고 싶은 내용에 대한 커멘트를 추가하였습니다. 자세한 Bokeh 의 공부를 위해서는 [공식 홈페이지][bokeh]로 곧바로 가보세요! 이런 친절한 튜토리얼 코드를 제공해주는 모든 개발자분들 감사합니다!
 
 This post includes the tutorial codes on the official homepage. I just putted additional comment in the tutorial codes. For detailed tutorials, please visit the official website. Thanks to Bokeh's friendly tutorial.
 
-Python 으로 작업을 한 뒤, plotting 을 할 일이 있을 때에는 습관적으로 matplotlib 을 이용하였습니다. Matplotlib 도 좋은 라이브러리이지만, attribute 세팅이나 사용법에서 불편함을 느낀 적이 많았습니다. 그 대안으로 d3 를 이용하려던 중, Bokeh 를 써보라는 추천을 받았습니다. 그리고 곧바로 포스트를 쓰게 되었습니다. Seaborn 같은 라이브러리가 좋다더라~ 라는 말을 듣고도 한번도 써보려 시도하지 않았던 옛날을 반성하게 된 순간이었습니다. 앞으로는 정말 부지런해야겠단 생각을 하며, 저의 quick starting 과정을 정리하였습니다.
+Python 으로 작업을 한 뒤, plotting 을 할 일이 있으면 습관적으로 matplotlib 을 이용하였습니다. Matplotlib 도 좋은 라이브러리이지만, attribute 세팅이나 사용법에서 불편함을 느낀 적이 많았습니다. 그 대안으로 다른 시각화 방법들을 찾던 중, Bokeh 를 써보라는 추천을 받았습니다. 그리고는 바로 포스트를 쓰게 되었습니다. "Seaborn 같은 라이브러리가 좋다더라~" 라는 말을 듣고도 한번도 써보지 않던 옛날의 저를 반성였습니다. 앞으로는 좋은 라이브러리들을 부지런하게 살펴봐야겠다는 생각을 하며, 저의 quick starting 과정을 정리하였습니다.
 
-Bokeh 는 [d3][d3] 의 멋진 라이브러리르들을 Python 에서도 이용할 수 있도록 도와줍니다. 일단 그림이 예쁩니다. 또한 JavaScript 기반으로 그리기 때문에 interactive 한 plotting 이 가능합니다. 설명력이 많은 plotting 을 그릴 수 있습니다. 또한 d3 처럼 [gallery][bokeh_gallery] 가 잘 만들어져서 필요한 plot 의 코드를 그대로 가져오면 됩니다. 또한 [jupyter notebook 튜토리얼][bokeh_tutorial]도 함께 제공됩니다.
+Bokeh 는 [d3][d3] 와 비슷한 멋진 plots 을 그릴 수 있도록 도와줍니다. 일단 그림이 예쁩니다. 하지만 d3 를 이용하지는 않습니다. Technical vision 을 읽어보면, stand alone library 라고 적혀있습니다. 또한 interactive 한 plotting 이 가능합니다. 그렇기 때문에 설명력이 많은 plotting 을 그릴 수 있습니다. [gallery][bokeh_gallery] 가 잘 만들어져서 필요한 plot 의 코드를 그대로 가져오면 됩니다. [jupyter notebook 튜토리얼][bokeh_tutorial]도 함께 제공됩니다.
+
+포스트 당시 Bokeh 는 version = 0.12.15 입니다. 
 
 ## Install
 
@@ -27,7 +29,7 @@ Pip install 이 가능합니다.
 pip install bokeh
 {% endhighlight %}
 
-공식홈페이지에서는 최소한 다음의 required dependencies 를 언급합니다. 만약 anaconda 의 모든 페키지를 다 설치하셨다면 그대로 pip install bokeh 만 하셔도 됩니다. 
+공식홈페이지에서는 최소한 다음의 required dependencies 를 언급합니다. 만약 anaconda 의 모든 페키지를 다 설치하셨다면 pip install bokeh 만 하셔도 됩니다. 
 
 	Jinja2 >=2.7
 	python-dateutil >=2.1
@@ -37,7 +39,7 @@ pip install bokeh
 	six >=1.5.2
 	tornado >=4.3
 
-하지만 io 를 위해서는 추가적인 packages 가 필요합니다. Bokeh 가 d3 를 이용하기 때문에 plot 을 png 파일로 저장하기 위해 Selenium 을 이용합니다. Python 환경에서 가상으로 웹페이지를 띄운 뒤, 그림을 파일로 저장합니다. 이를 위해서는 다음의 설치가 필요합니다. 
+하지만 io 를 위해서는 추가적인 packages 가 필요합니다. Bokeh 는 JavaScript 를 이용하여 그린 plot 을 png 파일로 저장하기 위해, Selenium 을 이용합니다. Python 환경에서 가상으로 웹페이지를 띄운 뒤, 그림을 파일로 저장합니다. 이를 위해서는 다음의 설치가 필요합니다. 
 
 {% highlight python %}
 pip install selenium
@@ -102,12 +104,16 @@ p = figure(title="Title",
            plot_height=200)
 {% endhighlight %}
 
-혹은 만들어진 그림의 plot_width, plot_height 를 조절할 수도 있습니다. d3 의 attribute 를 변경하는 것과 같습니다. 
+혹은 만들어진 그림의 plot_width, plot_height 를 조절할 수도 있습니다. JavaScript 객체의 attribute 를 변경하는 것과 같습니다. 
 
 {% highlight python %}
 p.plot_width = 800
 p.plot_height = 800
 {% endhighlight %}
+
+하지만 다시 한 번 show() 를 하여야 그림이 출력됩니다. 
+
+또한 jupyter notebook 에서 두 번의 show() 를 호출하였다면 두 개의 그림이 그려집니다.
 
 ## Changing title
 
@@ -280,7 +286,7 @@ x, y 의 center 를 옮겨가며, center 주변에 조금씩 흐트려트린 좌
 {% highlight python %}
 from numpy.random import random
 
-from bokeh.plotting import figure, show, output_file
+from bokeh.plotting import figure, show, output_notebook
 
 def mscatter(p, x, y, marker):
     p.scatter(x, y, marker=marker, size=15,
@@ -321,12 +327,15 @@ for y_idx, y_center in enumerate(y_centers):
               text = markers[y_idx][x_idx]
              )
 
+output_notebook()
 show(p)
 {% endhighlight %}
 
-## Multiple plot
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_markers.png)
 
-아래는 multiline 을 plotting 하는 튜토리얼 코드입니다. figure 에는 d3 처럼 여러 개의 그림을 겹칠 수 있습니다. 여러 layers 를 쌓는 느낌입니다. 만약 여러 개의 plot 을 모아서 plotting 을 하려면 bokeh.layouts.gridplot 을 이용합니다. 
+## Multiple plot (Gridplot)
+
+아래는 multiline 을 plotting 하는 튜토리얼 코드입니다. figure 에는 여러 개의 그림을 겹칠 수 있습니다. 여러 layers 를 쌓는 느낌입니다. 만약 여러 개의 plot 을 모아서 plotting 을 하려면 bokeh.layouts.gridplot 을 이용합니다. 
 
 {% highlight python %}
 import numpy as np
@@ -380,6 +389,12 @@ export_png(gp, 'gridplot.png')
 {% endhighlight %}
 
 ![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_gridplot.png)
+
+ncols 를 입력하지 않고, 직접 plots 을 넣을 수도 있습니다. 
+
+{% highlight python %}
+gridplot([[plot_1, plot_2], [plot_3, plot_4]])
+{% endhighlight %}
 
 [d3]: https://d3js.org/
 [seaborn]: https://seaborn.pydata.org/
