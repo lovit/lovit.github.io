@@ -379,7 +379,7 @@ Jupyter notebook 에서 출력된 그림의 save 아이콘을 누르면 가장 �
 export_png(gp, 'gridplot.png')
 {% endhighlight %}
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/gridplot.png)
+![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_gridplot.png)
 
 [d3]: https://d3js.org/
 [seaborn]: https://seaborn.pydata.org/
