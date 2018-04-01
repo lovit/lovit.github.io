@@ -342,7 +342,7 @@ print(idx2vocab[4300:4400])
      ...
     ]
 
-[word2vec_post]: {{ site.baseurl }}{ link _posts/2018-03-26_word_doc_embedding.md }
+[word2vec_post]: {{ site.baseurl }}{ link _posts/2018-03-26-word_doc_embedding.md }
 [konlpy]: http://konlpy.org/
 [pos_and_oov]: {{ site.baseurl }}{ link _posts/2018-04-01-pos_and_oov.md }
 [komoran]: https://github.com/shin285/KOMORAN
