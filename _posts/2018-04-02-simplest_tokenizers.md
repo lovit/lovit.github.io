@@ -12,6 +12,9 @@ tags:
 
 ## Tokenizer is necessary ?
 
+[from_text_to_matrix]: {{ site.baseurl }}{ link _posts/2018-03-26-from_text_to_matrix.md }
+[news]: http://sports.news.naver.com/sports/index.nhn?office_id=023&article_id=0002914128
+
 토크나이징은 데이터와 텍스트 마이닝이 만나는 첫 지점입니다. 토크나이징의 결과에 따라 마이닝 결과의 품질이 달라질 수 있습니다. 좋은 토크나이저의 기준은 목적에 따라 다릅니다. 반드시 단어가 제대로 인식되어야 하는 것도 아닙니다. 키워드 분석을 위해서는 단어가 제대로 인식되어야 합니다. 분석의 단위가 단어이기 때문입니다. 하지만 문서 판별이나 문장의 감성 분석을 위해서는 문장이 제대로 된 단어열로 표현될 필요는 없습니다. 대신 질 좋은 features 를 포함하는 질 좋은 벡터로 표현되면 됩니다. 아래의 문장을 단어열이 아닌 subwords 로 토크나이징 하여도 이 문장은 긍정문이라는 것을 예측할 수 있습니다. '재미있'이 감성 분석의 중요한 feature 가 되기 때문입니다.
 
 	문장: '이영화 정말 재미있다'
@@ -190,6 +193,3 @@ Query document 였던 doc_idx == 28969 를 제외한 문서들의 bag of words �
 ## Conclusion
 
 어절의 왼쪽만 취해도 비슷한 문서를 찾는데는 쓸만한 토크나이징을 할 수 있습니다. 하지만 제대로된 단어가 아니기 때문에 해석은 어렵습니다. 또한 어절 왼쪽의 3 글자를 단어로 취하는 과정에서 길이가 2 이하인 단어들은 제외가 되었습니다. Subword 의 길이를 global parameter 로 이용하였기 때문입니다. 우리는 이런 문제들을 unsupervised word extraction methods 를 이용하여 해결하려 합니다.
-
-[from_text_to_matrix]: {{ site.baseurl }}{ link _posts/2018-03-26-from_text_to_matrix.md }
-[news]: http://sports.news.naver.com/sports/index.nhn?office_id=023&article_id=0002914128
