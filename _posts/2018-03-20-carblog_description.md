@@ -113,7 +113,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.numdocs); });
 
-d3.tsv({{ "/assets/resources/carblog_k3_monthly.tsv" | absolute_url }}, function(d) {
+d3.tsv("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/carblog_k3_monthly.tsv", function(d) {
   d.date = parseTime(d.date);
   d.numdocs = +d.numdocs  ;
   return d;
