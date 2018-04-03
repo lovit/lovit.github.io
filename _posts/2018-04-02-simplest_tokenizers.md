@@ -64,7 +64,7 @@ tags:
 
 길이가 2인 글자를 취할 때 '박태'의 빈도수는 28 이었습니다. '박태'는 '박태환'을 의미하는 feature 입니다. 하나의 개념이 하나의 feature 에 해당만 된다면 term frequency matrix 는 동일하게 만들어지기 때문에 토크나이저가 문장을 제대로된 단어로 자르지 못하더라도 성능이 많이 떨어지지 않습니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/tokenizer_swimmer_park.png){: width="70%" height="70%"}
+![]({{ "/assets/figures/tokenizer_swimmer_park.png" | absolute_url }}){: width="70%" height="70%"}
 
 이 토크나이저는 다음의 상황에 유용합니다. 파일럿 실험으로 문서 군집화나 문서 판별을 빠르게 수행해야 합니다. 하지만 가지고 있는 품사 판별기, 형태소 분석기가 해당 데이터에 적합하지 않는데, 다행이도 띄어쓰기 기준으로 어절이 잘 구분될 때 이 토크나이저를 이용할 수 있습니다. 
 
