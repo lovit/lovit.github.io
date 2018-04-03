@@ -44,7 +44,7 @@ $$\theta$$ 는 logistic regression 의 coefficient vector 입니다. $$\theta_{k
 
 $$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(-\theta_1^Tx)}{\sum_k exp(-\theta_k^Tx)} \\ \cdots \\ \frac{exp(-\theta_n^Tx)}{\sum_k exp(-\theta_k^Tx)} \end{bmatrix}$$
 
-우리는 인공데이터를 만들어서 softmax regression 의 특징을 좀 더 살펴보겠습니다. 데이터 생성 파일은 [링크][data_generator]로 올려두었습니다. 총 5 개의 클래스에 대하여 각 클래스 별로 100 개의 2 차원 데이터를 만들었습니다. 방사형으로 퍼진 형태입니다. X 는 데이터, Y 는 각 데이터의 클래스입니다.
+우리는 인공데이터를 만들어서 softmax regression 의 특징을 좀 더 살펴보겠습니다. 데이터 생성 파일은 [링크]({{ "/assets/resources/logistic_data_generator" | absolute_url }})로 올려두었습니다. 총 5 개의 클래스에 대하여 각 클래스 별로 100 개의 2 차원 데이터를 만들었습니다. 방사형으로 퍼진 형태입니다. X 는 데이터, Y 는 각 데이터의 클래스입니다.
 
 {% highlight python %}
 X, Y = generate_spherical(n_class=5, n_per_class=100, dimension=2)
@@ -96,6 +96,4 @@ plt.show()
 
 우리는 아직 정규화 (regularization)에 대하여 이야기하지 않았습니다. L1, L2 regularization 을 이용하여 모델을 해석이 용이하게 만들기도 하고, 과적합 (over-fitting)을 방지하기도 합니다. 이에 대해서는 [다음 포스트][logistic_with_regularization]에서 알아봅니다. 
 
-
-[data_generator]: {{ site.baseurl }}{% link assets/resources/logistic_data_generator %}
 [logistic_with_regularization]: {{ site.baseurl }}{% link _posts/2018-03-24-lasso_keyword.md %}
