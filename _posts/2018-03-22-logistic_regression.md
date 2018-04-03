@@ -97,5 +97,5 @@ plt.show()
 우리는 아직 정규화 (regularization)에 대하여 이야기하지 않았습니다. L1, L2 regularization 을 이용하여 모델을 해석이 용이하게 만들기도 하고, 과적합 (over-fitting)을 방지하기도 합니다. 이에 대해서는 [다음 포스트][logistic_with_regularization]에서 알아봅니다. 
 
 
-[data_generator]: https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/resources/logistic_data_generator.py
+[data_generator]: {{ site.baseurl }}{% link assets/resources/logistic_data_generator %}
 [logistic_with_regularization]: {{ site.baseurl }}{% link _posts/2018-03-24-lasso_keyword.md %}
