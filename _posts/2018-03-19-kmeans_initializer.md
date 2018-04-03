@@ -103,7 +103,7 @@ hist, bin_edges = histogram(dist, bins=20)
 
 k-means++ 은 한 가지 단점이 더 있습니다. Initial point $$c_t$$ 를 선택하기 위하여 이전에 선택한 $$c_{t-1}$$ 만을 고려하면 $$c_{t+1}$$ 는 $$c_{t-1}$$ 와 비슷한 점일 수도 있습니다. 비슷한 점들을 선택하지 않는다는 보장을 하기 어렵습니다. 
     
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_pp.png)
+![]({{ "/assets/figures/kmeans_initializer_pp.png" | absolute_url }})
 
 정리하면 pairwise distance distribution 이 uniform distribution 에 가까울 경우에는 k-means++ 은 무의미하고 비싼 계산을 수행하는 것입니다. 
 
@@ -118,7 +118,7 @@ k-means++ 은 한 가지 단점이 더 있습니다. Initial point $$c_t$$ 를 �
 
 이는 아래 그림과 같은 효과를 가져옵니다. $$D_{init}$$ 에서 선택하는 점들은 적어도 거리가 t 이상인 점들로 구성이 됩니다. 그리고 위의 표와 같이 대부분의 거리가 최대에 가깝다면 $$\alpha$$ 를 2 ~ 5 정도로 선택하여도 $$D_{init}$$ 가 공집합이 되는 일은 잘 일어나지 않습니다. 최악의 경우가 발생할 가능성이 k-means++ 보다 많이 줄어드는 것이죠. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/kmeans_initializer_ball_cut.png)
+![]({{ "/assets/figures/kmeans_initializer_ball_cut.png" | absolute_url }})
 
 더하여 계산도 빠릅니다. 우리가 1M 의 데이터에 대하여 k=1,000 으로 k-means 를 학습할 경우, k-means++ 은 $$10^{15}$$ 의 거리 계산을 합니다. k-means++ 의 실제 비용은 거리 계산에 cumulative distribution function 에서의 random sampling 비용을 더해야 합니다. 다시 한 번 강조하지만, 이 계산으로 얻는 결과는 random sampling 과 비슷합니다. 하지만 위에서 제안한 방법은 $$\alpha ^2 \times k^3$$ 번의 계산만으로도 잘 퍼져있는 initial points 를 선택할 수 있습니다. $$\alpha = 2$$ 라면 $$4 \times 10^9$$ 번의 계산만으로도 충분합니다. 
 

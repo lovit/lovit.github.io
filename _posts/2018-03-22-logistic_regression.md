@@ -24,17 +24,17 @@ $$\begin{bmatrix} P(y=pos~\vert~x) \\ P(y=neg~\vert~x) \end{bmatrix} = \begin{bm
 
 혹은 logistic regression 을 기하학적으로 해석하기도 합니다. Bias 를 포함한 logistic regression 의 단면 (hyperplane) 은 빨간색과 파란색의 점들을 구분하는 결정단면 (separating hyperplane) 입니다. 쉽게 말해 경계면을 학습하는 것입니다. 이 결정단면의 수식은 $$(-\theta^Tx)$$ 입니다. 즉, 단면 위에 있는 점은 positive, negative 클래스에 속할 확률이 각각 0.5 라는 의미입니다. 어느 쪽에 속하는지 확신할 수 없으니까요. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_separate_plane.png)
+![]({{ "/assets/figures/logistic_separate_plane.png" | absolute_url }})
 
 그럼 위에서 pos, neg 의 확률을 각각 계산하는 형식으로 logistic regression 을 표현할 때도 기하학적으로 해석해봅시다. 각각의 $$\theta$$ 는 일종의 클래스의 대표벡터가 됩니다. $$\theta_1$$ 은 파란색 점들을 대표하는 백터, $$\theta_2$$ 는 빨간색 점들을 대표하는 벡터입니다. 하나의 클래스 당 하나의 대표벡터를 가집니다 (단 하나의 대표벡터를 지니기 때문에 linear inseparable case 가 생깁니다. 이는 Feed-forward neural network 에서 이야기하겠습니다). 만약 한 점 $$x$$ 가 $$\theta_1$$ 과 일치한다면 $$exp(\theta_1^Tx)$$ 는 어느 정도 큰 양수가, $$exp(\theta_2^Tx)$$ 는 0에 가까운 값이 되기 때문에 $$x$$ 의 클래스 1에 해당할 확률이 1이 됩니다. Logistic regression 은 각 점에 대하여 각 클래스의 대표벡터에 얼마나 가까운지를 학습하는 것입니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_direction_vector.png)
+![]({{ "/assets/figures/logistic_direction_vector.png" | absolute_url }})
 
 ## Meaning of coefficients in document classification
 
 $$\theta$$ 는 logistic regression 의 coefficient vector 입니다. $$\theta_{kj}$$ 는 feature j 가 클래스 k 의 기여도로 해석하기도 합니다. 우리는 뉴스 문서 집합에서 '연예뉴스'와 그 외 뉴스를 구분하는 문서판별기를 logistic regression 으로 학습합니다. Coefficient 는 '연예뉴스' 클래스에 대하여 각 단어 (feature)가 얼마나 기여를 하는지를 나타냅니다. '보였다, 이었다'와 같은 단어는 어느 클래스에서도 등장하는 문법 기능의 단어들입니다. 좋은 판별기라면 이런 단어들은 무시가 될 것입니다. '외교, 정책, 무역' 과 같은 단어는 연예뉴스보다는 정치, 외교, 경제 뉴스에서 더 많이 등장했을 것입니다. 이런 단어들이 등장한다면 연예뉴스가 아니라는 힌트를 얻을 수 있습니다. 하지만 '무대, 공연, 가수'와 같은 단어들이 등장한다면 연예뉴스라는 힌트를 얻게 되는 것입니다. Bag of words model (term frequency vector) 로 표현된 $$x$$ 는 coefficient vector 와 내적이 되기 때문에 각 단어가 등장한 횟수만큼 coefficient 가 더해집니다. 그리고 exponential 을 통하여 $$(-\infty, +\infty)$$ 인 값이 $$(0, +\infty)$$ 로 변환됩니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_coefficient_and_tf.png)
+![]({{ "/assets/figures/logistic_coefficient_and_tf.png" | absolute_url }})
 
 각 클래스에서 유독 자주 등장하는 단어들이 큰 coefficient 를 지닐 것이고, 이런 단어들이 등장하면 해당 클래스의 문서라고 판단하는 것입니다.
 
@@ -60,7 +60,7 @@ plt.scatter(X[:,0], X[:,1], s=2, c=Y)
 plt.show()
 {% endhighlight %}
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_data.png)
+![]({{ "/assets/figures/logistic_5class_data.png" | absolute_url }})
 
 Scikit-learn 에서 logistic / softmax regression 은 모두 sklearn.linear_model.LogisticRegression 에 구현되어 있습니다. Y 의 값의 종류가 3 개 이상이면 softmax regression 을 학습힙니다. 
 
@@ -86,11 +86,11 @@ plt.scatter(coef[:,0], coef[:,1], s=100, c=class_colors, marker='*')
 plt.show()
 {% endhighlight %}
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_data_w_classvector.png)
+![]({{ "/assets/figures/logistic_5class_data_w_classvector.png" | absolute_url }})
 
 각 클래스의 데이터가 서로 다른 방향으로 골고루 펼쳐져 있기 때문에 클래스의 대표벡터들이 각 클래스의 분포와 비슷하게 잘 퍼져있습니다. 하지만 데이터가 아래의 그림처럼 전체 공간의 한쪽에만 몰려 있다면, 방향벡터가 각 클래스의 데이터와 같은 방향인 것은 아닙니다. 데이터 분포의 경계에 있는 두 클래스의 대표벡터는 빈 공간에 위치합니다. 이는 softmax regression 에 데이터가 입력될 때 대표벡터와의 내적의 상대적인 크기가 더 중요하기 때문입니다. 대표벡터들은 널리 퍼져있어야 (서로 다른 방향벡터를 가져야) 각 클래스에 속할 확률이 확연히 다르게 나타나기 때문에 이처럼 학습됩니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_oneside_data_w_classvector.png)
+![]({{ "/assets/figures/logistic_5class_oneside_data_w_classvector.png" | absolute_url }})
 
 ## Read more
 

@@ -87,7 +87,7 @@ show(p)
 
 그 결과는 아래와 같습니다. 아래 그림은 plot 과 options 이 함께 포함되어 있습니다. 우측 상단의 options 에는 Box zoom, reset 같은 기능들이 있습니다. 디스크 모양 아이콘은 save 입니다. 만약 zoom-in 을 한 상태에서 save 를 하면 zoom-in 상태 그대로 저장이 됩니다. 이런 점이 matplotlib 보다 훨씬 편리한 점이라 생각됩니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_line.png)
+![]({{ "/assets/figures/bokeh_line.png" | absolute_url }})
 
 ## Figure size
 
@@ -273,7 +273,7 @@ output_notebook()
 show(p) # show the plot
 {% endhighlight %}
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_heatmap.png)
+![]({{ "/assets/figures/bokeh_heatmap.png" | absolute_url }})
 
 ## Overlap figures (with loop)
 
@@ -331,7 +331,7 @@ output_notebook()
 show(p)
 {% endhighlight %}
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_markers.png)
+![]({{ "/assets/figures/bokeh_markers.png" | absolute_url }})
 
 ## Multiple plot (Gridplot)
 
@@ -382,13 +382,13 @@ gp = gridplot(p1, p2, ncols=2, plot_width=400, plot_height=200)
 
 Jupyter notebook 에서 출력된 그림의 save 아이콘을 누르면 가장 마지막에 그려진 "Another Legend Example" 만 저장됩니다. 만약 둘 모두를 저장하고 싶다면 gridplot 을 gp 로 받은 뒤, 이를 explort_png() 에 입력하면 됩니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_lastplot.png)
+![]({{ "/assets/figures/bokeh_lastplot.png" | absolute_url }})
 
 {% highlight python %}
 export_png(gp, 'gridplot.png')
 {% endhighlight %}
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/bokeh_gridplot.png)
+![]({{ "/assets/figures/bokeh_gridplot.png" | absolute_url }})
 
 ncols 를 입력하지 않고, 직접 plots 을 넣을 수도 있습니다. 
 

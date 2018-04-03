@@ -15,14 +15,13 @@ Word2Vec 은 비슷한 문맥을 지니는 단어를 비슷한 벡터로 표현�
 
 2014 년 Word2Vec (Mikolov et al., 2013b) 논문을 처음 보았을 때가 기억이 납니다. v(China) - v(Beijing) = v(Russia) - v(Moscow) 그림이 정말 신기했습니다. 데이터 만으로도 단어의 의미적 관계가 학습이 되었으니까요. 저는 Word2Vec 논문 이후로 '딥러닝 + 자연어처리'와 embedding 주제에 대하여 공부를 시작하게 되었습니다. 아마도 저뿐 아닌 많은 분들이 Word2Vec 을 시작으로 '딥러닝 + 자연어처리'를 공부하실거라 생각합니다. 이번 포스트에서는 word2vec 의 원리에 대하여 알아보고, 이를 embedding, representation learning 의 일반적인 원리로 확장합니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_country_capital.png)
-(Mikolov, 2013b)
+![]({{ "/assets/figures/word2vec_country_capital.png" | absolute_url }})
 
 Word2Vec 은 Softmax regression 입니다. 이전 [softmax 포스트][logistic_regression]의 설명을 이어서 Word2Vec 원리를 이야기하기 때문에 이전의 포스트를 먼저 읽어주세요. 
 
 Word2Vec 은 **의미공간이라는 고차원 공간에 각 단어의 좌표값을 부여**합니다. 이 공간에서 각 좌표값의 숫자는 의미를 지니지 않습니다. 이는 지구의 위도, 경도와 같습니다. (동경 127, 북위 37) 이라는 숫자는 절대적인 의미를 지니지 않습니다. 기준점이 달라지면 숫자도 달라질테니까요. 하지만 (동경 130, 북위 36) 은 그 근처라는 것을 알 수 있습니다. 상대적인 거리는 의미를 지닙니다. 단어의 의미공간도 비슷합니다. 비슷한 벡터좌표를 지니는 두 단어는 비슷한 느낌의 단어입니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_semantic_space.png)
+![]({{ "/assets/figures/word2vec_semantic_space.png" | absolute_url }})
 
 Word2Vec 은 [softmax regression][logistic_regression] 의 확장입니다. Softmax regression 은 데이터 $$(X, Y)$$ 를 이용하여, 입력된 input $$x$$ 가 클래스 $$y$$ 가 될 확률을 최대화 시키는 방향으로 클래스 $$y$$ 의 대표벡터를 coefficient $$\beta$$ 에 학습합니다. 아래 식을 살펴보면 $$x$$에 대한 $$y$$ 의 확률은 $$x$$ 와 모든 클래스 종류의 $$y_j$$ 와의 내적을 exponential 함수에 넣어 non-negative 로 만든 뒤, 모든 $$exp(\beta_j^Tx)$$ 의 합으로 나눠서 확률 형식을 만듭니다. $$x$$ 가 입력되었을 때 $$y$$ 가 가장 큰 확률을 가지기 위해서는 해당 $$y$$ 와 $$x$$ 의 내적은 가장 크고 다른 $$y_j$$ 와 $$x$$ 의 내적은 작아야 합니다. Softmax regression 을 다시 생각해보세요. $$x$$ 와 이에 해당하는 클래스의 대표벡터가 같은 방향이어야 $$P(y \vert x)$$ 가 커집니다. 
 
@@ -34,11 +33,11 @@ Word2Vec 은 window classification 처럼, 긴 문장에 스캐너가 이동하�
 
 학습이 끝나면 스캐너를 옆으로 한 칸 이동시킵니다. 이번에는 [little, cat, on, the] 로 'sit' 을 예측하도록 학습합니다.
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_logistic_structure.png)
+![]({{ "/assets/figures/word2vec_logistic_structure.png" | absolute_url }})
 
 Word2Vec 의 학습은 의미공간에서의 각 단어의 위치좌표를 수정하는 것입니다. 각 단어의 위치좌표는 random vector 로 초기화 합니다. 이때는 당연히 위의 softmax regression 공식이 잘 맞지 않습니다. $$P(cat \vert [a, little, sit, on])$$ 이 커지도록 각 단어의 좌표를 조절해야 합니다. [a, little, sit, on] 의 평균벡터를 context vector, $$v_I$$ 라 하면, 'cat' 의 위치벡터는 $$v_I$$ 와 비슷하고, 다른 단어의 벡터는 $$v_I$$ 와 달라야 합니다. Softmax regression 이니까요. $$v_I$$ 와 비슷한 위치에 있는 cat 이 아닌 단어들은 밀어버리면 $$P(cat \vert v_I)$$ 가 좀 더 커집니다. 그리고 내적을 크게 만들기 위해서 cat 의 벡터 크기도 좀 늘리면서요.
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_softmax.png)
+![]({{ "/assets/figures/word2vec_softmax.png" | absolute_url }})
 
 'a little dog sit on the table' 이란 문장도 나올법합니다. 즉 cat 과 dog 은 비슷한 문맥에서 등장합니다. 우리는 context vector 에 $$Y$$ 의 벡터가 가까워지도록 학습을 하고 있습니다. 그렇다면 좌/우에 등장하는 단어가 비슷한 cat 과 dog 은 서로 같은 목적지를 향하여 위치벡터를 움직입니다. 이런 원리로 비슷한 문맥을 지니는 단어는 비슷한 벡터값을 가지게 됩니다.
 
@@ -46,7 +45,7 @@ Word2Vec 의 학습은 의미공간에서의 각 단어의 위치좌표를 수�
 
 하지만 위 공식대로 cat 을 context vector 방향으로 당겨오고, 다른 단어들을 모두 밀어버리면 학습량이 엄청납니다. 데이터 전체에 10 만개 정도의 단어가 존재한다면, cat 한 개를 $$v_I$$ 로 당겨오고, 99,999 개의 단어를 밀어내야 합니다. 사실 softmax regression 입장에서 충분히 떨어진 단어는 영향력이 적습니다. exp(-1) 이나 exp(-10) 의 크기는 exp(10) 과 비교하면 둘 모두 무시할만큼 작습니다. 중요한 것은 cat 을 context vector 방향으로 당겨오는 것입니다. 그렇기 때문에 99,999 개의 단어 중에 몇 개만 대표로 뽑아서 context vector 반대 방향으로 밀어냅니다. 이를 negative sampling 이라 합니다. cat 은 positive sample, 나머지 단어가 negative samples 입니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/word2vec_softmax_ns.png)
+![]({{ "/assets/figures/word2vec_softmax_ns.png" | absolute_url }})
 
 Negative sampling 은 각 단어의 빈도수를 고려해야 합니다. 자주 등장한 단어를 높은 확률로 선택되도록 샘플링 확률을 만듭니다. 자주 등장한 단어만큼은 제대로 학습을 하려함입니다. 수식은 크게 중요하지는 않습니다만, 빈도수를 고려하여 샘플링을 한다는 점이 중요합니다.
 
@@ -56,11 +55,11 @@ Negative sampling 은 각 단어의 빈도수를 고려해야 합니다. 자주 
 
 Word2Vec 이 등장한 이후 몇 달 지나지 않아 의미공간에 document 의 위치좌표를 학습하는 방법이 제안됩니다. Doc2Vec 은 document id 를 하나의 단어처럼 생각합니다. 'a little doc sit on the table' 이란 문장에 해당하는 document id, #doc5 역시 의미공간에서의 위치 좌표를 지닙니다. 그리고 모든 스냅샷에서 다른 단어들의 위치좌표와 함께 평균을 취하여 context vector 를 만듭니다. 그 다음은 Word2Vec 과 같습니다. document id + 4 개의 단어로 이뤄진 context vector 에 가깝도록 $$Y$$, cat 의 위치를 조절합니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/doc2vec_logistic_structure.png)
+![]({{ "/assets/figures/doc2vec_logistic_structure.png" | absolute_url }})
 
 Word2Vec 의 수식에서 $$exp({v_I}^{T}v_y) = exp\left(\left(\frac{v_{x1} + \cdots + v_{x4}}{4}\right)^T v_y\right)$$ 입니다. cat 을 각 네 단어의 가운데 방향으로 이동시킨 것과 비슷합니다. 각 $$X_i$$ 의 네 방향으로 $$Y$$ 를 당깁니다. 비슷하게 Doc2Vec 은 document id 와 각 문서 (혹은 문장)에 등장하였던 단어들이 서로 가까워지도록 document vector 를 움직입니다.
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/doc2vec_concept.png)
+![]({{ "/assets/figures/doc2vec_concept.png" | absolute_url }})
 
 단어가 다르더라도 단어의 벡터들이 비슷하다보니 각 문장의 document vectors 가 비슷해집니다. v(cat) $$\simeq$$ v(dog), v(table) $$\simeq$$ v(board) 이기 때문에 v('a little cat sit on table') $$\simeq$$ v('a little dog sit on board') 가 됩니다. 이는 entity - descriptor 의 관계로 생각할 수 있습니다. 임베딩을 하고 싶은 entity 에 대하여 이를 기술할 수 있는 단어, 혹은 이와 비슷한 list of descriptor 를 정의할 수 있다면 entity 의 임베딩 벡터를 학습할 수 있습니다. 
 
@@ -70,7 +69,7 @@ Doc2Vec 은 재밌는 결과를 보여줍니다. (Dai et al., 2015) 에서는 Wi
 
 더 재밌는 결과는 그림 (b) 입니다. v("Lady Gaga") - v("American") + v("Japanese") 을 계산한 뒤, 비슷한 벡터를 찾아보니 아무로 나미에, 나카가와 쇼코 같은 일본 가수, 혹은 배우 였습니다. 이런 결과가 등장하는 이유는 v("Lady Gaga") - v("Namie Amuro") $$\simeq$$ v("American") - v("Japanese") 이기 때문입니다. 레이디 가가와 아무로 나미에에 등장하는 공통된 단어들은 가수, 음악 활동과 관련된 단어일 것입니다. 미국인과 일본인의 문맥에 등장하는 공통된 단어들은 경제, 사회, 문화와 관련된 일반적인 단어일 것입니다. 공통된 단어가 서로 제외되면 두 나라의 고유한 단어들이 남았을테고, 그 차이가 비슷하다는 의미입니다. 위 식을 정리하면 v("Lady Gaga") - v("American") + v("Japanese") $$\simeq$$ v("Namie Amuro") 입니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/paragraph2vec_ladygaga.png)
+![]({{ "/assets/figures/paragraph2vec_ladygaga.png" | absolute_url }})
 
 영어 wikipedia 는 그만큼 각 문서의 형식이 통일되어 있다는 의미입니다. 어떤 데이터에 이와 같은 벡터 연산을 수행했는데 잘 되지 않는다면 entity 를 설명하는 descriptor 들이 이 공식에 적용할 수 있는지 확인해 보세요. 
 
@@ -92,7 +91,7 @@ $$P(cat \vert [a, little, sit, on])$$ 처럼 문장의 일부 단어를 이용�
 
 Language model 을 압축할 필요가 있었고, Bengio 교수는 feed-forward neural network 를 이용한 language model 을 만듭니다. 이때에는 $$P(on \vert [a, little, cat, sit])$$ 을 학습하였습니다. 그리고 input 으로 입력되는 단어의 벡터를 연속으로 이어붙였습니다 (concatenation). 각 단어가 100 차원의 위치벡터를 지녔다면 input 으로 400 차원의 벡터가 만들어집니다. 그리고 이를 hidden layer 에 입력합니다. Hidden 의 output 이 'on' 과 같은 차원이면 내적을 할 수 있습니다. 그 다음은 softmax regression 입니다. 사실 word embedding 은 neural language model 의 부산물입니다.
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/feedforward_language_model.png)
+![]({{ "/assets/figures/feedforward_language_model.png" | absolute_url }})
 
 이런 구조로 모델을 학습하면 학습시간이 15일, 한 달 정도 걸렸습니다. Word2Vec 은 feed-forward neural language model 에서 불필요한 부분들을 걷어냈습니다. 반드시 hidden 을 거칠 필요가 없었습니다. 또한 concatenation 도 굳이 필요가 없었습니다. Hidden layer 를 제거하고 concatenation 대신 평균을 취했더니 매우 빠르게 word embedding 을 학습하였습니다. 여기에 negative sampling 까지 더해져 속도가 훨씬 빨라졌습니다. 일반적인 컴퓨터 환경에서도 word embedding vector 를 빠르게 학습을 할 수 있다보니 Word2Vec 이 다양한 분야에서 이용되기 시작했습니다. 
 
@@ -325,6 +324,6 @@ doc2vec_model.docvecs.most_similar(1)
 
 
 
-[logistic_regression]: {{ site.baseurl }}{ link _posts/2018-03-22-logistic_regression.md }
+[logistic_regression]: {{ site.baseurl }}{% link _posts/2018-03-22-logistic_regression.md %}
 [gensim]: https://radimrehurek.com/gensim/index.html
 [googlengram]: https://research.googleblog.com/2006/08/all-our-n-gram-are-belong-to-you.html
