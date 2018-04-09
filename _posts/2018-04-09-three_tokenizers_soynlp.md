@@ -515,8 +515,8 @@ word2vec_twitter.most_similar('방송/Noun')
 
 [soynlp]: https://github.com/lovit/soynlp/
 [yaminjungum]: https://namu.wiki/w/%EC%95%BC%EB%AF%BC%EC%A0%95%EC%9D%8C
-[wpm]: {{ site.baseurl }}{% link _post/2018-04-02-wpm.md %}
-[text_to_matrix]: {{ site.baseurl }}{% link _post/2018-03-26-from_text_to_matrix.md %}
-[pos_and_oov]: {{ site.baseurl }}{% link _post/2018-04-01-pos_and_oov.md %}
-[cohesion]: {{ site.baseurl }}{% link _post/2018-04-09-cohesion_ltokenizer.md %}
-[beav]: {{ site.baseurl }}{% link _post/2018-04-09-branching_entropy_accessor_variety.md %}
+[wpm]: {{ site.baseurl }}{% link _posts/2018-04-02-wpm.md %}
+[text_to_matrix]: {{ site.baseurl }}{% link _posts/2018-03-26-from_text_to_matrix.md %}
+[pos_and_oov]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
+[cohesion]: {{ site.baseurl }}{% link _posts/2018-04-09-cohesion_ltokenizer.md %}
+[beav]: {{ site.baseurl }}{% link _posts/2018-04-09-branching_entropy_accessor_variety.md %}
