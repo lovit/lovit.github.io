@@ -101,12 +101,13 @@ Scores 에는 [Cohesion][cohesion], [Branching Entropy][beav], [Accessor Variety
 for e in range(2, 6):
     word = '아이오아이'[:e]
     if word in word_scores:
-    score = word_scores[word].cohesion_forward
-    frequency = word_scores[word].leftside_frequency
+        score = word_scores[word].cohesion_forward
+        frequency = word_scores[word].leftside_frequency
     else:
-    score = 0
-    frequency = 0
-    print('word = {}, frequency = {}, cohesion_forward={}'.format(word, frequency, score))
+        score = 0
+        frequency = 0
+    print('word = {}, frequency = {}, cohesion_forward={}'.format(
+        word, frequency, score))
 {% endhighlight %}
 
 '아이' 라는 단어의 빈도수가 급격히 떨어지며, '아이오아이'가 될 때 cohesion score 가 가장 큽니다. '아이오아'가 word_scores 에 포함되지 않은 이유는 빈도수가 거의 같은 subwords 는 긴 subword 만 남기도록 되어있기 때문입니다. 실제로 '아이오아'의 빈도수는 270 으로 '아이오아이'와 같습니다. 
@@ -291,7 +292,7 @@ maxscoretokenizer.tokenize('아이오아이의무대가방송에중계되었습�
 
 물론 숫자와 한글이 합쳐져서 하나의 단어가 되기도 합니다. 6.25전쟁이 '6.25', '전쟁'으로 나뉘어진 다음에, 이를 '6.25 - 전쟁'으로 묶는 건 ngram extraction 으로 할 수 있다. 이 부분은 일단 다루지 않습니다. 
 
-'6.25전쟁'과 같은 경우는 소수이며, 대부분의 경우에는 한글|숫자|영어(라틴)|기호가 바뀌는 지점에서 토크나이징이 되어야 합니다. 위의 예제는 적어도 [이것은, 123, 이라는숫자]로 니뉘어져야 합니다. 그 다음에 단어 추출에 의하여 [이것, 은, 123, 이라는, 숫자]라고 나뉘어지는 것이 이상적입니다.
+'6.25전쟁'과 같은 경우는 소수이며, 대부분의 경우에는 한글, 숫자, 영어(라틴), 기호가 바뀌는 지점에서 토크나이징이 되어야 합니다. 위의 예제는 적어도 [이것은, 123, 이라는숫자]로 니뉘어져야 합니다. 그 다음에 단어 추출에 의하여 [이것, 은, 123, 이라는, 숫자]라고 나뉘어지는 것이 이상적입니다.
 
 또한 한국어에서 자음/모음이 단어 중간에 단어의 경계를 구분해주는 역할을 합니다. 우리는 문자 메시지를 주고 받을 때 자음으로 이뤄진 이모티콘들로 띄어쓰기를 대신하기도 합니다. 
 
