@@ -1,5 +1,5 @@
 ---
-title: Unsupervised tokenizers in soynlp project, (Max Score Tokenizer, L-Tokenizer, RegexTokenizer)
+title: Unsupervised tokenizers in soynlp project
 date: 2018-04-09 23:00:00
 categories:
 - nlp
@@ -7,7 +7,8 @@ tags:
 - preprocessing
 ---
 
-soynlp 는 제가 작업하는 한국어 정보처리를 위한 비지도학습 기반 자연어처리 라이브러리 입니다. 현재 (ver 0.0.4) 세 가지 통계 기반 단어 추출 기법과 이를 이용하는 두 종류의 unsupervised tokenizers 를 제공합니다. WordExtractor 는 세 가지 단어 추출 기법인 Cohesion score, Branching Entropy, Accessor Variety 를 동시에 학습합니다. 학습된 통계 기반 단어 추출 기법들을 조합하여 Max Score Tokenizer 와 L-Tokenizer 를 만들 수 있습니다. 또한 규칙 기반으로 작동하는 Regex Tokenizer 도 제공합니다. 이에 대한 설명과 사용기입니다. 
+soynlp 는 제가 작업하는 한국어 정보처리를 위한 비지도학습 기반 자연어처리 라이브러리 입니다. 현재 (ver 0.0.4) 세 가지 통계 기반 단어 추출 기법과 이를 이용하는 두 종류의 unsupervised tokenizers 를 제공합니다. WordExtractor 는 세 가지 단어 추출 기법인 Cohesion score, Branching Entropy, Accessor Variety 를 동시에 학습합니다. 학습된 통계 기반 단어 추출 기법들을 조합하여 Max Score Tokenizer 와 L-Tokenizer 를 만들 수 있습니다. 또한 규칙 기반으로 작동하는 Regex Tokenizer 도 제공합니다. 이에 대한 설명과 사용기입니다.
+
 
 ## soynlp 
 
