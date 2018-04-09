@@ -27,7 +27,7 @@ Word2Vec 은 [softmax regression][logistic_regression] 의 확장입니다. Soft
 
 $$ maximize P(y_k \vert x) = \frac{exp(\beta_{y_k}^Tx)}{\sum_{j} exp(\beta_{j}^Tx)}$$
 
-흔히 생각하는 softmax regression 은 문장의 단어들 $$X$$ 를 이용하여 문장의 긍부정 $$Y$$ 를 예측합니다. $$X와 $$Y$$ 의 종류가 다릅니다. 하지만 Word2Vec 은 단어 $$X$$로 단어 $$Y$$ 를 예측합니다. $$X$$, $$Y$$ 가 모두 단어입니다. 
+흔히 생각하는 softmax regression 은 문장의 단어들 $$X$$ 를 이용하여 문장의 긍부정 $$Y$$ 를 예측합니다. $$X$$ 와 $$Y$$ 의 종류가 다릅니다. 하지만 Word2Vec 은 단어 $$X$$로 단어 $$Y$$ 를 예측합니다. $$X$$, $$Y$$ 가 모두 단어입니다. 
 
 Word2Vec 은 window classification 처럼, 긴 문장에 스캐너가 이동하며 스냅샷을 찍듯이 작동합니다. 예를 들어 [a, little, cat, sit, on, the, table] 이라는 문장이 주어졌을 때, 크기 5인 (-2, 2) 의 스캐너를 이동하여 [a, little, cat, sit, on] 이라는 스냅샷을 하나 만듭니다. 스냅샷의 양 옆의 [a, little, sit, on] 네 단어로 'cat' 이라는 가운데 단어를 예측하는 regression 문제를 학습합니다. 즉 [a, little, sit, on] 네 단어가 $$X$$, 'cat' 이 $$Y$$ 입니다. 단어를 $$X$$ 로 이용하기 위해서 각 단어의 의미공간에서의 위치좌표, 벡터값을 이용합니다. 각 단어는 의미공간에서 각자의 좌표값을 가지고 있습니다. 'a' 가 입력되면 이에 해당하는 좌표값을 가지고 옵니다. $$X, Y$$ 의 내적이 성립하려면 두 벡터의 차원의 크기가 같아야 합니다. [a, little, sit, on] 의 네 단어에 대한 좌표값을 모두 가지고 온 뒤 평균을 취하면 $$Y$$ 와 같은 차원의 벡터가 됩니다. 이 과정이 한 스냅샷에서 이뤄지는 학습입니다.
 
@@ -316,14 +316,16 @@ doc2vec_model.docvecs.most_similar(1)
 	('밀정', '137952', 0.654565691947937)
 
 ## Reference
-- Bengio, Y., Ducharme, R., Vincent, P., & Jauvin, C. (2003). A neural probabilistic language model. Journal of machine learning research, 3(Feb), 1137-1155.
-- Dai, A. M., Olah, C., & Le, Q. V. (2015). Document embedding with paragraph vectors. arXiv preprint arXiv:1507.07998.
-- Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013a). Efficient estimation of word representations in vector space. arXiv preprint arXiv:1301.3781.
-- Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S., & Dean, J. (2013b). Distributed representations of words and phrases and their compositionality. In Advances in neural information processing systems (pp. 3111-3119).
+- Bengio, Y., Ducharme, R., Vincent, P., & Jauvin, C. (2003). [A neural probabilistic language model.][nlm] Journal of machine learning research, 3(Feb), 1137-1155.
+- Dai, A. M., Olah, C., & Le, Q. V. (2015). [Document embedding with paragraph vectors][paragraph2vec]. arXiv preprint arXiv:1507.07998.
+- Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013a). [Efficient estimation of word representations in vector space.][word2vecarxiv] arXiv preprint arXiv:1301.3781.
+- Mikolov, T., Sutskever, I., Chen, K., Corrado, G. S., & Dean, J. (2013b). [Distributed representations of words and phrases and their compositionality][doc2vecnips]. In Advances in neural information processing systems (pp. 3111-3119).
 - Google Research blog, [All Our N-gram are Belong to You][googlengram]
 
-
-
+[doc2vecnips]: https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf
+[paragraph2vec]: https://arxiv.org/abs/1507.07998
+[word2vecarxiv]: https://arxiv.org/abs/1301.3781
+[nlm]: http://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf
 [logistic_regression]: {{ site.baseurl }}{% link _posts/2018-03-22-logistic_regression.md %}
 [gensim]: https://radimrehurek.com/gensim/index.html
 [googlengram]: https://research.googleblog.com/2006/08/all-our-n-gram-are-belong-to-you.html
