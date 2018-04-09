@@ -32,7 +32,7 @@ Scipy 에서 제공하는 [sparse matrix class][scipy_sparse] 는 다양합니�
 
 우리는 다음과 같은 4 x 5 의 행렬을 만들어 네 가지 sparse matrix type 에 대하여 알아봅니다. 
 
-![]{{ "/assets/figures/sparse_matrix_mat.png" | absolute_url }}{: width="50%" height="50%"}
+![]({{ "/assets/figures/sparse_matrix_mat.png" | absolute_url }}){: width="50%" height="50%"}
 
 scipy.sparse 의 matrix 를 만드는 방법은 sparse martrix 의 구성요소를 직접 입력하는 방법과 numpy.ndarray 를 입력하는 방법이 있습니다. 후자는 튜토리얼처럼 연습할 때에만 쓸 수 있는 방법입니다. 애초에 numpy.ndarray 를 만들고 싶지 않는 경우에 sparse matrix 를 만드니까요. 
 
@@ -76,7 +76,7 @@ csr.todense()
 
 ## DoK format
 
-Dictionary of Keys 의 약자입니다. 0 이 아닌 값들의 위치를 저장하는 방식으로 (row, column) 을 key 로 지니는 dict 로 구성되어 있습니다. 가장 직관적입니다. x[i,j] 에 접근하기가 가장 쉽습니다. (i,j) pair 의 key 가 dict 에 존재하는지 확인하고, 그 값이 있다면 key 를 value 로 map 합니다. $$O(1)$$ 의 access 속도를 보입니다. 새로운 값을 저장할 때에도 hash map 의 데이터를 넣는 방식으로 작동합니다. 
+Dictionary of Keys 의 약자입니다. 0 이 아닌 값들의 위치를 저장하는 방식으로 (row, column) 을 key 로 지니는 dict 로 구성되어 있습니다. 직관적인 구조로, x[i,j] 에 접근하기가 쉽습니다. (i,j) pair 의 key 가 dict 에 존재하는지 확인하고, 그 값이 있다면 key 를 value 로 map 합니다. $$O(1)$$ 의 access 비용이 듭니다. 새로운 값을 저장할 때에도 hash map 의 데이터를 넣는 것 뿐입니다.
 
 numpy.ndarray 인 x 를 이용하여 dok matrix 를 만듭니다. 
 
@@ -149,7 +149,7 @@ dok = coo.todok()
 
 Compressed Sparse Row 의 약자입니다. Row 순서대로 데이터를 저장합니다. 
 
-![]{{ "/assets/figures/sparse_matrix_csr.png" | absolute_url }}{: width="50%" height="50%"}
+![]({{ "/assets/figures/sparse_matrix_csr.png" | absolute_url }}){: width="50%" height="50%"}
 
 CSR matrix 에는 indices, indptr, data 가 있습니다. data 는 0 이 아닌 요소의 값 입니다. 
 
@@ -157,13 +157,13 @@ CSR matrix 에는 indices, indptr, data 가 있습니다. data 는 0 이 아닌 
 print(csr.data) # [1 2 3 4 5 6]
 {% endhighlight %}
 
-indices 는 data 의 값의 column index 입니다. 
+indices 는 data 의 값에 해당하는 column index 입니다. 
 
 {% highlight python %}
 print(csr.indices) # [0 4 1 3 0 3]
 {% endhighlight %}
 
-indptr 은 row 별로 data 의 begin index 와 end index 가 저장되어 있습니다. 예를 들어 0 번째 row 의 data 는 data[0:2] 에 저장되어 있습니다. 그리고 그 때의 column index 는 indices[0:2] 입니다. 
+indptr 은 row 별로 data 의 begin index 와 end index 가 저장되어 있습니다. 예를 들어 0 번째 row 의 data 는 data[0:2] 입니다. 또한 이에 해당하는 column index 는 indices[0:2] 입니다. 
 
 {% highlight python %}
 print(csr.indptr) # [0 2 4 4 6]
@@ -204,7 +204,7 @@ rows, cols = csr.nonzero()
 
 Compressed Sparse Cow 의 약자입니다. csr 과 반대로 column 순서대로 데이터를 저장합니다. 
 
-![]{{ "/assets/figures/sparse_matrix_csc.png" | absolute_url }}{: width="50%" height="50%"}
+![]({{ "/assets/figures/sparse_matrix_csc.png" | absolute_url }}){: width="50%" height="50%"}
 
 CSC matrix 에도 indices, indptr, data 가 있습니다. data 는 0 이 아닌 요소의 값 입니다. Column 순서로 데이터가 저장되기 때문에 csr.data 와 data 의 순서가 달라졌습니다. 
 
