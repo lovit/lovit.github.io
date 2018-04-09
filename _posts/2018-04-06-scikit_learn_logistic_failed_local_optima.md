@@ -54,6 +54,8 @@ C 를 기본값 1 로 설정하여 모델을 학습한 뒤의 $$\theta$$ 를 확
 위의 cost function 을 이용하여 직접 loss 와 cost 를 계산하였습니다. 위 그림의 loss 와 cost 는 각각 loss = -0.729, cost=14.637 입니다. 
 
 {% highlight python %}
+import numpy as np
+
 # cross entropy of softmax
 def get_loss(X, class_vector):
     exp = np.exp(np.inner(X, class_vector))
@@ -69,20 +71,21 @@ def get_cost(loss, coef, C):
 
 아래 그림은 모델을 학습시키지 않고, 각 클래스의 평균 벡터와 배수를 취한 벡터를 대표 벡터로 만든 것입니다. 
 
+<center>Below figure is "Mean vector as class vector"</center>
 ![]({{ "/assets/figures/logistic_meanx.png" | absolute_url }})
-<center>Mean vector as class vector</center>
 
+<center>Below figure is "Mean vector x1.2 as class vector"</center>
 ![]({{ "/assets/figures/logistic_meanx1_2.png" | absolute_url }})
-<center>Mean vector x1.2 as class vector</center>
 
+<center>Below figure is "Mean vector x1.5 as class vector"</center>
 ![]({{ "/assets/figures/logistic_meanx1_5.png" | absolute_url }})
-<center>Mean vector x1.5 as class vector</center>
 
+<center>Below figure is "Mean vector x2 as class vector"</center>
 ![]({{ "/assets/figures/logistic_meanx2.png" | absolute_url }})
-<center>Mean vector x2 as class vector</center>
 
+<center>Below figure is "Mean vector x3 as class vector"</center>
 ![]({{ "/assets/figures/logistic_meanx3.png" | absolute_url }})
-<center>Mean vector x3 as class vector</center>
+
 
 그리고 각각의 loss 와 cost 입니다. mean vector 를 $$\theta$$ 로 이용하면 loss 모델을 학습하는 경우보다 loss 가 큽니다. 하지만 x1.5 ~ x2 배수를 취하면 loss 는 오히려 모델을 학습하는 경우보다도 작습니다. 모델의 학습은 cost 기준이기 때문에 mean vector 만을 이용하여도 cost 기준에서 훨씬 좋은 solution 입니다. 그런데 scikit learn 의 LogisticRegression 은 이와 다른 solution 을 찾았네요. 
 
@@ -99,9 +102,9 @@ def get_cost(loss, coef, C):
 
 $$\lambda$$ 는 loss 와 regularity 사이에서 중요도를 정의하는 페러매터입니다. Accuracy 와 over fitting 사이에서 모델의 학습 방향을 결정합니다. 혹시 $$\lambda$$ 에 의한 영향인가 싶어 C 를 바꿔가며 모델을 학습했습니다만 solution 이 같았습니다. 
 
-어쩌면 solver 때문일지도 모르겠습니다. Solver 는 solution 을 찾는 알고리즘입니다 .sklearn.linear_model.LogisticRegression 에서 이용하는 solver 는 아래와 같습니다. Default 는 liblinear 입니다. 이들을 모두 바꿔가며 학습해도 그 결과가 같았습니다. 
+어쩌면 solver 때문일지도 모르겠습니다. Solver 는 solution 을 찾는 알고리즘입니다 scikit-learn 의 LogisticRegression 에서 이용할 수 있는 solver 는 아래와 같습니다. Default 는 liblinear 입니다. 이들을 모두 바꿔가며 학습해도 그 결과가 같았습니다. 
 
- 	{‘newton-cg’, ‘lbfgs’, ‘liblinear’, ‘sag’, ‘saga’},
+	{‘newton-cg’, ‘lbfgs’, ‘liblinear’, ‘sag’, ‘saga’}
 
 어쩌면 random seeds 가 달라서 local optima 까지 도달하지 못할 수도 있겠다는 생각이 들었습니다. Random seed 를 바꿔 실험하였습니다. 하지만 결과가 같았습니다. 
 
