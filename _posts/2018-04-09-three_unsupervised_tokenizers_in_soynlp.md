@@ -23,16 +23,16 @@ twitter.pos('너무너무너무는 아이오아이의 노래입니다')
 
 '너무너무너무'와 '아이오아이'는 하나의 단어이지만, 여러 개의 복합단어로 나뉘어졌습니다. 이를 해결하기 위하여 많은 형태소 분석기와 품사 판별기는 사용자 사전 추가 기능을 제공합니다. 
 
-	[('너무', 'Noun'),
-	 ('너무', 'Noun'),
-	 ('너무', 'Noun'),
-	 ('는', 'Josa'),
-	 ('아이오', 'Noun'),
-	 ('아이', 'Noun'),
-	 ('의', 'Josa'),
-	 ('노래', 'Noun'),
-	 ('입니', 'Adjective'),
-	 ('다', 'Eomi')]
+    [('너무', 'Noun'),
+     ('너무', 'Noun'),
+     ('너무', 'Noun'),
+     ('는', 'Josa'),
+     ('아이오', 'Noun'),
+     ('아이', 'Noun'),
+     ('의', 'Josa'),
+     ('노래', 'Noun'),
+     ('입니', 'Adjective'),
+     ('다', 'Eomi')]
 
 WPM 은 일종의 데이터 압축 알고리즘으로, 정해진 크기의 벡터 공간으로 모든 문서를 표현하는데 그 목적이 있습니다. 미등록 단어 문제를 근본적으로 해결하는 방법은 아닙니다. [soynlp][soynlp] 는 미등록 단어 문제를 직접 풀기 위한 목적으로 시작된 한국어 처리 프로젝트입니다. 단어 추출 / 토크나이저 빌더 / 품사 추출 / 품사 판별기 빌더 / 전처리에 필요한 utils 를 제공하고 있습니다. 
 
@@ -45,7 +45,7 @@ soynlp 의 의미는 콩nlp 가 아닙니다. 오래전 스페인어를 공부�
 
 pip install 이 가능합니다. 
 
-	pip install soynlp==0.0.4
+    pip install soynlp==0.0.4
 
 git clone 으로 이용하셔도 됩니다. numpy 와 psutil 에만 dependency 가 있습니다. 
 
@@ -84,15 +84,15 @@ word_scores['아이오아이']
 
 Scores 에는 [Cohesion][cohesion], [Branching Entropy][beav], [Accessor Variety][beav] 의 값이 학습되어 있습니다. 각각에 대한 설명은 링크의 포스트를 참고하세요. forward 는 왼쪽에서 오른쪽 방향으로 바라보았을 때의 score 입니다. cohesion_forward 는 어절의 왼쪽에 위치한 subword 의 cohesion score 입니다. 
 
-	Scores(cohesion_forward=0.30063636035733476,
-		   cohesion_backward=0,
-		   left_branching_entropy=3.0548011243339506,
-		   right_branching_entropy=2.7422160443312897,
-		   left_accessor_variety=32,
-		   right_accessor_variety=27,
-		   leftside_frequency=270,
-		   rightside_frequency=0
-		   )
+    Scores(cohesion_forward=0.30063636035733476,
+           cohesion_backward=0,
+           left_branching_entropy=3.0548011243339506,
+           right_branching_entropy=2.7422160443312897,
+           left_accessor_variety=32,
+           right_accessor_variety=27,
+           leftside_frequency=270,
+           rightside_frequency=0
+           )
 
 '아이오아이' 라는 단어의 왼쪽부터 오른쪽 끝까지의 cohesion score 와 subword frequency 를 확인합니다. 
 
@@ -110,10 +110,10 @@ for e in range(2, 6):
 
 '아이' 라는 단어의 빈도수가 급격히 떨어지며, '아이오아이'가 될 때 cohesion score 가 가장 큽니다. '아이오아'가 word_scores 에 포함되지 않은 이유는 빈도수가 거의 같은 subwords 는 긴 subword 만 남기도록 되어있기 때문입니다. 실제로 '아이오아'의 빈도수는 270 으로 '아이오아이'와 같습니다. 
 
-	word = 아이, frequency = 4910, cohesion_forward=0.1485537940215418
-	word = 아이오, frequency = 307, cohesion_forward=0.09637631475495469
-	word = 아이오아, frequency = 0, cohesion_forward=0
-	word = 아이오아이, frequency = 270, cohesion_forward=0.30063636035733476
+    word = 아이, frequency = 4910, cohesion_forward=0.1485537940215418
+    word = 아이오, frequency = 307, cohesion_forward=0.09637631475495469
+    word = 아이오아, frequency = 0, cohesion_forward=0
+    word = 아이오아이, frequency = 270, cohesion_forward=0.30063636035733476
 
 
 ## 한국어 어절의 구조 L + [R]
@@ -174,7 +174,7 @@ ltokenizer.tokenize('아이오아이의 무대가 방송에 중계되었습니�
 
 뉴스 데이터는 띄어쓰기가 잘 지켜져 있습니다. 공식 문서들도 띄어쓰기가 잘 지켜져 있습니다. 그러나 웹공간에서 만날 수 있는 수많은 문서들은 띄어쓰기가 잘 지켜지지 않습니다. 철자까지도 틀리며 ['야민정음'][yaminjungum]까지도 등장하는데, 띄어쓰기가 잘 지켜져 있기를 기대할 수도 없습니다. 띄어쓰기가 잘 지켜지지 않는 경우에 이용하기 위하여 Max Score Tokenizer 를 만들었습니다. 
 
-Max Score Tokenizer 의 원리는 사람이 띄어쓰기가 지켜지지 않은 문장을 인식하는 원리와 같습니다. 사람도 잘 알고 있는 단어부터 눈에 들어옵니다. 아래 문장을 단어들로 직접 나눠보세요
+Max Score Tokenizer 의 원리는 사람이 띄어쓰기가 지켜지지 않은 문장을 인식하는 원리와 같습니다. 사람도 잘 알고 있는 단어부터 눈에 들어옵니다. 아래 문장을 단어들로 직접 나눠보세요.
 
     이런문장을직접토크나이징을해볼게요
     
@@ -201,16 +201,16 @@ Word Piece Model 과 비슷한 원리이기도 합니다. WPM 처럼 가장 빈�
 단어 길이의 범위를 [2, 3]이라고 가정하면 아래와 같은 subword score를 얻을 수 있습니다. 아래는 (subword, begin, end, score) 입니다.
 
     [('파스', 0, 2, 0.3),
-     ('파스타', 0, 3, 0.7),
-     ('스타', 1, 3, 0),
-     ('스타가', 1, 4, 0),
-     ('타가', 2, 4, 0),
-     ('타가좋', 2, 5, 0),
-     ('가좋', 3, 5, 0),
-     ('가좋아', 3, 6, 0),
-     ('좋아', 4, 6, 0.5),
-     ('좋아요', 4, 7, 0.2),
-     ('아요', 5, 7, 0)]
+    ('파스타', 0, 3, 0.7),
+    ('스타', 1, 3, 0),
+    ('스타가', 1, 4, 0),
+    ('타가', 2, 4, 0),
+    ('타가좋', 2, 5, 0),
+    ('가좋', 3, 5, 0),
+    ('가좋아', 3, 6, 0),
+    ('좋아', 4, 6, 0.5),
+    ('좋아요', 4, 7, 0.2),
+    ('아요', 5, 7, 0)]
      
 이를 점수 순서로 정렬하면 아래와 같습니다. 사람도 아는 단어부터 잘 인식된다는 점을 sorting 으로 잘 아는 subword 를 찾는 과정으로 구현하였습니다. 
 
