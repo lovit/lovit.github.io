@@ -85,14 +85,14 @@ word_scores['아이오아이']
 Scores 에는 [Cohesion][cohesion], [Branching Entropy][beav], [Accessor Variety][beav] 의 값이 학습되어 있습니다. 각각에 대한 설명은 링크의 포스트를 참고하세요. forward 는 왼쪽에서 오른쪽 방향으로 바라보았을 때의 score 입니다. cohesion_forward 는 어절의 왼쪽에 위치한 subword 의 cohesion score 입니다. 
 
     Scores(cohesion_forward=0.30063636035733476,
-           cohesion_backward=0,
-           left_branching_entropy=3.0548011243339506,
-           right_branching_entropy=2.7422160443312897,
-           left_accessor_variety=32,
-           right_accessor_variety=27,
-           leftside_frequency=270,
-           rightside_frequency=0
-           )
+       cohesion_backward=0,
+       left_branching_entropy=3.0548011243339506,
+       right_branching_entropy=2.7422160443312897,
+       left_accessor_variety=32,
+       right_accessor_variety=27,
+       leftside_frequency=270,
+       rightside_frequency=0
+       )
 
 '아이오아이' 라는 단어의 왼쪽부터 오른쪽 끝까지의 cohesion score 와 subword frequency 를 확인합니다. 
 
@@ -100,11 +100,11 @@ Scores 에는 [Cohesion][cohesion], [Branching Entropy][beav], [Accessor Variety
 for e in range(2, 6):
     word = '아이오아이'[:e]
     if word in word_scores:
-        score = word_scores[word].cohesion_forward
-        frequency = word_scores[word].leftside_frequency
+    score = word_scores[word].cohesion_forward
+    frequency = word_scores[word].leftside_frequency
     else:
-        score = 0
-        frequency = 0
+    score = 0
+    frequency = 0
     print('word = {}, frequency = {}, cohesion_forward={}'.format(word, frequency, score))
 {% endhighlight %}
 
@@ -114,6 +114,7 @@ for e in range(2, 6):
     word = 아이오, frequency = 307, cohesion_forward=0.09637631475495469
     word = 아이오아, frequency = 0, cohesion_forward=0
     word = 아이오아이, frequency = 270, cohesion_forward=0.30063636035733476
+
 
 
 ## 한국어 어절의 구조 L + [R]
@@ -135,6 +136,7 @@ for e in range(2, 6):
 | 용언 | 동사, 형용사 |
 
 그렇다면 한국어 어절의 구조는 L + [R] 입니다. L 에는 '체언 / 부사 / 동사 / 형용사 / 감탄사'가 올 수 있습니다. R 에는 '조사 / 동사 / 형용사'가 올 수 있습니다. 그러나 R 이 반드시 필요하지는 않습니다.
+
 
 ## L-Tokenizer
 
@@ -177,7 +179,7 @@ ltokenizer.tokenize('아이오아이의 무대가 방송에 중계되었습니�
 Max Score Tokenizer 의 원리는 사람이 띄어쓰기가 지켜지지 않은 문장을 인식하는 원리와 같습니다. 사람도 잘 알고 있는 단어부터 눈에 들어옵니다. 아래 문장을 단어들로 직접 나눠보세요.
 
     이런문장을직접토크나이징을해볼게요
-    
+
 우리는 지금 토크나이징을 이야기 하고 있기 때문에, '토크나이징'이라는 단어가 눈에 잘 들어옵니다. 그 다음으로는 '문장', '직접', '볼게요' 순으로 단어가 눈에 들어옵니다. 일단 그렇다고 가정하면, 아래 순서대로 단어를 마킹할 수 있습니다. 
 
     이런문장을직접 [토크나이징] 을해볼게요
@@ -197,7 +199,7 @@ Word Piece Model 과 비슷한 원리이기도 합니다. WPM 처럼 가장 빈�
 
     sent = '파스타가좋아요'
     scores = {'파스': 0.3, '파스타': 0.7, '좋아요': 0.2, '좋아':0.5}
-    
+
 단어 길이의 범위를 [2, 3]이라고 가정하면 아래와 같은 subword score를 얻을 수 있습니다. 아래는 (subword, begin, end, score) 입니다.
 
     [('파스', 0, 2, 0.3),
@@ -211,7 +213,7 @@ Word Piece Model 과 비슷한 원리이기도 합니다. WPM 처럼 가장 빈�
     ('좋아', 4, 6, 0.5),
     ('좋아요', 4, 7, 0.2),
     ('아요', 5, 7, 0)]
-     
+ 
 이를 점수 순서로 정렬하면 아래와 같습니다. 사람도 아는 단어부터 잘 인식된다는 점을 sorting 으로 잘 아는 subword 를 찾는 과정으로 구현하였습니다. 
 
     [('파스타', 0, 3, 0.7),
@@ -228,8 +230,8 @@ Word Piece Model 과 비슷한 원리이기도 합니다. WPM 처럼 가장 빈�
 
 파스타라는 subword 의 점수가 가장 높으니, 이를 토큰으로 취급합니다. 파스타의 범위인 [0, 3)과 겹치는 다른 subwords 을 리스트에서 지워주면 아래와 같은 토큰 후보들이 남습니다. 
 
-    파스타가좋아요 > [파스타]가좋아요
-    
+파스타가좋아요 > [파스타]가좋아요
+
     [('좋아', 4, 6, 0.5),
      ('좋아요', 4, 7, 0.2),
      ('가좋', 3, 5, 0),
@@ -239,11 +241,11 @@ Word Piece Model 과 비슷한 원리이기도 합니다. WPM 처럼 가장 빈�
 다음으로 '좋아'를 단어로 인식하면 남은 토큰 후보가 없기 때문에 아래처럼 토크나이징이 되며, 남는 글자들 역시 토큰으로 취급하여 토크나이징을 종료합니다. 
 
     파스타가좋아요 > [파스타]가[좋아]요 > [파스타, 가, 좋아, 요]
-    
+
 이처럼 단어 점수만을 이용하여도 손쉽게 토크나이징을 할 수 있습니다. 이 방법의 장점은 각 도메인에 적절한 단어 점수를 손쉽게 변형할 수 있다는 것입니다. 도메인에서 반드시 단어로 취급되어야 하는 글자들이 있다면, 그들의 점수를 scores에 최대값으로 입력합니다. Score tie-break 는 글자가 오버랩이 되어 있다면, 좀 더 긴 글자를 선택하는 것으로 구현하였습니다. 합성명사 역시 처리 가장 긴 명사를 선택하게 됩니다. 
 
     scores = {'서울': 1.0, '대학교': 1.0, '서울대학교': 1.0} 
-    
+
 위처럼 단어 점수가 부여된다면 '서울대학교'를 [서울, 대학교]로 분리하지는 않을 것입니다. 대신 '서울'이나 '대학교'가 등장한 다른 어절에서는 이를 단어로 분리합니다. 
 
 Max Score Tokenizer 는 이러한 컨셉으로, 단어 점수를 토크나이저에 입력하여 원하는 단어를 잘라냅니다. 이는 띄어쓰기가 제대로 이뤄지지 않은 텍스트를 토크나이징하기 위한 방법이며, 단어 점수를 잘 정의하는 것은 단어 추출의 몫입니다. 
@@ -269,6 +271,7 @@ maxscoretokenizer.tokenize('아이오아이의무대가방송에중계되었습�
 
 {% highlight python %}
 maxscoretokenizer.tokenize('아이오아이의무대가방송에중계되었습니다', flatten=False)
+
 # [[('아이오아이', 0, 5, 0.30063636035733476, 5),
 #   ('의', 5, 6, 0.0, 1),
 #   ('무대', 6, 8, 0.042336645588678112, 2),
@@ -278,7 +281,6 @@ maxscoretokenizer.tokenize('아이오아이의무대가방송에중계되었습�
 #   ('중계', 12, 14, 0.0019356503785271852, 2),
 #   ('되었습니다', 14, 19, 0.2762976357271788, 5)]]
 {% endhighlight %}
-
 
 ## Regex Tokenizer
 
@@ -293,11 +295,11 @@ maxscoretokenizer.tokenize('아이오아이의무대가방송에중계되었습�
 또한 한국어에서 자음/모음이 단어 중간에 단어의 경계를 구분해주는 역할을 합니다. 우리는 문자 메시지를 주고 받을 때 자음으로 이뤄진 이모티콘들로 띄어쓰기를 대신하기도 합니다. 
 
     아이고ㅋㅋ진짜? = [아이고, ㅋㅋ, 진짜, ?]
-    
+
 'ㅋㅋ' 덕분에 '아이고'와 '진짜'가 구분이 되며, 'ㅠㅠ'와 함께 붙어있는 'ㅋㅋ'는 서로 다른 이모티콘으로 구분이 될 수 있습니.
 
     아이고ㅋㅋㅜㅜ진짜? = [아이고, ㅋㅋ, ㅜㅜ, 진짜, ?]
-    
+
 이를 분리하는 손쉬운 방법은 'ㅋㅋ'를 찾아내어 앞/뒤에 빈 칸을 하나씩 추가하는 것입니다. 
 
     str.replace('ㅋㅋ', ' ㅋㅋ ')
@@ -305,11 +307,11 @@ maxscoretokenizer.tokenize('아이오아이의무대가방송에중계되었습�
 str에서의 어떤 pattern 을 찾아내기 위하여 regular expression 을 이용합니다. 
 
     re.compile('[가-힣]+')
-    
+
 위 regular expression은 초/중/종성이 완전한 한국어의 시작부터 끝까지라는 의미입니다. 
 
     re.compile('[ㄱ-ㅎ]+')
-    
+
 위 regular expression은 ㄱ부터 ㅎ까지 자음의 범위를 나타냅니다. 
 
 Regex Tokenizer 는 regular extression 을 이용하여 언어가 달라지는 순간에 띄어쓰기를 추가합니다. 영어의 경우에는 움라우트가 들어가는 경우들이 있어서 알파벳 뿐 아니라 라틴까지 포함하였습니다. 
@@ -348,7 +350,6 @@ tokenizer.tokenize(sent)
 {% endhighlight %}
 
 이는 다른 토크나이저를 이용하기 전, 최대한 띄어쓰기를 수행하여 다른 토크나이저의 계산 비용을 줄이고 오류를 막기 위한 용도로 이용됩니다. 
-
 
 ## L-Tokenizer / KoNLPy Twitter + Naver news + Word2Vec
 
