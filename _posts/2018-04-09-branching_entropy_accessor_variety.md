@@ -103,10 +103,10 @@ $$SS$$ 에 대한 criteria 는 몇 개의 functions 입니다. $$\vert W \vert$$
 
 Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. 단어의 최대 길이는 6 이라 가정한 뒤, i 를 1 씩 증가하며 best solusions 을 찾아갑니다. 
 
-- $$f_0 = 0$$
-- $$f_1 = f(W_{11} = C_1)$$
-- $$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$
-- $$f(S) = f_n$$
+- $$f_0 = 0$$ 
+- $$f_1 = f(W_{11} = C_1)$$ 
+- $$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$ 
+- $$f(S) = f_n$$ 
 
 위 방법을 한국어 데이터에 적용해보지는 않았습니다. Accessor Variety 는 그 자체로 어느 정도 잘 작동합니다. 알고리즘을 만들면 이 포스트를 업데이트 하겠습니다. 
 
