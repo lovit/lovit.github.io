@@ -109,7 +109,7 @@ def cohesion(w):
 
 위 코드는 확률의 누적곲이 아닙니다. 아래처럼 $$P(x_{0:1})$$ 과 $$P(x_{0:n})$$ 을 제외한 모든 부분이 삭제되기 때문입니다. 
 
-$$cohesion(c_{0:4}) = \frac{ c_{0:2} }{ \cancel{ c_{0:1} } } \times \frac{ \cancel{ c_{0:3} } }{ \cancel{ c_{0:2} } } \times \frac{ c_{0:4} }{ \cancel{ c_{0:3} }}$$
+$$cohesion(c_{0:4}) = \frac{ c_{0:2} }{ c_{0:1} } \times \frac{ c_{0:3} }{ c_{0:2} } \times \frac{ c_{0:4} }{ c_{0:3} }$$
 
 
 ## L-Tokenizer
