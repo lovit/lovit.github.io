@@ -149,6 +149,7 @@ L-Tokenizer 는 토크나이징에 이용할 score dict 를 argument 로 받습�
 {% highlight python %}
 from soynlp.tokenizer import LTokenizer
 
+cohesion_scores = {word:score.cohesion_forward for word, score in word_scores.items()}
 ltokenizer = LTokenizer(scores = cohesion_scores)
 {% endhighlight %}
 
