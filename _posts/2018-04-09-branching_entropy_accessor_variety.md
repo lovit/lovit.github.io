@@ -1,6 +1,6 @@
 ---
 title: Uncertanty to word boundary; Accessor Variety & Branching Entropy
-date: 2018-04-09 23:10:00
+date: 2018-04-09 22:30:00
 categories:
 - nlp
 tags:
