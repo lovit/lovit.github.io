@@ -85,28 +85,28 @@ Threshold 에 universial parameter 는 없습니다. Threshold 는 corpus 의 �
 
 Accessor Variety 를 이용한 unsupervised chinese word segmentation 방법은 같은 해에 동일한 저자인 Feng 에 의하여 제안되었습니다. 길이가 n 인 문장의 segmentation points 는 n-1 개 이며, 각각 [0, 1] 을 부여하는 labeling 문제입니다. 총 $$2^{n-1}$$ 개의 solutions 중에서 가장 적절한 solution 을 찾는 문제입니다. 모든 solutions 중에서 best solution 을 찾는 것은 많은 비용이 들기 때문에 효율적으로 최선의 solution 을 찾는 많은 heuristics 이 제안되었습니다. Feng 의 segmentation algorithm 도 이에 해당합니다. 
 
-혹은 Conditional Random Field (CRF) 와 같은 sequential labeling 방법들도 이용될 수 있습니다. 상하이 교통대학의 [Hai Zhao][zhaohai] 는 unsupervised chinese word segmentation 에 대한 많은 연구를 하였던 분이며, CRF 를 많이 이용하였습니다. 그리고 supervised algorithm 인 CRF 에 out of vocabulary 를 인식하는 능력을 부여하기 위하여 accessor variety 를 함께 이용하기도 했습니다. 이 분야에 관심이 있는 분이라면 Zhao 의 연구를 살펴보시길 바랍니다 (개인적으로 이 분 연구의 팬입니다). 
+혹은 Conditional Random Field (CRF) 와 같은 sequential labeling 방법들도 이용될 수 있습니다. 상하이 교통대학의 [Hai Zhao][zhaohai] 는 unsupervised chinese word segmentation 에 대한 연구를 하셨던 분이며, CRF 를 많이 이용하였습니다. 그리고 supervised algorithm 인 CRF 에 out of vocabulary 를 인식하는 능력을 부여하기 위하여 accessor variety 를 함께 이용하기도 했습니다. 이 분야에 관심이 있는 분이라면 Zhao 의 연구를 살펴보시길 바랍니다 (개인적으로 이 분 연구의 팬입니다). 
 
 다시 Feng 의 Accessor Variety 를 이용한 unsupervised word segmentation 으로 돌아옵니다. 풀어야 하는 문제는 문장 $$S$$ 가 있을 때 이를 substrings 인 $$SS$$ 로 나누는 것입니다. $$m \le n$$ 입니다. [Unsupervised segmentation of Chinese corpus using accessor variety][av_segmentation] 에서 제안된 방법은 $$SS$$ 에 대한 criteria 와, 이를 찾기 위한 dynamic programming 기반 알고리즘입니다. 
 
 <center>$$S = C_1 C_2 \cdots C_n$$</center>
-<center>$$SS = W_1 W_2 \cdots W_m$$</center><br>
+<center>$$SS = W_1 W_2 \cdots W_m$$</center>
 
 $$SS$$ 에 대한 criteria 는 몇 개의 functions 입니다. $$\vert W \vert$$ 는 단어 $$W$$ 의 길이입니다. $$b, c, d$$ 는 integer user configuration parameters 입니다. 
 
 <center>$$f_1 (W) = b^{\vert W \vert} \times log \left( AV(W) \right)$$</center>
 <center>$$f_2 (W) = \vert W \vert ^{\vert W \vert} \times log \left( AV(W) \right) ^d$$</center>
-<center>$$f_1 (W) = \vert W \vert ^c \times log \left() AV(W) \right) ^d$$</center>
-<center>$$f_1 (W) = \vert W \vert ^{\vert W \vert} \times log \left() AV(W) \right)$$</center><br>
+<center>$$f_3 (W) = \vert W \vert ^c \times log \left( AV(W) \right) ^d$$</center>
+<center>$$f_4 (W) = \vert W \vert ^{\vert W \vert} \times log \left( AV(W) \right)$$</center>
 
 사용자가 알아서 설정하는 임의의 parameters 이지만, 말은 됩니다. $$AV(W)$$ 의 값이 클수록 단어일 가능성이 높습니다. $$\vert W \vert ^d$$ 를 곱함으로써, 이왕이면 더 긴 단어가 선택되기를 장려합니다. Unsupervised approach 는 정확한 학습데이터가 없기 때문에, 알고리즘을 설계하는 사람이 옳다고 믿는 방향으로 solutions 을 유도합니다. 
 
 Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. 단어의 최대 길이는 6 이라 가정한 뒤, i 를 1 씩 증가하며 best solusions 을 찾아갑니다. 
 
-1. $$f_0 = 0$$
-1. $$f_1 = f(W_{11} = C_1)$$
-1. $$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$
-1. $$f(S) = f_n$$
+- $$f_0 = 0$$
+- $$f_1 = f(W_{11} = C_1)$$
+- $$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$
+- $$f(S) = f_n$$
 
 위 방법을 한국어 데이터에 적용해보지는 않았습니다. Accessor Variety 는 그 자체로 어느 정도 잘 작동합니다. 알고리즘을 만들면 이 포스트를 업데이트 하겠습니다. 
 
@@ -125,7 +125,7 @@ Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. �
 
 Branching Entropy 는 Accessor Variety 가 이용하는 글자 종류보다도 글자 빈도의 분포가 단어의 경계를 나타나는 더 좋은 정보라 판단하였습니다. Entropy 는 확률분포의 불확실성입니다. 
 
-<center>$$entropy(P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$</center><br>
+<center>$$entropy(P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$</center>
 
 '손나'의 오른쪽에 등장할 글자는 명확하기 때문에 entropy 가 작습니다. 불확실성이 작습니다. 반대로 '공연'의 오른쪽에 등장할 글자는 다양하여 entropy, 불확실성이 높습니다. 
 
@@ -240,5 +240,5 @@ for word in '연합 연합뉴 연합뉴스'.split():
 [av_segmentation]: https://link.springer.com/chapter/10.1007/978-3-540-30211-7_73
 [branching_paper]: https://www.researchgate.net/profile/Zhihui_Jin/publication/220873812_Unsupervised_Segmentation_of_Chinese_Text_by_Use_of_Branching_Entropy/links/561db42808aecade1acb403e.pdf
 [harris]: http://www.jstor.org/stable/411036
-[zhaohie]: http://bcmi.sjtu.edu.cn/~zhaohai/
+[zhaohai]: http://bcmi.sjtu.edu.cn/~zhaohai/
 [soynlp]: https://github.com/lovit/soynlp
