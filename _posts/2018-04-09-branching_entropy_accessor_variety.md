@@ -1,6 +1,6 @@
 ---
 title: Uncertanty to word boundary; Accessor Variety & Branching Entropy
-date: 2018-04-09 23:00:00
+date: 2018-04-09 23:10:00
 categories:
 - nlp
 tags:
@@ -43,13 +43,13 @@ twitter.pos('너무너무너무는 아이오아이의 노래입니다')
 
 통계 기반 단어 추출 방법들을 살펴보면 언어학자인 Zellig Harris 의 직관이 자주 인용됩니다. 
 
-<center><i>The uncertainty of tokens coming after a sequence helps determine whether a given position is at a boundary.</i></center>
+<center><i>The uncertainty of tokens coming after a sequence helps determine whether a given position is at a boundary.</i></center><br>
 
 단어 혹은 형태소의 경계에서는 다른 단어나 형태소가 등장하기 때문에, 그 경계에서의 불확실성이 높다는 의미입니다. 쉽게 말하면, '자연어처' 오른쪽에 등장할 글자는 예측하기 쉽습니다. 아마도 '자연어처리'를 떠올렸을 겁니다. 하지만 '자연어처리' 오른쪽에 등장할 글자는 다양하기 때문에 어떤 단어가 등장한다고 쉽게 예상할 수 없습니다. 단어의 반대 방향으로도 위의 문장은 성립합니다. (이 단어도 말이 안되는건 아니지만) '연어처리' 앞에 등장할 글자는 '자'임을 쉽게 예상할 수 있지만, '자연어처리' 앞에 등장할 단어를 예상하기는 어렵습니다. 이처럼 단어나 형태소의 경계에서는 다양한 글자가 등장합니다. 다음 글자에 대한 불확실성이 커집니다. 
 
 아래의 그림에서 n, na 오른쪽에 등장할 글자가 매우 다양하기 때문에 불확실성이 큽니다. 그러나 natur 다음에 등장할 글자는 -e 아니면 -al 의 a 임을 짐작할 수 있습니다.
 
-![]({{ "/assets/figures//branching_entropy_uncertainty.png" | absolute_url }})
+![]({{ "/assets/figures//branching_entropy_uncertainty.png" | absolute_url }}){: width="70%" height="70%"}
 
 Accessor Variety 와 Branching Entropy 는 위와 같은 단어 경계에서의 불확실성을 각각 다른 방식으로 정의하며 단어의 경계를 찾습니다. 단어의 경계를 찾을 수 있다면, 그 지점을 나눔으로써 단어를 구분할 수 있기 때문입니다. 
 
@@ -77,7 +77,7 @@ $$AV(s) = min(av_l(s), av_r(s))$$
 
 이 논문에서는 accessor variety value 에 threshold cutting 을 수행하여 단어를 추출하고, 해당 단어가 실제 단어인지를 확인하였습니다. 단어의 길이가 길더라도 추출이 잘 되며, threshold 는 어느 정도 이상으로 높여야함을 볼 수 있습니다. 
 
-![]({{ "/assets/figures/accessor_variety_performance.png" | absolute_url }})
+![]({{ "/assets/figures/accessor_variety_performance.png" | absolute_url }}){: width="70%" height="70%"}
 
 Threshold 에 universial parameter 는 없습니다. Threshold 는 corpus 의 크기에 따라 상대적으로 다르기 때문에 몇 번의 try & error 로 조절합니다.
 
@@ -90,23 +90,23 @@ Accessor Variety 를 이용한 unsupervised chinese word segmentation 방법은 
 다시 Feng 의 Accessor Variety 를 이용한 unsupervised word segmentation 으로 돌아옵니다. 풀어야 하는 문제는 문장 $$S$$ 가 있을 때 이를 substrings 인 $$SS$$ 로 나누는 것입니다. $$m \le n$$ 입니다. [Unsupervised segmentation of Chinese corpus using accessor variety][av_segmentation] 에서 제안된 방법은 $$SS$$ 에 대한 criteria 와, 이를 찾기 위한 dynamic programming 기반 알고리즘입니다. 
 
 <center>$$S = C_1 C_2 \cdots C_n$$</center>
-<center>$$SS = W_1 W_2 \cdots W_m$$</center>
+<center>$$SS = W_1 W_2 \cdots W_m$$</center><br>
 
 $$SS$$ 에 대한 criteria 는 몇 개의 functions 입니다. $$\vert W \vert$$ 는 단어 $$W$$ 의 길이입니다. $$b, c, d$$ 는 integer user configuration parameters 입니다. 
 
-<center>$$f_1 (W) = b^{\vert W \vert} \times log \left AV(W) \right$$</center>
-<center>$$f_2 (W) = \vert W \vert ^{\vert W \vert} \times log \left AV(W) \right ^d$$</center>
-<center>$$f_1 (W) = \vert W \vert ^c \times log \left AV(W) \right ^d$$</center>
-<center>$$f_1 (W) = \vert W \vert ^{\vert W \vert} \times log \left AV(W) \right$$</center>
+<center>$$f_1 (W) = b^{\vert W \vert} \times log \left( AV(W) \right)$$</center>
+<center>$$f_2 (W) = \vert W \vert ^{\vert W \vert} \times log \left( AV(W) \right) ^d$$</center>
+<center>$$f_1 (W) = \vert W \vert ^c \times log \left() AV(W) \right) ^d$$</center>
+<center>$$f_1 (W) = \vert W \vert ^{\vert W \vert} \times log \left() AV(W) \right)$$</center><br>
 
 사용자가 알아서 설정하는 임의의 parameters 이지만, 말은 됩니다. $$AV(W)$$ 의 값이 클수록 단어일 가능성이 높습니다. $$\vert W \vert ^d$$ 를 곱함으로써, 이왕이면 더 긴 단어가 선택되기를 장려합니다. Unsupervised approach 는 정확한 학습데이터가 없기 때문에, 알고리즘을 설계하는 사람이 옳다고 믿는 방향으로 solutions 을 유도합니다. 
 
 Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. 단어의 최대 길이는 6 이라 가정한 뒤, i 를 1 씩 증가하며 best solusions 을 찾아갑니다. 
 
-$$f_0 = 0$$
-$$f_1 = f(W_{11} = C_1)$$
-$$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$
-$$f(S) = f_n$$
+1. $$f_0 = 0$$
+1. $$f_1 = f(W_{11} = C_1)$$
+1. $$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$
+1. $$f(S) = f_n$$
 
 위 방법을 한국어 데이터에 적용해보지는 않았습니다. Accessor Variety 는 그 자체로 어느 정도 잘 작동합니다. 알고리즘을 만들면 이 포스트를 업데이트 하겠습니다. 
 
@@ -125,7 +125,7 @@ $$f(S) = f_n$$
 
 Branching Entropy 는 Accessor Variety 가 이용하는 글자 종류보다도 글자 빈도의 분포가 단어의 경계를 나타나는 더 좋은 정보라 판단하였습니다. Entropy 는 확률분포의 불확실성입니다. 
 
-<center>entropy(P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)</center>
+<center>$$entropy(P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$</center><br>
 
 '손나'의 오른쪽에 등장할 글자는 명확하기 때문에 entropy 가 작습니다. 불확실성이 작습니다. 반대로 '공연'의 오른쪽에 등장할 글자는 다양하여 entropy, 불확실성이 높습니다. 
 
@@ -149,7 +149,7 @@ $$entropy(공연) = - \left( 0.3 * log(0.3) + 0.2 * log(0.2) + 0.5 * log(0.5) \r
 
 그러면 그림 아래의 subplot 처럼 $$x_{0:4}, x_{4:5}, x_{5:8}$$ 과 같은 길이가 1 인 유닛이 들어있는 경우는 단어를 자르지 못합니다. '단어 + 의' 처럼 조사같은 suffix 들이 이에 해당합니다. 그런데 $$x_{4:5}$$ 가 suffix 역할을 한다면, $$x_{0:4}$$ 와 $$x_{0:5}$$ 는 계속하여 entropy 가 증가합니다. '단어의' 라는 어절 다음에 많은 글자들이 등장하기 때문입니다. 이처럼 한글자를 더하여 entropy 가 증가하는 경우에는 $$4, 5$$ 모두 boundary points 로 선택합니다.
 
-![]({{ "/assets/figures//branching_entropy_segmentation.png" | absolute_url }})
+![]({{ "/assets/figures//branching_entropy_segmentation.png" | absolute_url }}){: width="50%" height="50%"}
 
 그런데 문장의 길이가 길면 $$h(x_{0:k})$$ 가 없을 수도 있습니다. $$k=10$$ 이 되면 몇 개의 단어가 연속으로 등장한 구 (phrase) 입니다. 그러나 데이터가 충분하여 $$h(x_{0:k})$$ 가 크다면 $$h(x_{i:k})$$ 도 큽니다. 이 논문에서도 최대 길이를 6 으로 이용하였습니다. 
 
