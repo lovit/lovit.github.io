@@ -1,6 +1,6 @@
 ---
-title: Scipy sparse matrix handling
-date: 2018-03-27 11:00:00
+title: Term proportion ratio base Keyword extraction
+date: 2018-04-12 07:00:00
 categories:
 - nlp
 tags:
