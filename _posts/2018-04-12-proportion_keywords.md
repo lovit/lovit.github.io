@@ -7,6 +7,7 @@ tags:
 - keyword
 ---
 
+키워드를 추출하는 방법은 다양합니다. 이들은 saliency 와 distinctiveness 를 만족하는 키워드로 선택합니다. Lasso regression 을 이용하여 키워드를 추출할 수도 있습니다. 그러나 lasso regression 은 correlation 이 높은 단어 중에서는 하나만 키워드로 선택합니다. 또한 regression parameters 를 학습해야 하기 때문에 계산 비용이 듭니다. Term frequency matrix 에 직관적인 공식만 적용해도 키워드를 추출할 수 있습니다. 이번 포스트에서는 가볍지만 파워풀한 키워드 추출 방법을 소개합니다.
 
 ## What is Keyword?
 
