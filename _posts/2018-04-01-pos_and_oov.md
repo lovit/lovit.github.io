@@ -5,7 +5,7 @@ categories:
 - nlp
 tags:
 - preprocessing
-- tokenization
+- tokenizer
 ---
 
 텍스트 데이터 분석을 위하여 우리는 문장을 단어나 토큰으로 분리합니다. 텍스트 분석의 단위는 단어, 구문, 문장, 문서가 될 수 있습니다. 문서/문장은 분리된 토큰을 이용하여 tf 나 tfidf 와 같은 one hot representation 과 doc2vec 과 같은 distributed representation 의 벡터로 표현합니다. 연관어 분석이나 토픽모델링은 문장에서 나뉘어진 단어의 co-occurrence 정보를 이용합니다. 이들은 모두 모두 문장을 단어나 토큰으로 잘 분리되었다고 가정합니다. 여기서 **잘 분리된 토큰**은 분석의 대상과 목적에 따라 정의가 다릅니다. 이번 포스트에서는 한국어 텍스트 데이터를 단어나 토큰으로 만드는 과정에 대하여 논의합니다. 미등록단어 (out of vocabulary) 문제의 원인과 해결 방향에 대해 이야기합니다.
