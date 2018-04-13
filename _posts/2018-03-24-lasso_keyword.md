@@ -17,7 +17,7 @@ Softmax (Logistic) regression 은 각 클래스 별 대표벡터를 학습합니
 
 $$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(-\theta_1^Tx)}{\sum_k exp(-\theta_k^Tx)} \\ \cdots \\ \frac{exp(-\theta_n^Tx)}{\sum_k exp(-\theta_k^Tx)} \end{bmatrix}$$
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_5class_data_w_classvector.png)
+![]({{ "/assets/figures/logistic_5class_data_w_classvector.png" | absolute_url }})
 
 ## Logistic regression with L2 regularization
 
@@ -27,7 +27,7 @@ $$cost = \sum_{i}^{n} \left(y_i - \frac{1}{1 + exp(-\theta^Tx)} \right) + \lambd
 
 아래 그림의 data 1 의 경우, L2 regularization 비용계수인 $$\lambda$$ 가 커질수록 대표벡터의 크기가 줄어듭니다. 대표벡터가 원점 근처로 모여듭니다. 하지만 방향성은 유지가 되고 있습니다. 방향성이 바뀌면 해당 클래스를 대표하지 않기 때문입니다. 좀 더 재밌는 결과는 data 2 나 3 과 같이 각 클래스의 데이터가 골고루 펼쳐져 있지 않는 경우입니다. $$\lambda$$ 가 작을 때에는 대표벡터와 각 클래스의 데이터들이 다른 공간에 위치합니다. 각 클래스에 속할 확률만 잘 계산되면 되기 때문입니다. 일종의 과적합 (overfitting) 입니다. 하지만 regularization cost 가 커질수록 대표벡터들은 원점에 모여들고, 각 클래스를 좀 더 잘 표현하는 모양으로 학습됩니다. Regularization 은 overfitting 을 해결하는 수단입니다.
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/logistic_l2_regularization.png)
+![]({{ "/assets/figures/logistic_l2_regularization.png" | absolute_url }})
 
 이보다 overfitting 과 regularization 의 관계를 잘 설명하는 예시는 유명한 regression 예시입니다. 아래 그림은 [Wikipedia 의 regularization page][wikipedia] 의 그림입니다. 녹색 선은 regularization 비용이 큰 경우, 파란 선은 비용이 작은 경우 입니다. 좋은 모델은 학습데이터에 대해서 y 를 잘 맞추기만 하면 되는 것은 아닙니다. 모델이 간략하여 학습데이터가 없는 부분에서도 잘 틀리지 않을 수 있어야 합니다. 이를 일반화 성능이 좋다고 이야기합니다. Regularization 은 모델을 복잡하지 않게 만들어 일반화 성능을 높이는 역할을 합니다.
 
@@ -41,7 +41,7 @@ $$cost = \sum_{i}^{n} \left(y_i - \frac{1}{1 + exp(-\theta^Tx)} \right) + \lambd
 
 아래의 그림은 0 과 1 두 가지 클래스를 구분하기 위하여 T0 ~ T14 까지 15 개의 단어 (features) 를 이용하는 문서판별기의 예시입니다. T0 는 0 과 1 모두에서 자주 등장하므로 0 과 1 을 구분하는 힌트가 되지 않습니다. T0 은 버립시다. T4 나 T6 이 등장하면 클래스가 0 이라는 아주 명확한 힌트가 됩니다만, 이 두 개의 features 를 모두 이용하느니 T2 한 개만 이용해도 됩니다. 그리고 T6 과 T7 은 중복된 재료입니다. 만약 반드시 T6 을 이용한다면 T7 은 이용할 필요가 없습니다. 이런 논리로 생각하면 [T1, T2, T3, T11, T13, T14] 은 문서 판별을 잘 수행하는 최소한의 feature set 입니다. 이들만 coefficient 가 0 이 아니면 됩니다. 그리고 L1 regularization 을 이용하는 logistic regression 은 바로 이렇게 행동합니다. **중복되지 않는 최소한의 유용한 features 를 선택**합니다. 물론 L1 regularization 은 이런 논리로 coefficients 를 학습하지는 않지만, 그 결과는 이와 같습니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/lasso_selected_features.png)
+![]({{ "/assets/figures/lasso_selected_features.png" | absolute_url }})
 
 그리고 L1 norm 을 이용하는 logistic regression 을 LASSO regression 이라 부릅니다. Least Absolute Shrinkage and Selection Operator 의 약어입니다. 
 

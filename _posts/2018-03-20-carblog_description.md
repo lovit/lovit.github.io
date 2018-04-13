@@ -70,8 +70,9 @@ Carblog 는 데이터분석 사례의 프로젝트이름 입니다. Carblog 는 
 
 혹은 **각 문서의 토픽**을 찾을 수도 있을 겁니다. 우리는 직관적인 통계를 하나 이용할 수 있습니다. 분명 위 카테고리에 포함된 다수의 문서들은 차량 관련 문서일 것입니다. 그렇기 때문에 '차량', '엔진오일'과 같은 단어를 포함하는 문서는 여러 카테고리에 골고루 존재할 것입니다. 하지만 '터미네이터'는 '제네시스' 카테고리에서만 등장할 것입니다. '악장'이라는 단어도 '소나타' 카테고리에서 유독 많이 등장합니다. Implicit 한 label 이 존재합니다. 이를 잘 이용한다면 어쩌면 우리는 문서의 토픽을, 적어도 문서의 토픽이 차량인지 아닌지 정도는 구분할 수 있을 것 같습니다. 
 
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/carblog_df_dist_car.png)
-![](https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/figures/carblog_df_dist_terminator.png)
+![]({{ "/assets/figures/carblog_df_dist_car.png" | absolute_url }})
+
+![]({{ "/assets/figures/carblog_df_dist_terminator.png" | absolute_url }})
 
 카테고리 별로 차량 외 주제들이 존재하지만, 그 양은 차량과 비교하면 매우 작습니다. Class imbalance 현상이 존재합니다. 이 때에는 Latent Dirichlet Allocation (LDA) 와 같은 토픽 모델링이나 k-means 와 같은 문서 군집화 방법들이 잘 학습되지 않습니다. 경험을 기반으로 하는 머신 러닝 알고리즘들은 많이 등장하는 클래스의 데이터의 패턴을 더 잘 학습하기 때문입니다. **Minor topic discovery** 역시 이 데이터로 풀어볼 수 있는 재미있는 문제입니다. 
 
@@ -112,7 +113,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.numdocs); });
 
-d3.tsv("https://raw.githubusercontent.com/lovit/lovit.github.io/master/_posts/resources/carblog_k3_monthly.tsv", function(d) {
+d3.tsv("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/carblog_k3_monthly.tsv", function(d) {
   d.date = parseTime(d.date);
   d.numdocs = +d.numdocs  ;
   return d;
