@@ -2,7 +2,7 @@
 
 # Jupyter
 jupyter/*
-*.ipynb
+!jupyter/*.ipynb
 
 # resource test
 _posts/resources/index.html
