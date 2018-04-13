@@ -175,15 +175,15 @@ pprint(subtokens)
 
 첫번째 경우는 다른 후보가 subword 의 왼쪽에 곂치는 경우입니다. 두 subwords 의 시작점이 같은 경우도 포함합니다.  b_ <= b and b < e_ 입니다. b < e 이기 때문에 아래 식이 성립합니다.
 
-![]({{ "assets/figures/maxscoretokenizer_left_over.png" | absolute_url }})
+![]({{ "assets/figures/maxscoretokenizer_left_over.png" | absolute_url }}){: width:70% height:70%}
 
 두번째 경우는 다른 후보가 subword 의 오른쪽에 겹치는 경우입니다. 두 subwords 의 끝점이 같은 경우도 포함합니다. b < b_ and e <= e_ 이고 b < e 이기 때문에 아래의 식이 성립합니다. 
 
-![]({{ "assets/figures/maxscoretokenizer_right_over.png" | absolute_url }})
+![]({{ "assets/figures/maxscoretokeinzer_right_over.png" | absolute_url }}){: width:70% height:70%}
 
 세번째는 다른 후보가 subword 를 포함하는 경우입니다. b < e 이기 때문에 아래의 식이 성립합니다.
 
-![]({{ "assets/figures/maxscoretokeinzer_include.png" | absolute_url }})
+![]({{ "assets/figures/maxscoretokeinzer_include.png" | absolute_url }}){: width:70% height:70%}
 
 마지막은 다른 후보가 subword 에 포함되는 경우입니다. 다른 후보가 subword 에 포함되려면 b < b_ and e_ < e 이고 b_ < e_ 이기 때문에 b_ < e and b < e_ 입니다. 
 
