@@ -5,6 +5,7 @@ categories:
 - nlp
 tags:
 - preprocessing
+- tokenizer
 ---
 
 soynlp 는 제가 작업하는 한국어 정보처리를 위한 비지도학습 기반 자연어처리 라이브러리 입니다. 현재 (ver 0.0.4) 세 가지 통계 기반 단어 추출 기법과 이를 이용하는 두 종류의 unsupervised tokenizers 를 제공합니다. WordExtractor 는 세 가지 단어 추출 기법인 Cohesion score, Branching Entropy, Accessor Variety 를 동시에 학습합니다. 학습된 통계 기반 단어 추출 기법들을 조합하여 Max Score Tokenizer 와 L-Tokenizer 를 만들 수 있습니다. 또한 규칙 기반으로 작동하는 Regex Tokenizer 도 제공합니다. 이에 대한 설명과 사용기입니다.
@@ -252,6 +253,8 @@ Word Piece Model 과 비슷한 원리이기도 합니다. WPM 처럼 가장 빈�
 위처럼 단어 점수가 부여된다면 '서울대학교'를 [서울, 대학교]로 분리하지는 않을 것입니다. 대신 '서울'이나 '대학교'가 등장한 다른 어절에서는 이를 단어로 분리합니다. 
 
 Max Score Tokenizer 는 이러한 컨셉으로, 단어 점수를 토크나이저에 입력하여 원하는 단어를 잘라냅니다. 이는 띄어쓰기가 제대로 이뤄지지 않은 텍스트를 토크나이징하기 위한 방법이며, 단어 점수를 잘 정의하는 것은 단어 추출의 몫입니다. 
+
+Max Score Tokenizer 의 구현은 [이 포스트 링크][maxscoretokenizer]에 기술하였습니다. 
 
 Max Score Tokenizer의 사용법은 아래와 같습니다. class instance 를 만들 때 scores에 {str:float} 형태의 단어 점수 사전을 입력합니다. 
 
@@ -523,3 +526,4 @@ word2vec_twitter.most_similar('방송/Noun')
 [pos_and_oov]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
 [cohesion]: {{ site.baseurl }}{% link _posts/2018-04-09-cohesion_ltokenizer.md %}
 [beav]: {{ site.baseurl }}{% link _posts/2018-04-09-branching_entropy_accessor_variety.md %}
+[maxscoretokenizer]: {{ site.baseurl }}{% link _posts/2018-04-09-max_score_tokenizer_dev.md %}

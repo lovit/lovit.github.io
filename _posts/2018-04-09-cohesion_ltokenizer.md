@@ -5,6 +5,8 @@ categories:
 - nlp
 tags:
 - preprocessing
+- word
+- tokenizer
 ---
 
 다양한 언어에서 미등록 단어를 데이터 기반으로 추출하려는 시도가 있었습니다. 단어는 연속으로 등장한 글자이며, 그 글자들은 서로 연관성이 높습니다. characters 간의 co-occurrence 정보를 이용하면 단어를 찾을 수 있습니다. Cohesion score 는 한국어의 단어 추출을 위하여 character n-gram 을 이용합니다. 또한 한국어 어절의 구조인 L + [R] 특성을 함께 이용하면 간단한 unsupervised tokenizer 도 만들 수 있습니다. 
