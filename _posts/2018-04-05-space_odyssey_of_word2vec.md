@@ -151,7 +151,7 @@ PC1 과 PC2 를 각각 $$(x, y)$$ 축으로 scatter plot 을 그렸습니다. �
 
 Infrequent words 들은 $$w_t$$ 의 확률값이 매우 작아야 합니다. $$w_c$$ 의 문맥에서 등장할 확률이니까요. Frequent words 들이 context words 일 가능성이 높습니다. 이 단어들과 멀리 떨어지면 아래의 softmax 식에 매우 잘 맞습니다. 그렇다면 infrequent words 들을 어느 작은 공간에 모두 몰아넣어도 될 것입니다. Infrequent words 의 semantic 을 고려하지 않는다는 점은 속상하지만, Word2Vec 의 시작은 language model 입니다. 그 입장에서는 frequent words 에 집중하는 것이 당연합니다. 
 
-$$P(w_t \vert w_c) = \frac{exp(exp(w_t^T w_c))}{\sum_{w \in V} exp(w^T w_c) }$$
+$$P(w_t \vert w_c) = \frac{exp(w_t^T w_c)}{\sum_{w \in V} exp(w^T w_c) }$$
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Exp.svg/500px-Exp.svg.png){: width="50%" height="50%"}
 
