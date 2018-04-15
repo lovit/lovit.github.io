@@ -69,11 +69,11 @@ $$PR(u) = \sum_{v \in B_u} \frac{PR(v)}{N_v}$$
 
 PageRank 는 개미의 이동 모델로 설명하기도 합니다. N 개의 마디가 존재하는 graph 에 각 마디마다 공평하게 $$\frac{1}{N}$$ 마리의 개미를 올려둡니다. 한 스텝마다 모든 마디의 개미들은 links 를 따라 연결된 다른 마디로 이동합니다. 한 마디의 links 가 두 개 이상이라면 개미들은 공평히 나눠져서 링크를 따라 이동합니다. 이 부분이 위 식의 $$\frac{PR(v)}{N_v}$$ 입니다. Backlinks 가 많은 마디는 마디에는 많은 개미가 모입니다. 이 과정을 한 번이 아닌 여러 번 수행합니다. 
 
-![]({{ "/assets/figures/graph_pagerank_propagation.png" | absolute_url }})
+![]({{ "/assets/figures/graph_pagerank_propagation.png" | absolute_url }}){: width="70%" height="70%"}
 
 이러한 과정을 확률 분야에서는 Markov model 이라 합니다. 매 스텝마다 변하는 시스템을 확률 모형으로 표현합니다. 개미가 이동하는 비율은 Markov model 의 transition matrix 에 해당합니다. 그리고 Markov model 에서는 이런 과정을 여러 번 반복하면 각 마디에 존재하는 개미의 숫자가 변하지 않는 시점 (steady state) 이 생깁니다. 대략 반복횟수 50 번 정도면 충분합니다. 
 
-![]({{ "/assets/figures/graph_pagerank_balance.png" | absolute_url }})
+![]({{ "/assets/figures/graph_pagerank_balance.png" | absolute_url }}){: width="70%" height="70%"}
 
 그러나 어떤 마디는 backlinks 만 있고 다른 마디로 연결되는 links 가 없을 수도 있습니다 (dangling node). 이 경우에 개미는 들어오기만 할 뿐 다른 마디로 나가질 못합니다. 이 문제를 해결하기 위해 각 마디에 존재하는 개미의 $$c=0.85$$, 85% 만큼만 남겨두고 $$(1 - c)$$, 15% 는 임의의 노드로 보냅니다. 모든 마디에서 15% 의 개미가 다른 마디로 나뉘어서 보내지기 때문에 각 마디는 $$\frac{1 - c}{N}$$ 의 개미가 새로 유입되는 효과가 있습니다. $$\frac{1 - c}{N}$$ 은 dangling nodes 에 의하여 cyclic graph 가 만들어지지 않는 문제를 해결하기 위한 방법입니다. Random jump 를 통하여 모든 마디는 연결이 되며, cyclic network 가 됩니다.
 
@@ -89,7 +89,7 @@ HITS 의 아이디어는 아래와 같습니다. 정말 좋아하는 구절이�
 
 I quotated following text from the [paper][hits], that is one of my favorate phrase. 
 
-<center>*Hubs and authorities exhibit what could be called a mutually reinforcing relationship: a good hub is a page that points to many good authorities; a good authority is a page that is pointed to by many good hubs.*</center>
+<center>Hubs and authorities exhibit what could be called a mutually reinforcing relationship: a good hub is a page that points to many good authorities; a good authority is a page that is pointed to by many good hubs.</center>
 
 ### Algorithm
 
