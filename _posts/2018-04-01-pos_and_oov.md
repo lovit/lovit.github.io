@@ -154,6 +154,6 @@ twitter.pos('너무너무너무는 아이오아이의 노래입니다')
 
 [simplest_tokenizers]: {{ site.baseurl }}{% link _posts/2018-04-02-simplest_tokenizers.md %}
 [wpm]: {{ site.baseurl }}{% link _posts/2018-04-02-wpm.md %}
-[cohesion]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
-[krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
-[beav]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
+[cohesion]: {{ site.baseurl }}{% link _posts/2018-04-09-cohesion_ltokenizer.md %}
+[krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-17-wordrank.md %}
+[beav]: {{ site.baseurl }}{% link _posts/2018-04-09-branching_entropy_accessor_variety.md %}
