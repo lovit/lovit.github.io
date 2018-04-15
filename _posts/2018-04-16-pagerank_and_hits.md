@@ -1,6 +1,6 @@
 ---
 title: Graph ranking algorithm. PageRank and HITS
-date: 2017-04-16 04:40:00
+date: 2018-04-16 04:40:00
 categories:
 - machine learning
 tags:
