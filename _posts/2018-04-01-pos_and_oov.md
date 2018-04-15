@@ -152,8 +152,8 @@ twitter.pos('너무너무너무는 아이오아이의 노래입니다')
 - [KR-WordRank][krwordrank] 는 graph ranking 방법을 이용하여 단어를 추출합니다. (not yet)
 - [Branching Entropy][beav] 와 [Acessor Variety][beav] 는 손나은의 오른쪽에 등장하는 글자의 다양성의 정보를 이용합니다. (not yet)
 
-[simplest_tokenizers]: {{ site.baseurl }}{ link _posts/2018-04-02-simplest_tokenizers.md }
-[wpm]: {{ site.baseurl }}{ link _posts/2018-04-02-wpm.md }
-[cohesion]: {{ site.baseurl }}{ link _posts/2018-04-01-pos_and_oov.md }
-[krwordrank]: {{ site.baseurl }}{ link _posts/2018-04-01-pos_and_oov.md }
-[beav]: {{ site.baseurl }}{ link _posts/2018-04-01-pos_and_oov.md }
+[simplest_tokenizers]: {{ site.baseurl }}{% link _posts/2018-04-02-simplest_tokenizers.md %}
+[wpm]: {{ site.baseurl }}{% link _posts/2018-04-02-wpm.md %}
+[cohesion]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
+[krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
+[beav]: {{ site.baseurl }}{% link _posts/2018-04-01-pos_and_oov.md %}
