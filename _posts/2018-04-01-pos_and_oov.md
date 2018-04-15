@@ -147,13 +147,13 @@ twitter.pos('너무너무너무는 아이오아이의 노래입니다')
 
 ## Related posts
 - [Left-side subword tokenizer][simplest_tokenizers] 는 문서 판별 등의 작업에 이용할 수 있는 아주 간단한 토크나이저 입니다. 
-- [Word piece model][wpm] 은 out of vocabulary 문제를 우회 (해결이 아닙니다) 하는 토크나이저 입니다. (not yet)
-- [Cohesion score][cohesion] 는 단어의 일부분으로 다른 부분이 얼마나 잘 예상되느냐에 대한 정보를 단어 추출에 이용합니다. (not yet)
-- [KR-WordRank][krwordrank] 는 graph ranking 방법을 이용하여 단어를 추출합니다. (not yet)
-- [Branching Entropy][beav] 와 [Acessor Variety][beav] 는 손나은의 오른쪽에 등장하는 글자의 다양성의 정보를 이용합니다. (not yet)
+- [Word piece model][wpm] 은 out of vocabulary 문제를 우회 (해결이 아닙니다) 하는 토크나이저 입니다.
+- [Cohesion score][cohesion] 는 단어의 일부분으로 다른 부분이 얼마나 잘 예상되느냐에 대한 정보를 단어 추출에 이용합니다.
+- [KR-WordRank][krwordrank] 는 graph ranking 방법을 이용하여 단어를 추출합니다.
+- [Branching Entropy][beav] 와 [Acessor Variety][beav] 는 손나은의 오른쪽에 등장하는 글자의 다양성의 정보를 이용합니다.
 
 [simplest_tokenizers]: {{ site.baseurl }}{% link _posts/2018-04-02-simplest_tokenizers.md %}
 [wpm]: {{ site.baseurl }}{% link _posts/2018-04-02-wpm.md %}
 [cohesion]: {{ site.baseurl }}{% link _posts/2018-04-09-cohesion_ltokenizer.md %}
-[krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-17-wordrank.md %}
+[krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-17-krwordrank.md %}
 [beav]: {{ site.baseurl }}{% link _posts/2018-04-09-branching_entropy_accessor_variety.md %}
