@@ -7,17 +7,17 @@ tags:
 - graph
 ---
 
-Graph ranking 은 nodes 와 edges 로 구성된 networks 에서 중요한 nodes 를 찾습니다. 대표적인 알고리즘인 PageRank 는 Google 의 초기 검색 엔진에도 이용되었습니다. Web page graph 에서 중요한 pages 를 찾은 뒤, 검색 결과를 출력할 때, 그들의 우선순위를 높였습니다. 그 외에도 recommender system 이나 natural language processing 에서도 자주 이용되었습니다. 이 포스트에서는 대표적인 graph ranking 알고리즘인 PageRank 와 HITS 에 대하여 알아봅니다. 
+Graph ranking 은 nodes 와 edges 로 구성된 networks 에서 중요한 nodes 를 찾기 위한 방법입니다. 대표적인 알고리즘인 PageRank 는 Google 의 초기 검색 엔진에 이용된 알고리즘으로 유명합니다. PageRank 를 이용하여 web page graph 에서 중요한 pages 를 찾은 뒤, 검색 결과를 출력할 때 그들의 우선 순위를 높입니다. PageRank 는 그 외에도 recommender system 이나 natural language processing 분야에서도 자주 이용되었습니다. 이 포스트에서는 대표적인 graph ranking 알고리즘인 PageRank 와 HITS 에 대하여 알아봅니다. 
 
 ## Graph
 
 그래프는 데이터를 표현하는 방식 중 하나입니다. 그래프는 마디 (node, vertex) 와 호 (edge) 로 이뤄져 있으며, $$G = (V, E)$$ 로 자주 표현합니다. 
 
-아래의 그림처럼 인물 간 친밀도를 edge 로 표현하면 인맥(?) 그래프를 만들 수 있습니다. 이 때 마디는 각 인물입니다. 이 때 마디의 종류는 하나이기 때문에 homogeneous graph 라 분류합니다.
+아래의 그림처럼 인물 간 친밀도를 edge 로 표현하면 인맥(?) 그래프를 만들 수 있습니다. 마디는 각 인물입니다. 그래프 전체에서 마디의 종류가 하나이기 때문에 이 그래프를 homogeneous graph 라 합니다.
 
 ![]({{ "/assets/figures/graph_socialnetwork.png" | absolute_url }})
 
-혹은 배우와 영화의 출연 관계를 그래프로 표현할 수도 있습니다. 각 배우의 각 영화에 대한 기여도를 edge 로 표현할 수도 있습니다. 이 때 배우 간에는 연결 관계가 없고, 영화 간에도 연결 관계가 없습니다. 오로직 배우와 영화 간에만 연결 관계가 있습니다. 이처럼 마디의 종류가 두 개로 분류되어 연결이 되는 그래프를 bipartite graph 라 합니다. 그리고 마디의 종류가 다르기 때문에 heterogeneous graph 로 분류합니다. 
+혹은 배우와 영화의 출연 관계를 그래프로 표현할 수도 있습니다. 각 배우의 각 영화에 대한 기여도를 edge 로 표현할 수도 있습니다. 배우 간에는 연결 관계가 없고, 영화 간에도 연결 관계가 없습니다. 오로직 배우와 영화 간에만 연결 관계가 있습니다. 이처럼 마디의 종류가 두 개로 분류되어 연결이 되는 그래프를 bipartite graph 라 합니다. 그리고 마디의 종류가 다르기 때문에 heterogeneous graph 로 분류합니다. 
 
 ![]({{ "/assets/figures/graph_movieactor.png" | absolute_url }})
 
@@ -31,10 +31,10 @@ Graph 는 행렬 (matrix) 형식으로 표현될 수 있습니다. 100 개의 �
 
 Metric space 는 쉬운 표현으로, "거리가 정의되는 공간" 입니다. Metric space 는 points 와 distance 로 정의되며, 네 가지 성질이 만족해야 합니다. $$x, y$$ 은 metric space 의 임의의 두 점입니다. 
 
-- $$d(x, y) \ge 0$$ 두 점 사이의 거리는 0 이거나 그보다 큽니다. 
-- $$d(x, y) = 0 \Leftrightarrow x = y$$ 거리가 0 이려면 두 점은 같아야 합니다. 
-- $$d(x, y) = d(y, x)$$ $$x$$ 에서 $$y$$ 로의 거리와 $$y$$ 에서 $$x$$ 로의 거리는 같습니다. 
-- $$d(x,z) \le d(x,y) + d(y,z)$$ 삼각부등식이 성립합니다. 
+- $$d(x, y) \ge 0$$ : 두 점 사이의 거리는 0 이거나 그보다 큽니다. 
+- $$d(x, y) = 0 \Leftrightarrow x = y$$ : 거리가 0 이려면 두 점은 같아야 합니다. 
+- $$d(x, y) = d(y, x)$$ : $$x$$ 에서 $$y$$ 로의 거리와 $$y$$ 에서 $$x$$ 로의 거리는 같습니다. 
+- $$d(x,z) \le d(x,y) + d(y,z)$$ : 삼각부등식이 성립합니다. 
 
 다소 수학적인 이야기입니다만, 어려운 이야기는 아닙니다. 우리가 살고 있는 이 3 차원 세상이 metric space 이며, 4 번은 p1 과 p2 가 가깝고 p2 와 p3 이 가까우면 p1 과 p3 도 가깝다는 이야기입니다. 이런 공간에서 $$x$$ 가 $$y$$ 를 가깝다(친하다)고 생각하는데, $$y$$는 $$x$$ 를 가깝지(친하지) 않다고 표현할 수 없습니다. 하지만 graph 는 이 표현이 가능합니다. 
 
@@ -51,9 +51,9 @@ Graph 는 벡터 공간보다 더 자유로운 표현이 가능합니다. 이러
 
 PageRank 는 가장 대표적인 graph ranking 알고리즘입니다. Google 의 Larry Page 가 초기 Google 의 검색 엔진의 랭킹 알고리즘으로 만든 알고리즘으로도 유명합니다. Web page graph 에서 중요한 pages 를 찾아서 검색 결과의 re-ranking 의 과정에서 중요한 pages 의 ranking 을 올리는데 이용되었습니다. 
 
-중요한 web pages 를 찾기 위하여 PageRank 는 매우 직관적인 아이디어를 이용하였습니다. 많은 사람들이 링크를 지니는 pages 가 중요한 페이지라 가정하였습니다. 일종의 '투표'입니다. 각 web page 가 다른 web page 에게 자신의 점수 중 일부를 부여합니다. 다른 web page 로부터의 링크 (backlinks) 가 많은 page 는 자신에게 모인 점수가 클 것입니다. 자신으로 유입되는 backlinks 가 적은 pages 는 다른 web pages 로부터 받은 점수가 적을 것입니다. 또한 모든 pages 가 같은 양의 점수를 가지는 것이 아닙니다. 중요한 pages 는 많은 점수를 가지고 있습니다. Backlinks 가 적은 링크라 하더라도 중요한 page 에서 투표를 받은 pages 는 중요한 page 가 됩니다. 
+중요한 web pages 를 찾기 위하여 PageRank 는 매우 직관적인 아이디어를 이용하였습니다. 많은 유입 링크 (backlinks)를 지니는 pages 가 중요한 pages 라 가정하였습니다. 일종의 '투표'입니다. 각 web page 가 다른 web page 에게 자신의 점수 중 일부를 부여합니다. 다른 web page 로부터의 링크 (backlinks) 가 많은 page 는 자신에게 모인 점수가 클 것입니다. 자신으로 유입되는 backlinks 가 적은 pages 는 다른 web pages 로부터 받은 점수가 적을 것입니다. 또한 모든 pages 가 같은 양의 점수를 가지는 것이 아닙니다. 중요한 pages 는 많은 점수를 가지고 있습니다. Backlinks 가 적은 링크라 하더라도 중요한 page 에서 투표를 받은 pages 는 중요한 page 가 됩니다. 
 
-이 아이디어는 PageRank 에서 갑자기 나타난 것은 아닙니다. Bibliometrics (계량서지학) 에서는 citations 에 대하여 연구하였습니다. Citations 이 많은 책은 중요한 책입니다. 그리고 그 책이 reference 로 이용하는 책 역시 중요할 책일 것입니다. PageRank 의 links 는 bibliometrics 의 citation 입니다. 실제로 [PageRank 의 논문][pagerank]을 살펴보면 bibliometrics 의 논문들이 참고되어 있습니다. 그리고 PageRank 는 이제 information retrieval 외의 다양한 분야에서 응용되고 있습니다. 한 아이디어가 여러 학문 분야로 퍼져나갑니다. 
+이처럼 직관적인 아이디어가 PageRank 에서 갑자기 나타난 것은 아닙니다. Bibliometrics (계량서지학) 에서는 citations 에 대하여 연구하였습니다. Citations 이 많은 책은 중요한 책입니다. 그리고 그 책이 reference 로 이용하는 책 역시 중요할 책일 것입니다. PageRank 의 links 는 bibliometrics 에서의 citation 입니다. 실제로 [PageRank 의 논문][pagerank]을 살펴보면 bibliometrics 의 논문들이 참고되어 있습니다. 그리고 이제 PageRank 는 information retrieval 외의 다양한 분야에서 응용되고 있습니다. 한 아이디어가 여러 학문 분야로 퍼져나갑니다. 
 
 ### Formular
 
@@ -67,11 +67,11 @@ Citations 만을 생각하면 아래의 식만으로도 충분합니다. 그러�
 
 $$PR(u) = \sum_{v \in B_u} \frac{PR(v)}{N_v}$$
 
-PageRank 는 개미의 이동 모델로 설명하기도 합니다. N 개의 마디가 존재하는 graph 에 각 마디마다 공평하게 $$\frac{1}{N}$$ 마리의 개미를 올려둡니다. 한 스텝마다 모든 마디의 개미들은 links 를 따라 연결된 다른 마디로 이동합니다. 한 마디의 links 가 두 개 이상이라면 개미들은 공평히 나눠져서 링크를 따라 이동합니다. 이 부분이 위 식의 $$\frac{PR(v)}{N_v}$$ 입니다. Backlinks 가 많은 마디는 마디에는 많은 개미가 모입니다. 이 과정을 한 번이 아닌 여러 번 수행합니다. 
+PageRank 는 개미의 이동 모델로 설명하기도 합니다. N 개의 마디가 존재하는 graph 에 각 마디마다 공평하게 $$\frac{1}{N}$$ 마리의 개미를 올려둡니다. 한 스텝마다 모든 마디의 개미들은 links 를 따라 연결된 다른 마디로 이동합니다. 한 마디의 links 가 두 개 이상이라면 개미들은 공평히 나눠져서 링크를 따라 이동합니다. 이 부분이 위 식의 $$\frac{PR(v)}{N_v}$$ 입니다. Backlinks 가 많은 마디에는 많은 개미가 모입니다. 이 과정을 한 번이 아닌 여러 번 수행합니다. 
 
 ![]({{ "/assets/figures/graph_pagerank_propagation.png" | absolute_url }}){: width="70%" height="70%"}
 
-이러한 과정을 확률 분야에서는 Markov model 이라 합니다. 매 스텝마다 변하는 시스템을 확률 모형으로 표현합니다. 개미가 이동하는 비율은 Markov model 의 transition matrix 에 해당합니다. 그리고 Markov model 에서는 이런 과정을 여러 번 반복하면 각 마디에 존재하는 개미의 숫자가 변하지 않는 시점 (steady state) 이 생깁니다. 대략 반복횟수 50 번 정도면 충분합니다. 
+이러한 과정을 확률 분야에서는 Markov model 이라 합니다. 확률 모형을 이용하여 매 스텝마다 변하는 시스템을 표현합니다. 개미가 이동하는 비율은 Markov model 의 transition matrix 에 해당합니다. 그리고 Markov model 에서는 이런 과정을 여러 번 반복하면 각 마디에 존재하는 개미의 숫자가 변하지 않는 시점 (steady state) 이 생깁니다. 대략 반복횟수 50 번 정도면 충분합니다. 
 
 ![]({{ "/assets/figures/graph_pagerank_balance.png" | absolute_url }}){: width="70%" height="70%"}
 
@@ -83,13 +83,13 @@ $$\frac{1 - c}{N}$$ 는 PageRank 의 bias 역할을 합니다. 이부분을 유�
 
 ### Concept
 
-PageRank 와 비슷한 시기에, 비슷한 아이디어로, 비슷한 문제를 해결한 다른 알고리즘도 있습니다. HITS 는 [Jon Kleinberg][jonkleingerg] 의 알고리즘입니다. 네트워크, 확률, 클러스터링, 최적화, dynamic system, ... 등 정말 많은 영역에서 연구를 하시는 분입니다 (이 분도 개인적으로 팬질하는 교수님입니다). HITS 는 Hyperlink-Induced Topic Search 의 약자입니다.
+PageRank 와 비슷한 시기에, 비슷한 아이디어로, 비슷한 문제를 해결한 다른 알고리즘도 있습니다. HITS 는 [Jon Kleinberg][jonkleingerg] 의 알고리즘입니다. 네트워크, 확률, 클러스터링, 최적화, dynamic system, ... 등 정말 많은 영역에서 연구를 하시는 분입니다 (이 분도 팬질하는 교수님입니다). HITS 는 Hyperlink-Induced Topic Search 의 약자입니다.
 
 HITS 의 아이디어는 아래와 같습니다. 정말 좋아하는 구절이라서 원문을 그대로 인용하였습니다. 중요한 웹페이지는 좋은 웹페이지로부터 링크를 많이 받은 페이지이고, 각 페이지의 authority 는 중요한 웹페이지로부터의 링크가 많을수록 높다는 의미입니다. 
 
 I quotated following text from the [paper][hits], that is one of my favorate phrase. 
 
-<center>Hubs and authorities exhibit what could be called a mutually reinforcing relationship: a good hub is a page that points to many good authorities; a good authority is a page that is pointed to by many good hubs.</center>
+<center><i>Hubs and authorities exhibit what could be called a mutually reinforcing relationship: a good hub is a page that points to many good authorities; a good authority is a page that is pointed to by many good hubs.</i></center>
 
 ### Algorithm
 
@@ -121,14 +121,14 @@ $$score(p) = \sum_{q:(q \rightarrow p)} score(q)$$
 
 PageRank 를 설명할 때 eigen vector problem 이라는 말이 자주 등장합니다. 앞서 PageRank 처럼 매 스텝마다 마디의 랭킹이 변하는 과정을 확률 모형으로 표현할 수 있는 문제를 Markov model 이라 하였습니다. 그리고 PageRank 의 랭킹값이 일정해지는 상태를 steady state 라 하였습니다. Markov model 에서 steady state 를 하나의 수식으로 계산하는 방법이 있습니다. 행렬의 eigen vector 를 찾는 문제와 같습니다. 하나의 수식으로 eiven vector 를 계산하는 방법을 선형대수적 해법 (algebraic solution) 이라 합니다.
 
-하지만 수식을 모른다 하여도 앞선 개미의 이동 모형을 그대로 코드로 옮겨서 구현하여도 steady state 의 값을 계산할 수 있습니다. 아래의 코드는 선형대수적 해법이 아닌, 직관을 그대로 코드로 옮긴 방법입니다.
+하지만 수식을 모른다 하여도 앞선 개미의 이동 모형을 그대로 코드로 옮겨서 구현하면 steady state 의 값을 계산할 수 있습니다. 아래의 코드는 선형대수적 해법이 아닌, 직관을 그대로 코드로 옮긴 방법입니다.
 
 
 ## Implementing PageRank with Python
 
-Python 으로 구현할 때에도 두 가지 방법이 있습니다. 개미가 각 마디를 이동하는 비율을 행렬로 표현할 수 있습니다. numpy 와 scipy.sparse 를 이용하면 빠른 계산을 할 수 있습니다. 하지만 모든 마디가 미리 숫자로 표현되어 있어야 합니다. 속도 비교도 해볼겸, 이 부분은 나중에 따로 포스팅하겠습니다. 
+Python 을 이용하여 선형대수적이지 않는 방법으로 PageRank 를 구현할 때에도 두 가지 방법이 있습니다. 개미가 각 마디를 이동하는 비율을 행렬로 표현할 수 있습니다. 첫번째 방법은 numpy 와 scipy.sparse 를 이용하면 구현하는 것으로, c 를 이용하기 때문에 빠른 계산이 가능합니다. 하지만 모든 마디가 미리 숫자로 표현되어 있어야 합니다. 속도 비교도 해볼겸, 이 부분은 나중에 따로 포스팅하겠습니다. 
 
-이번에는 python 의 dict 만을 이용하는 방법으로 PageRank 를 구현합니다. 
+이번 포스트에서는 두번째 방법인 Python 의 dict 만을 이용하여 PageRank 를 구현합니다. 
 
 입력되는 데이터 G 의 형태는 dict dict 입니다. 대신 inbound graph 여야 합니다. G 의 첫번째 key 는 우리가 이번에 계산할 마디 v 입니다. 두번째 key 는 v 로 이동할 마디 u 입니다. 그리고 두번째 dict 의 value 는 u 에서 v 로 이동하는 비율입니다. 
 
