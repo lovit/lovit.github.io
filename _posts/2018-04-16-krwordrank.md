@@ -27,6 +27,8 @@ $$authority(p) = \sum_{q:(q \rightarrow p)} hub(q)$$
 
 ![]({{ "/assets/figures/graph_pagerank_propagation.png" | absolute_url }}){: width="70%" height="70%"}
 
+더 자세한 내용은 [PageRankd and HITS post][prnhits] 를 참고하세요.
+
 
 ## WordRank
 
@@ -250,3 +252,4 @@ for word, r in sorted(keywords.items(), key=lambda x:x[1], reverse=True)[:30]:
 [wordrank]: http://www.aaai.org/ocs/index.php/AAAI/AAAI11/paper/viewFile/3590/3971
 [krwordrank]: https://github.com/lovit/KR-WordRank/blob/master/reference/2014_JKIIE_KimETAL_KR-WordRank.pdf
 [krwordrankgit]: https://github.com/lovit/kr-wordrank
+[prnhits]: {{ site.baseurl }}{% link _posts/2018-04-16-pagerank_and_hits %}
