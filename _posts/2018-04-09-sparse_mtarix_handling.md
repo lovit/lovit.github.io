@@ -8,7 +8,7 @@ tags:
 - preprocessing
 ---
 
-벡터는 행렬로 표현할 수 있습니다. Distributed representation 처럼 벡터의 대부분의 값이 0 이 아닐 경우에는 numpy.ndarray 와 같은 double[][] 형식으로 벡터를 저장합니다. Row 는 각 entity, column 은 벡터 공간에서의 각 차원에 해당합니다. 이와 반대로 sparse matrix 는 벡터의 많은 값들이 0 입니다. 대부분의 값이 일정하다면 그 값을 기본으로, 그 값이 아닌 다른 값들만을 저장하면 메모리를 효율적으로 이용할 수 있습니다. 데이터를 저장할 때도 마찬가지입니다. Sparse matrix 는 이를 위한 format 입니다. Format 이 array 가 아닌기 때문에 이를 잘 이용하기 위한 방법을 알아야 합니다. Python 의 [scipy.sparse][scipy_sparse] 라이브러리에는 sparse matrix format 들이 구현되어 있습니다. 이에 대하여 이야기합니다. 
+벡터는 행렬로 표현할 수 있습니다. Distributed representation 처럼 벡터의 대부분의 값이 0 이 아닐 경우에는 numpy.ndarray 와 같은 double[][] 형식으로 벡터를 저장합니다. Row 는 각 entity, column 은 벡터 공간에서의 각 차원에 해당합니다. 이와 반대로 sparse matrix 는 벡터의 많은 값들이 0 입니다. 대부분의 값이 일정하다면 그 값이 아닌 다른 값들만을 메모리에 저장하면 메모리를 효율적으로 이용할 수 있습니다. 데이터를 저장할 때도 마찬가지입니다. Sparse matrix 는 이를 위한 format 입니다. Format 이 array 가 아닌기 때문에 이를 잘 이용하기 위한 방법을 알아야 합니다. Python 의 [scipy.sparse][scipy_sparse] 라이브러리에는 sparse matrix format 들이 구현되어 있습니다. 이에 대하여 이야기합니다. 
 
 ## Type of sparse matrix
 
@@ -76,7 +76,7 @@ csr.todense()
 
 ## DoK format
 
-Dictionary of Keys 의 약자입니다. 0 이 아닌 값들의 위치를 저장하는 방식으로 (row, column) 을 key 로 지니는 dict 로 구성되어 있습니다. 직관적인 구조로, x[i,j] 에 접근하기가 쉽습니다. (i,j) pair 의 key 가 dict 에 존재하는지 확인하고, 그 값이 있다면 key 를 value 로 map 합니다. $$O(1)$$ 의 access 비용이 듭니다. 새로운 값을 저장할 때에도 hash map 의 데이터를 넣는 것 뿐입니다.
+Dictionary of Keys 의 약자입니다. 0 이 아닌 값들의 위치를 저장하는 방식으로 (row, column) 을 key 로 지니는 dict 로 구성되어 있습니다. 직관적인 구조이며 x[i,j] 에 접근하기가 쉽습니다. (i,j) pair 의 key 가 dict 에 존재하는지 확인하고, 그 값이 있다면 key 를 value 로 map 합니다. $$O(1)$$ 의 access 비용이 듭니다. 새로운 값을 저장할 때에도 hash map 에 데이터를 넣는 것 뿐입니다.
 
 numpy.ndarray 인 x 를 이용하여 dok matrix 를 만듭니다. 
 
@@ -206,7 +206,7 @@ Compressed Sparse Cow 의 약자입니다. csr 과 반대로 column 순서대로
 
 ![]({{ "/assets/figures/sparse_matrix_csc.png" | absolute_url }}){: width="50%" height="50%"}
 
-CSC matrix 에도 indices, indptr, data 가 있습니다. data 는 0 이 아닌 요소의 값 입니다. Column 순서로 데이터가 저장되기 때문에 csr.data 와 data 의 순서가 달라졌습니다. 
+CSC matrix 에도 indices, indptr, data 가 있습니다. data 는 0 이 아닌 요소의 값 입니다. CSC matrix 는 column 순서로 데이터를 저장하기 때문에 csr.data 와 csc.data 는 순서가 다릅니다. 
 
 {% highlight python %}
 print(csr.data) # [1 2 3 4 5 6]
@@ -253,7 +253,7 @@ for j, (b, e) in enumerate(zip(csc.indptr, csc.indptr[1:])):
 
 ## Sparse matrix I/O and Matrix Market format (mtx file)
 
-scipy.io 를 이용하여 matrix 를 저장하고 읽을 수 있습니다. 어떤 형식의 matrix 를 mmwrite 로 저장하여도 그 형식은 matrix market 이 됩니다. 
+scipy.io 를 이용하여 matrix 를 저장하고 읽을 수 있습니다. 어떤 형식의 matrix 를 mmwrite 로 저장하여도 그 형식은 matrix market 으로 같습니다.
 
 {% highlight python %}
 from scipy.io import mmwrite
@@ -262,7 +262,7 @@ from scipy.io import mmread
 mmwrite('mat.mtx', csr)
 {% endhighlight %}
 
-Matrix market format 은 텍스트 형식으로 파일을 저장합니다. 위의 3 줄은 header 에 해당합니다. 'mat.mtx' 파일의 맨 앞 5 줄입니다. 첫 줄은 파일 형식을 정의하는 고유 head, 두번째 줄은 띄어쓰기 입니다. 3 번째 줄은 이 행렬의 num row, num column, nnz 입니다. 즉 nnz 는 네번째 줄부터의 line number 입니다. 파일의 총 line number 는 세번째줄 마지막 숫자 + 2 입니다. 
+Matrix market format 은 sparse matrix 의 텍스트 저장 방식입니다. 위의 3 줄은 header 입니다. 아래의 예시는 'mat.mtx' 파일의 맨 앞 5 줄입니다. 첫 줄은 파일 형식을 정의하는 고유 head, 두번째 줄은 띄어쓰기 입니다. 3 번째 줄은 이 행렬의 num row, num column, nnz 입니다. 즉 nnz 는 네번째 줄부터의 line number 입니다. 파일의 총 line number 는 세번째줄 마지막 숫자 + 2 입니다. 
 
 네번째 줄부터 데이터가 저장됩니다. Row 와 column index 은 0 이 아닌 1 부터 시작됩니다. Python 스럽지는 않습니다. 왜 이런 포멧이 만들어졌는지는 찾아보지 못했지만, matlab 과 같은 소프트웨어들의 row, column index 가 1 부터 시작하는데, 이 때 만들어진 포멧이 아닐까 짐작하고 있습니다. 
 
@@ -356,7 +356,7 @@ print(len(csr.data)) # 6
 print(csr_zero.data) # array([1, 0, 2, 3, 0, 0, 5, 0], dtype=int64)
 {% endhighlight %}
 
-더 좋은 방법은 다음처럼 0 을 할당하고 싶은 값을 제거하는 것입니다. 가장 효율적인 코드는 아니지만, 직관적인 코드입니다. 해당 column 일 경우 이를 건너뛰는 rows, columns, data list 를 새로 만들어 return 합니다. shape 을 x.shape 으로 만든 것은, 마지막 column 을 제거할 경우 return 되는 matrix 의 column 개수가 1 개 줄어들 수도 있기 때문입니다. 
+더 좋은 방법은 다음처럼 0 을 할당하고 싶은 값을 제거하는 것입니다. 속도가 가장 빠른 방법은 아니지만 설명을 위한 직관적인 코드입니다. 해당 column 을 건너뛰는 새로운 rows, columns, data list 를 만들어 return 합니다. 이 때 반드시 shape 을 x.shape 으로 지정해야 합니다. 마지막 column 을 제거할 경우 return 되는 matrix 의 column 개수가 1 개 줄어들 수도 있기 때문입니다. 
 
 {% highlight python %}
 def remove_column(x, idx):
@@ -377,7 +377,7 @@ def remove_column(x, idx):
 
 sparse matrix 의 연산을 할 경우에는 최대한 numpy, scipy, scikit-learn 의 함수를 이용하는 것이 좋습니다. 내적을 위해서는 numpy.dot 을 이용할 수 있습니다. Distance 계산을 위해서는 sklearn.metric.pairwise_distances 를 이용할 수 있습니다. 
 
-numpy 와 scipy 는 c 로 만들어진 라이브러리입니다. 이들의 값을 Python 으로 불러들인 뒤, python 환경에서 작업을 수행하면 변수의 type check 를 거치게 됩니다. 이 비용이 생각보다도 많이 듭니다. 최대한 numpy 와 같은 library 의 함수를 이용하여 작업을 한 뒤, 결과만 python 으로 받는 것이 좋습니다. 
+numpy 와 scipy 는 c 로 만들어진 라이브러리입니다. 이들의 값을 Python 으로 불러들인 뒤, python 환경에서 작업을 수행하면 변수의 type check 를 거치게 됩니다. 이 비용이 꾀 큽니다. 가능한 numpy 와 같은 library 의 함수를 이용하여 작업을 한 뒤, 결과만 python 으로 받는 것이 좋습니다. 
 
 거리 계산을 위해 pairwise_distances 를, rows 나 column 간의 거리 계산 후 가장 가까운 row, column 을 찾기 위해서는 pairwise_distances_argmin 을 이용합니다. pairwise_distances(axis = ?) 을 이용하면 row, column 단위의 작업을 조절할 수 있습니다. 
 
