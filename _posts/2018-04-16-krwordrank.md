@@ -8,12 +8,12 @@ tags:
 - keyword
 ---
 
-PageRank 나 HITS 같은 graph ranking 알고리즘은 natural language processing 에서 이용되기도 합니다. WordRank 는 일본어와 중국어의 unsupervised word segmentation 을 위하여 제안된 방법입니다. 하지만 이 알고리즘을 한국어에 그대로 적용하기는 어렵습니다. 한국어와 일본어, 중국어는 언어적 특성이 다릅니다. KR-WordRank 는 한국어의 특징을 반영하여 비지도학습 기반으로 한국어의 단어를 추출합니다. 그리고 단어 점수는 키워드 점수로 이용될 수도 있습니다. 즉, KR-WordRank 는 토크나이저를 이용하지 않으면서도 단어/키워드 추출을 비지도학습 기반으로 한번에 수행할 수 있습니다. 
+PageRank 나 HITS 같은 graph ranking 알고리즘은 natural language processing 에서 이용되기도 합니다. WordRank 는 일본어와 중국어의 unsupervised word segmentation 을 위하여 제안된 방법입니다. 하지만 이 알고리즘을 한국어에 그대로 적용하기는 어렵습니다. 한국어와 일본어, 중국어는 언어적 특성이 다릅니다. KR-WordRank 는 한국어의 특징을 반영하여 비지도학습 기반으로 한국어의 단어를 추출합니다. 그리고 단어 점수는 키워드 점수로 이용될 수도 있습니다. 즉, KR-WordRank 는 토크나이저를 이용하지 않으면서도 단어/키워드 추출을 비지도학습 기반으로 수행합니다.
 
 
 ## Brief review of HITS
 
-PageRank 와 비슷한 시기에, 비슷한 아이디어로, 비슷한 문제를 해결한 다른 알고리즘도 있습니다. HITS 는 [Jon Kleinberg][jonkleingerg] 의 알고리즘입니다. HITS 의 아이디어는 "중요한 웹페이지는 좋은 웹페이지로부터 링크를 많이 받은 페이지이고, 각 페이지의 authority 는 중요한 웹페이지로부터의 링크가 많을수록 높다" 입니다. 이 아이디어를 그대로 공식으로 표현하였습니다. 
+PageRank 와 HITS 는 비슷한 시기에, 비슷한 아이디어로, 비슷한 문제를 해결하였습니다. HITS 의 아이디어는 "중요한 웹페이지는 좋은 웹페이지로부터 링크를 많이 받은 페이지이고, 각 페이지의 authority 는 중요한 웹페이지로부터의 링크가 많을수록 높다" 입니다. 이 아이디어를 그대로 공식으로 표현하였습니다. 
 
 마디 p 의 hub score 는 backlinks 의 출발 마디인 q 의 authority score 의 합입니다. 마디 p 의 authotiry score 는 backlinks 의 출발 마디인 q 의 hub score 의 합입니다. 이 식을 hub and authority score 가 수렴할 때 까지 반복합니다. 초기화는 모든 마디에 같은 값을 hub and authority score 로 설정합니다.
 
@@ -36,9 +36,9 @@ WordRank 는 띄어쓰기가 없는 중국어와 일본어에서 graph ranking �
 
 WordRank 는 substring graph 를 만든 뒤, graph ranking 알고리즘을 학습합니다. Substring graph 는 아래 그림의 (a), (b) 처럼 구성됩니다. 
 
-먼저 문장에서 띄어쓰기가 포함되지 않은 모든 substring 의 빈도수를 계산합니다. 이때 빈도수가 같으면서 짧은 substring 이 긴 substring 에 포함된다면 이를 제거합니다. 아래 그림에서 seet 의 빈도수가 2 이고, seeth 의 빈도수가 2 이기 때문에 seet 는 graph node 후보에서 제거합니다. 
+먼저 문장에서 띄어쓰기가 포함되지 않은 모든 substring 의 빈도수를 계산합니다. 이때 빈도수가 같으면서 짧은 substring 이 긴 substring 에 포함된다면 이를 제거합니다. 아래 그림에서 'seet' 의 빈도수가 2 이고, 'seeth' 의 빈도수가 2 이기 때문에 'seet' 는 graph node 후보에서 제외됩니다.
 
-두번째 단계는 모든 substring 에 대하여 links 를 구성합니다. 'that' 옆에 'see'와 'dog' 이 있었으므로 두 마디를 연결합니다. 왼쪽에 위치한 subsrting 과 오른쪽에 위치한 subsrting 의 edge 는 서로 다른 종류로 표시합니다. 이때, 'do' 역시 'that'의 오른쪽에 등장하였으므로 링크를 추가합니다. 
+두번째 단계는 모든 substring nodes 에 대하여 links 를 구성합니다. 'that' 옆에 'see'와 'dog' 이 있었으므로 두 마디를 연결합니다. 왼쪽에 위치한 subsrting 과 오른쪽에 위치한 subsrting 의 edge 는 서로 다른 종류로 표시합니다. 이때, 'do' 역시 'that'의 오른쪽에 등장하였으므로 링크를 추가합니다. 
 
 이렇게 구성된 subsrting graph 에 HITS 알고리즘을 적용하여 각 subsrting 의 ranking 을 계산합니다.
 
