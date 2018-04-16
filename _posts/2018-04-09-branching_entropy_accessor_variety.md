@@ -45,7 +45,7 @@ twitter.pos('너무너무너무는 아이오아이의 노래입니다')
 
 <center><i>The uncertainty of tokens coming after a sequence helps determine whether a given position is at a boundary.</i></center><br>
 
-단어 혹은 형태소의 경계에서는 다른 단어나 형태소가 등장하기 때문에, 그 경계에서의 불확실성이 높다는 의미입니다. 쉽게 말하면, '자연어처' 오른쪽에 등장할 글자는 예측하기 쉽습니다. 아마도 '자연어처리'를 떠올렸을 겁니다. 하지만 '자연어처리' 오른쪽에 등장할 글자는 다양하기 때문에 어떤 단어가 등장한다고 쉽게 예상할 수 없습니다. 단어의 반대 방향으로도 위의 문장은 성립합니다. (이 단어도 말이 안되는건 아니지만) '연어처리' 앞에 등장할 글자는 '자'임을 쉽게 예상할 수 있지만, '자연어처리' 앞에 등장할 단어를 예상하기는 어렵습니다. 이처럼 단어나 형태소의 경계에서는 다양한 글자가 등장합니다. 다음 글자에 대한 불확실성이 커집니다. 
+단어 혹은 형태소의 경계에서는 다른 단어나 형태소가 등장하기 때문에, 그 경계에서의 불확실성이 높다는 의미입니다. 쉽게 말하면, '자연어처' 오른쪽에 등장할 글자는 예측하기 쉽습니다. 아마도 '자연어처리'를 떠올렸을 겁니다. 하지만 '자연어처리' 오른쪽에 등장할 글자는 다양하기 때문에 어떤 단어가 등장한다고 쉽게 예상할 수 없습니다. 단어의 반대 방향에서도 위의 문장은 성립합니다. '연어처리' 앞에 등장할 글자는 '자'임을 쉽게 예상할 수 있지만, '자연어처리' 앞에 등장할 단어를 예상하기는 어렵습니다. 이처럼 단어나 형태소의 경계에서는 다양한 글자가 등장합니다. 다음 글자에 대한 불확실성이 커집니다. 
 
 아래의 그림에서 n, na 오른쪽에 등장할 글자가 매우 다양하기 때문에 불확실성이 큽니다. 그러나 natur 다음에 등장할 글자는 -e 아니면 -al 의 a 임을 짐작할 수 있습니다.
 
@@ -85,7 +85,7 @@ Threshold 에 universial parameter 는 없습니다. Threshold 는 corpus 의 �
 
 Accessor Variety 를 이용한 unsupervised chinese word segmentation 방법은 같은 해에 동일한 저자인 Feng 에 의하여 제안되었습니다. 길이가 n 인 문장의 segmentation points 는 n-1 개 이며, 각각 [0, 1] 을 부여하는 labeling 문제입니다. 총 $$2^{n-1}$$ 개의 solutions 중에서 가장 적절한 solution 을 찾는 문제입니다. 모든 solutions 중에서 best solution 을 찾는 것은 많은 비용이 들기 때문에 효율적으로 최선의 solution 을 찾는 많은 heuristics 이 제안되었습니다. Feng 의 segmentation algorithm 도 이에 해당합니다. 
 
-혹은 Conditional Random Field (CRF) 와 같은 sequential labeling 방법들도 이용될 수 있습니다. 상하이 교통대학의 [Hai Zhao][zhaohai] 는 unsupervised chinese word segmentation 에 대한 연구를 하셨던 분이며, CRF 를 많이 이용하였습니다. 그리고 supervised algorithm 인 CRF 에 out of vocabulary 를 인식하는 능력을 부여하기 위하여 accessor variety 를 함께 이용하기도 했습니다. 이 분야에 관심이 있는 분이라면 Zhao 의 연구를 살펴보시길 바랍니다 (개인적으로 이 분 연구의 팬입니다). 
+혹은 Conditional Random Field (CRF) 와 같은 sequential labeling 방법들도 이용될 수 있습니다. 상하이 교통대학의 [Hai Zhao][zhaohai] 는 unsupervised chinese word segmentation 에 대한 연구를 하셨던 분이며, CRF 를 많이 이용하였습니다. 그리고 supervised algorithm 인 CRF 에 out of vocabulary 를 인식하는 능력을 부여하기 위하여 accessor variety 를 함께 이용하기도 했습니다. 이 분야에 관심이 있는 분이라면 Zhao 의 연구를 살펴보시길 바랍니다 (저는 이 분 연구의 팬입니다). 
 
 다시 Feng 의 Accessor Variety 를 이용한 unsupervised word segmentation 으로 돌아옵니다. 풀어야 하는 문제는 문장 $$S$$ 가 있을 때 이를 substrings 인 $$SS$$ 로 나누는 것입니다. $$m \le n$$ 입니다. [Unsupervised segmentation of Chinese corpus using accessor variety][av_segmentation] 에서 제안된 방법은 $$SS$$ 에 대한 criteria 와, 이를 찾기 위한 dynamic programming 기반 알고리즘입니다. 
 
@@ -99,7 +99,7 @@ $$SS$$ 에 대한 criteria 는 몇 개의 functions 입니다. $$\vert W \vert$$
 <center>$$f_3 (W) = \vert W \vert ^c \times log \left( AV(W) \right) ^d$$</center>
 <center>$$f_4 (W) = \vert W \vert ^{\vert W \vert} \times log \left( AV(W) \right)$$</center>
 
-사용자가 알아서 설정하는 임의의 parameters 이지만, 말은 됩니다. $$AV(W)$$ 의 값이 클수록 단어일 가능성이 높습니다. $$\vert W \vert ^d$$ 를 곱함으로써, 이왕이면 더 긴 단어가 선택되기를 장려합니다. Unsupervised approach 는 정확한 학습데이터가 없기 때문에, 알고리즘을 설계하는 사람이 옳다고 믿는 방향으로 solutions 을 유도합니다. 
+사용자가 알아서 설정하는 임의의 parameters 이지만, 말은 됩니다. $$AV(W)$$ 의 값이 클수록 단어일 가능성이 높습니다. $$\vert W \vert ^d$$ 를 곱함으로써, 이왕이면 더 긴 단어가 선택되기를 장려합니다. Unsupervised approach 는 정확한 학습데이터가 없기 때문에, 알고리즘을 설계하는 사람이 옳다고 믿는 방향으로 solutions 을 유도해야 합니다. 
 
 Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. 단어의 최대 길이는 6 이라 가정한 뒤, i 를 1 씩 증가하며 best solusions 을 찾아갑니다. 
 
@@ -108,7 +108,7 @@ Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. �
 - repeat: $$f_i = max_{1 \le j \le min(i, 6)} \left (f_{i-j}^{`} + f(W_{ij}) \right), 2 \le i \le n$$ 
 - finally: $$f(S) = f_n$$ 
 
-위 방법을 한국어 데이터에 적용해보지는 않았습니다. Accessor Variety 는 그 자체로 어느 정도 잘 작동합니다. 알고리즘을 만들면 이 포스트를 업데이트 하겠습니다. 
+위 방법을 한국어 데이터에 적용해보지는 않았습니다. Accessor Variety 는 그 자체가 단어 추출 용으로 한국어에서도 잘 작동합니다. 알고리즘을 만들면 이 포스트를 업데이트 하겠습니다. 
 
 
 ## Branching Entropy
@@ -134,7 +134,7 @@ $$entropy(공연) = - \left( 0.3 * log(0.3) + 0.2 * log(0.2) + 0.5 * log(0.5) \r
 
 이처럼 글자 종류의 절대값이 아닌 분포를 이용함으로써 좀 더 정밀하게 단어 경계 점수를 수치로 표현할 수 있습니다. 
 
-이 방법은 단어의 좌/우에 대하여 모두 적용할 수 있습니다. 이런 재료들은 이후에 Tokenizer의 재료가 됩니다. 토크나이저의 목적은 주어진 문장/어절에서 단어를 분리하는 것이기 때문입니다. 아래 그림처럼 한 경계를 마주하는 두 단어의 right / left side branching entropy 의 값이 모두 높다면, 이 부분은 단어의 경계일 가능성이 높습니다. 
+이 방법은 단어의 좌/우에 대하여 모두 적용할 수 있습니다. 이런 정보들은 tokenizer 의 재료입니다. 토크나이저의 목적은 주어진 문장/어절에서 단어를 분리하는 것입니다. 아래 그림처럼 한 경계를 마주하는 두 단어의 right / left side branching entropy 의 값이 모두 높다면, 이 부분은 단어의 경계일 가능성이 높습니다. 
 
 ![]({{ "/assets/figures//branching_entropy_bothside.png" | absolute_url }})
 
@@ -159,7 +159,7 @@ $$entropy(공연) = - \left( 0.3 * log(0.3) + 0.2 * log(0.2) + 0.5 * log(0.5) \r
 - $$B_{increase}$$ : $$h(x_{n+1}) - h(x_n) > valdelta$$
 - $$B_{ordinary}$$ : $$h(x_n) > val$$
 
-사실 이 spec 만 이용하면 $$h(x_{i:k})$$ 의 $$i$$ 가 바뀔 때, $$h(x)$$ 의 경향이 변하면 어떤 선택을 해야 하는지에 대해서는 다루지 않습니다. 그대로 알고리즘으로 구현할 수가 없었습니다. 
+사실 이 spec 만 이용하면 구현이 완벽히 되지 않습니다. $$h(x_{i:k})$$ 의 $$i$$ 가 바뀔 때, $$h(x)$$ 의 경향이 변하면 어떤 선택을 해야 하는지에 대해서는 적혀있지 않습니다. 이에 대한 해법을 만든 뒤 한국어에 대한 branching entropy tokenizer 를 만드는 일도 해봐야 겠습니다.
 
 
 ## Apply statistical word extractors to Korean
@@ -202,7 +202,7 @@ for word in '연합 연합뉴 연합뉴스'.split():
     print('word = {:4}, lbe = {:.3}, rbe={:.3}'.format(word, lbe, rbe))
 {% endhighlight %}
 
-뉴스 기사이기 때문에 '연합뉴스'는 매우 많이 등장합니다. '연합뉴' 는 right branching entropy 가 너무 작아 WordExtractor.extract() 의 과정에서 이미 탈락 시켰습니다. 
+뉴스 기사이기 때문에 '연합뉴스'는 매우 많이 등장합니다. '연합뉴' 는 right branching entropy 가 너무 작아 WordExtractor.extract() 의 과정에서 이미 탈락되었습니다.
 
 	word = 연합  , lbe = 3.2, rbe=0.427
 	word = 연합뉴 , lbe = 0.0, rbe=0.0
