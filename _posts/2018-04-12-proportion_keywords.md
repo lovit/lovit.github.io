@@ -7,7 +7,7 @@ tags:
 - keyword
 ---
 
-키워드를 추출하는 방법은 다양합니다. 이들은 saliency 와 distinctiveness 를 만족하는 키워드로 선택합니다. Lasso regression 을 이용하여 키워드를 추출할 수도 있습니다. 그러나 lasso regression 은 correlation 이 높은 단어 중에서는 하나만 키워드로 선택합니다. 또한 regression parameters 를 학습해야 하기 때문에 계산 비용이 듭니다. Term frequency matrix 에 직관적인 공식만 적용해도 키워드를 추출할 수 있습니다. 이번 포스트에서는 가볍지만 파워풀한 키워드 추출 방법을 소개합니다.
+키워드를 추출하는 방법은 다양합니다. 많은 키워드 추출 방법들은 saliency 와 distinctiveness 를 만족하는 단어를 키워드로 선택합니다. Lasso regression 을 이용하여 키워드를 추출할 수도 있습니다. 그러나 lasso regression 은 correlation 이 높은 단어들 중에서 중복된 단어를 제거하여 키워드를 선택합니다. 또한 regression parameters 를 학습해야 하기 때문에 계산 비용이 듭니다. Term frequency matrix 에 직관적인 공식만 적용해도 키워드를 추출할 수 있습니다. 이번 포스트에서는 가볍지만 파워풀한 키워드 추출 방법을 소개합니다.
 
 ## What is Keyword?
 
@@ -73,21 +73,21 @@ print('n pos = {}, n neg = {}'.format(len(positive_documents), len(negative_docu
 # n pos = 97, n neg = 29994
 {% endhighlight %}
 
-sparse matrix x에서 sum()을 하면 모든 값의 합이 구해집니다. sum(axis=0)을 하면 rows가 하나의 row로 합쳐지는 sum이며, sum(axis=1)을 하면 columns가 하나의 column으로 합쳐지는 sum입니다. 우리의 x는 (document by term) matrix이기 때문에 row sum을 하면 모든 문서에서의 단어들의 빈도수 합이 구해집니다. 그래서 (30091 by 9774)의 term frequency matrix가 9774 차원의 term frequency vector가 되었음을 확인할 수 있습니다. 
+sparse matrix $$x$$ 에서 sum() 을 하면 모든 값의 합이 구해집니다. sum(axis=0) 을 하면 rows 가 하나의 row 로 합쳐지는 sum 이며, sum(axis=1) 을 하면 columns 가 하나의 column 으로 합쳐지는 sum 입니다. 우리의 x는 (document by term) matrix 이기 때문에 row sum 을 하면 모든 문서에서의 단어들의 빈도수 합이 구해집니다. 그래서 (30091 by 9774)의 term frequency matrix 가 9774 차원을 지닙니다.
 
 {% highlight python %}
 x.shape # (30091, 9774)
 x.sum(axis=0).shape # (1, 9774)
 {% endhighlight %}
 
-scipy.sparse 의 matrix는 slicing이 가능합니다. positive_documents를 list 형식으로 만들었습니다. 이 list를 x에 넣어서 x[list,:] 을 실행하면 list에 해당하는 모든 row들을 잘라서 submatrix를 만듭니다. positive_documents, 즉 '아이오아이'라는 단어가 들어간 문서들만을 잘라내어 submatrix를 만든 뒤, 이를 row sum (= sum(axis=0))을 하였습니다. '아이오아이'라는 단어가 들어간 문서의 단어 빈도수가 만들어집니다. 이를 list로 만든 뒤, 출력해보면 다음과 같이 term frequency list가 만들어졌음을 볼 수 있습니다. 길이는 단어의 개수와 같습니다. 
+scipy.sparse 의 matrix 는 slicing 이 가능합니다. positive_documents 를 list 형식으로 만듭니다. 이 list 를 x 에 넣어서 x[list,:] 을 실행하면 list에 해당하는 모든 row 들을 잘라서 submatrix 를 만듭니다. positive_documents, 즉 '아이오아이'라는 단어가 들어간 문서들만을 잘라내어 submatrix 를 만든 뒤, 이를 row sum (= sum(axis=0)) 을 하였습니다. '아이오아이'라는 단어가 들어간 문서의 단어 빈도수가 만들어집니다. 이를 list 로 만든 뒤, 출력해보면 다음과 같이 term frequency list 가 만들어졌음을 볼 수 있습니다. 길이는 단어의 개수와 같습니다. 
 
 {% highlight python %}
 positive_proportion = x[positive_documents,:].sum(axis=0)
 positive_proportion = positive_proportion.tolist()[0]
 {% endhighlight %}
 
-총 합을 _sum 이라는 변수로 만든 뒤, 모든 빈도수를 이 _sum으로 나누어주면 positive documents, 즉 '아이오아이'가 포함된 문서에서의 단어들의 출현 비율이 만들어집니다. 
+총 합을 _sum 이라는 변수로 만든 뒤, 모든 빈도수를 이 _sum 으로 나누어주면 positive documents, 즉 '아이오아이'가 포함된 문서에서의 단어들의 출현 비율이 만들어집니다. 
 
 {% highlight python %}
 _sum = sum(positive_proportion)
@@ -96,7 +96,7 @@ positive_proportion = [v/_sum for v in positive_proportion]
 
 이 과정을 반복할 것이니 to_proportion(documents_list) 라는 함수로 만들어 둡니다. 
 
-positive proportion은 '아이오아이'가 포함된 문서에서의 단어 출현 비율, negative proportion은 '아이오아이'가 포함되지 않은 문서에서의 단어 출현 비율입니다. 
+positive proportion 은 '아이오아이'가 포함된 문서에서의 단어 출현 비율, negative proportion 은 '아이오아이'가 포함되지 않은 문서에서의 단어 출현 비율입니다. 
 
 {% highlight python %}
 def to_proportion(documents_list):
@@ -110,7 +110,7 @@ positive_proportion = to_proportion(positive_documents)
 negative_proportion = to_proportion(negative_documents)
 {% endhighlight %}
 
-상대적 출현 비율은 모든 단어들에 대하여 p / (p+n) 을 계산하면 됩니다. p는 한 단어의 positive proportion의 값이며, n은 그 단어의 negative proportion의 값입니다. 
+상대적 출현 비율은 모든 단어들에 대하여 p / (p+n) 을 계산하면 됩니다. p는 한 단어의 positive proportion 의 값이며, n은 그 단어의 negative proportion 의 값입니다. 
 
 {% highlight python %}
 def proportion_ratio(pos, neg):
@@ -121,7 +121,7 @@ def proportion_ratio(pos, neg):
 keyword_score = proportion_ratio(positive_proportion, negative_proportion)
 {% endhighlight %}
 
-이제 proportion ratio가 높은 단어들을 찾아봅니다. enumerate를 이용하면 점수가 높은 단어의 index와 그 점수를 (단어, 점수) pair로 만들 수 있습니다. 이를 점수 기준으로 정렬하면 점수 순 정렬이 됩니다. 
+이제 proportion ratio 가 높은 단어들을 찾아봅니다. enumerate 를 이용하면 점수가 높은 단어의 index 와 그 점수를 (단어, 점수) pair 로 만들 수 있습니다. 이를 점수 기준으로 정렬하면 점수 순 정렬이 됩니다. 
 
 {% highlight python %}
 sorted(enumerate(keyword_score), key=lambda x:-x[1])[:30]
@@ -139,37 +139,39 @@ sorted(enumerate(keyword_score), key=lambda x:-x[1])[:30]
 #  ...
 {% endhighlight %}
 
-앞서 term frequency vector를 만들었습니다. 이도 list로 만들어 둡니다. 키워드/연관어를 추출할 때, 최소 빈도수를 설정하기 위해서입니다. 
+앞서 term frequency vector 를 만들었습니다. 이도 list 로 만들어 둡니다. 키워드/연관어를 추출할 때, 최소 빈도수를 설정하기 위해서입니다. 
 
 {% highlight python %}
 term_frequency = x.sum(axis=0).tolist()[0]
 {% endhighlight %}
 
-이 과정을 proportion ratio keyword로 감싸서 함수로 만들어 둡니다. min count와 단어를 입력받도록 합니다. 
+이 과정을 proportion ratio keyword 로 감싸서 함수로 만들어 둡니다. min count 와 단어를 입력받도록 합니다. 
 
 term frequency matrix 에 포함되지 않은 단어면 키워드분석을 하지 않습니다. 
 
-	word_idx = word2int(word)
-		if word_idx == -1:
-			return None
+{% highlight python %}
+word_idx = word2int(word)
+if word_idx == -1:
+    return None
+{% endhighlight %}
             
-min count cutting을 통해서 최소 빈도수 이상인 단어들만 available terms로 만들어 둡니다. 
+min count cutting 을 통하여 최소 빈도수 이상인 단어들만 available terms 로 만들어 둡니다. 
 
 	term_frequency = x.sum(axis=0).tolist()[0]
 	available_terms = {term:count for term, count in enumerate(term_frequency) if count >= min_count}
 
-그 뒤 positive_documents / negative_documents를 선택하고, positive_proportion / negative_proportion 를 계산한 뒤, proportion_ratio를 계산합니다. 
+그 뒤 positive_documents / negative_documents 를 선택하고, positive_proportion / negative_proportion 를 계산한 뒤, proportion_ratio 를 계산합니다. 
 
 	positive_documents = x[:,word_idx].nonzero()[0].tolist()
 	positive_proportion = to_proportion(positive_documents)
 	...
 	keyword_score = proportion_ratio(positive_proportion, negative_proportion)
 
-최소빈도수 이상으로 등장한 단어만을 keyword로 남겨두는 filtering을 합니다. filter 함수를 써도 좋습니다.
+최소빈도수 이상으로 등장한 단어만을 keyword 로 남겨두는 filtering 을 합니다. filter 함수를 써도 좋습니다.
 
 	keyword_score = [(term, score) for term, score in keyword_score if term in available_terms]
 
-word index로 표현되어 있는 keyword_score = [(idx, score), ... ]를 [(word, score), ...]로 바꿔줍니다. 
+word index 로 표현되어 있는 keyword_score = [(idx, score), ... ] 를 [(word, score), ...] 로 바꿔줍니다. 
 
 	keyword_score = [(int2word(term), score) for term, score in keyword_score]
 
