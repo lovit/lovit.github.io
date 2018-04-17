@@ -324,7 +324,7 @@ Python dict 를 이용하여 구현한 PageRank 의 iteration 30 번의 계산 �
 한국에서 유명한 영화들이 높은 rank 를 갖는 것은 맞지만, 두 방법의 rank 기준 순서가 조금 다릅니다. Graph 내의 PageRank 의 합을 1 로 정하여 truncation error 가 난 것인지 혹은 구현 과정에서 실수가 있었는지는 살펴봐야 겠습니다. 
 
 [pagerankgit]: https://github.com/lovit/pagerank/
-[comparison_tutorial]: https://github.com/lovit/pagerank/pagerank_numpy_vs_dict.ipynb
+[comparison_tutorial]: https://github.com/lovit/pagerank/blob/master/pagerank_numpy_vs_dict.ipynb
 [sparsepost]: {{ site.baseurl }}{% link _posts/2018-04-09-sparse_mtarix_handling.md %}
 [pagerank]: {{ site.baseurl }}{% link _posts/2018-04-16-pagerank_and_hits.md %}
 [ppr]: {{ site.baseurl }}{% link _posts/2018-04-17-personalized_pagerank.md %}
