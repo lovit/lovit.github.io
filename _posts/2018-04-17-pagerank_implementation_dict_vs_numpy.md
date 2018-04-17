@@ -262,6 +262,6 @@ Python dict 를 이용하여 구현한 PageRank 의 iteration 30 번의 계산 �
 
 [pagerankgit]: https://github.com/lovit/pagerank/
 [comparison_tutorial]: https://github.com/lovit/pagerank/pagerank_numpy_vs_dict.ipynb
-[sparsepost]: {{ site.baseulr }}{% link _posts/2018-04-09-sparse_mtarix_handling.md %}
+[sparsepost]: {{ site.baseurl }}{% link _posts/2018-04-09-sparse_mtarix_handling.md %}
 [pagerank]: {{ site.baseurl }}{% link _posts/2018-04-16-pagerank_and_hits.md %}
 [ppr]: {{ site.baseurl }}{% link _posts/2018-04-16-2018-04-17-personalized_pagerank.md %}
