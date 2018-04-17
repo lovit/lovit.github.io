@@ -23,7 +23,7 @@ $$PR(u) = c \times \sum_{v \in B_u} \frac{PR(v)}{N_v} + (1 - c) \times \frac{1}{
 
 ## Implementing PageRank with Python dict (slow version)
 
-[이전 포스트][pagerank]에서 Python 의 dict 를 이용하여 PageRank 를 구현하였습니다. 입력되는 데이터 G 는 dict dict 형식입니다. Pure Python codes 지만, 그렇기 때문에 느린 편입니다. 
+[이전 포스트][pagerank]에서 Python 의 dict 를 이용하여 PageRank 를 구현하였습니다. input 데이터 g 는 dict dict 형식입니다. Pure Python codes 로 구현할 수 있습니다. 쓰지 못할 수준은 아니지만, 계산 속도가 느린 편입니다. 
 
 {% highlight python %}
 def pagerank(G, bias=None, df=0.15,
@@ -98,6 +98,69 @@ _sum = sum(bias)
 bias = np.asarray([b / _sum for b in comments_bias])
 {% endhighlight %}
 
+영화평의 개수를 bias 로 이용했습니다. 한국에서 인기있던 영화들의 rank 가 높아야 합니다. 영화 nodes 만을 선택한 뒤, 랭킹이 높은 상위 50 개의 영화를 살펴봅니다. 
+
+{% highlight python %}
+movie_rank = {node:rank for node, rank in rank.items() if node[0] == 'm'}
+for movie, _ in sorted(movie_rank.items(), key=lambda x:-x[1])[:50]:
+    movie_idx = movie.split()[1]
+    print(idx2movie(movie_idx))
+{% endhighlight %}
+
+한국에서 인기있는 영화들이 상위에 랭킹이 된 것으로 보아 PageRank 알고리즘은 학습이 잘 되었음을 확인할 수 있습니다. 
+
+    인천상륙작전 (2016, 한국)
+    연평해전 (2015, 한국)
+    국가대표 (2009, 한국)
+    설국열차 (2013, 한국)
+    어벤져스: 에이지 오브 울트론 (2015, 미국)
+    국제시장 (2014, 한국)
+    겨울왕국 (2014, 미국)
+    암살 (2015, 한국)
+    7번방의 선물 (2013, 한국)
+    캡틴 아메리카: 시빌 워 (2016, 미국)
+    곡성(哭聲) (2016, 한국)
+    귀향 (2016, 한국)
+    26년 (2012, 한국)
+    인터스텔라 (2014, 미국 영국)
+    세 얼간이 (2011, 인도)
+    부산행 (2016, 한국)
+    아가씨 (2016, 한국)
+    레미제라블 (2012, 영국)
+    밀정 (2016, 한국)
+    럭키 (2016, 한국)
+    디 워 (2007, 한국)
+    판도라 (2016, 한국)
+    미스터 고 (2013, 한국)
+    다세포 소녀 (2006, 한국)
+    해운대 (2009, 한국)
+    님아, 그 강을 건너지 마오 (2014, 한국)
+    광해, 왕이 된 남자 (2012, 한국)
+    수상한 그녀 (2014, 한국)
+    트랜스포머: 사라진 시대 (2014, 미국)
+    킹스맨 : 시크릿 에이전트 (2015, 미국 영국)
+    괴물 (2006, 한국)
+    아수라 (2016, 한국)
+    역린 (2014, 한국)
+    포화 속으로 (2010, 한국)
+    어거스트 러쉬 (2007, 미국)
+    비긴 어게인 (2014, 미국)
+    검은 사제들 (2015, 한국)
+    아바타 (2009, 미국)
+    말할 수 없는 비밀 (2008, 대만)
+    베테랑 (2015, 한국)
+    덕혜옹주 (2016, 한국)
+    감기 (2013, 한국)
+    타워 (2012, 한국)
+    라스트 갓파더 (2010, 한국 미국)
+    늑대소년 (2012, 한국)
+    왕의 남자 (2005, 한국)
+    그래비티 (2013, 미국 영국)
+    영웅: 샐러멘더의 비밀 (2013, 한국 미국 러시아 연방)
+    라디오 스타 (2006, 한국)
+    과속스캔들 (2008, 한국)
+
+
 ## Implementing PageRank with Numpy (fast version)
 
 먼저 dict dict 형식인 g 를 sparse matrix 로 변환합니다. 다음 round 의 rank 값은 현재 rank 값에 adjacent matrix 를 내적한 형태입니다. 그림처럼 adjacent matrix $$A$$ 의 $$i$$ 번째 row 와 현재 시점의 $$rank_t$$ 를 내적한 값이 $$rank_{t+1}[i]$$ 에 저장됩니다. 
@@ -132,9 +195,9 @@ A = csc_matrix((data, (rows, cols)))
 print(A.shape) # (265607, 265607)
 {% endhighlight %}
 
-ir 은 $$\frac{1}{num nodes}$$ 입니다. PageRank 의 기본값입니다. $$Ar_t = r_{t+1}$$ 를 위하여 adjacent matrix $$A$$ 와 rank vector $$r$$ 의 내적을 수행해야 합니다.
+ir 은 $$\frac{1}{A.shape[0]}$$ 입니다. PageRank 계산을 시작할 때 모든 마디의 기본값으로 이용됩니다. $$Ar_t \rightarrow r_{t+1}$$ 를 위하여 adjacent matrix $$A$$ 와 rank vector $$r$$ 의 내적을 수행해야 합니다.
 
-이 때 numpy.dot 을 이용할 수 있습니다. 하지만, **numpy 는 sparse matrix 의 내적을 수행하기 위해 이를 dense matrix 로 변환합니다**. 265,607 by 265,607 의 double[][] 를 만듭니다. 그렇기 때문에 계산이 되지 않습니다. 그 이전에 out of memory 를 만나게 됩니다. 
+이 때 numpy.dot 을 이용할 수 있습니다. 하지만, **numpy 는 sparse matrix 의 내적을 수행하기 위해 이를 dense matrix 로 변환합니다**. 265,607 by 265,607 의 double array 를 만듭니다. 계산을 하기 이전에 out of memory 가 발생합니다. 
 
 {% highlight python %}
 # Do not implement like this
@@ -143,14 +206,14 @@ ir 은 $$\frac{1}{num nodes}$$ 입니다. PageRank 의 기본값입니다. $$Ar_
 # np.dot(A, rank) 
 {% endhighlight %}
 
-Scipy 에서는 scipy.sparse 에서 safe_sparse_dot 함수를 제공합니다. scipy.sparse.matrix 와 numpy.ndarray 의 내적, 혹은 sparse matrix 간의 내적은 scipy 의 함수를 이용해야 합니다. sparse matrix 에서 제공하는 .dot() 함수는 safe_sparse_dot 함수를 호출합니다. 
+**Scipy 에서는 scipy.sparse 에서 safe_sparse_dot 함수를 제공**합니다. scipy.sparse.matrix 와 numpy.ndarray 의 내적, 혹은 sparse matrix 간의 내적은 scipy 의 함수를 이용해야 합니다. sparse matrix 에서 제공하는 .dot() 함수는 safe_sparse_dot 함수를 호출합니다. 
 
 {% highlight python %}
 # call scipy.sparse safe_sparse_dot()
 rank_new = A.dot(rank) 
 {% endhighlight %}
 
-Sparse matrix 와 dense matrix 간의 내적은 sparse matrix 의 0 이 아닌 값을 기준으로 계산되어야 합니다. Sparse matrix 의 대부분의 값이 0 이기 때문에 곱셈을 할 필요가 없는 값이 매우 많기 때문입니다. safe_sparse_dot() 함수는 이런 원리로 구현되어 있습니다. 
+Sparse matrix 와 dense matrix 간의 내적은 sparse matrix 의 0 이 아닌 값을 기준으로 계산해야 합니다. Sparse matrix 의 대부분의 값이 0 이기 때문에 곱셈을 할 필요가 없는 값이 매우 많기 때문입니다. safe_sparse_dot() 함수는 이를 위하여 만들어졌습니다.
 
 간혹 내적의 총합이 float 연산 과정에서의 truncated error 때문에 1 보다 줄어들 수 있습니다. 이를 보정하기 위하여 l1 normalize 를 수행합니다. 
 
@@ -161,7 +224,7 @@ rank_new = normalize(rank_new.reshape(1, -1), norm='l1').reshape(-1)
 print(rank_new.sum()) # 1.0000000000000002
 {% endhighlight %}
 
-Dangling nodes 문제를 방지하기 위한 random jumping 까지 구현되어야 합니다. $$Ar_t = r_{t+1}$$ 에 의하여 계산된 $$r_{t+1}$$ 에 $$c$$ 배를 한 뒤, $$(1 - c) \times bias$$ 를 더합니다. 
+Dangling nodes 문제를 방지하기 위한 random jumping 까지 구현되어야 합니다. $$Ar_t \rightarrow r_{t+1}$$ 에 의하여 계산된 $$r_{t+1}$$ 에 $$c$$ 배를 한 뒤, $$(1 - c) \times bias$$ 를 더합니다. 
 
 $$r_{t+1} = c \times Ar_t + (1 - c) \times bias$$
 
