@@ -7,13 +7,13 @@ tags:
 - visualization
 ---
 
-Word cloud 는 단어와 단어의 중요도를 손쉽게 보여주는 시각화 도구 입니다. Frequent words 나 keywords 를 시각화하여 보여줄 수 있습니다. 이번 포스트에서는 KR-WordRank 를 이용하여 키워드를 추출한 뒤, wordcloud package 를 이용하는 과정에 대한 quick starting 을 소개합니다. 
+Word cloud 는 중요한 단어나 키워드를 직관적으로 보여주는 시각화 도구 입니다. 이번 포스트에서는 KR-WordRank 를 이용하여 키워드를 추출한 뒤, wordcloud package 를 이용하는 과정에 대한 quick starting 을 소개합니다. 
 
 ## KR-WordRank
 
-WordRank 는 띄어쓰기가 없는 중국어와 일본어에서 graph ranking 알고리즘을 이용하여 단어를 추출하기 위해 제안된 방법입니다. Ranks 는 substring 의 단어 가능 점수이며, 이를 이용하여 unsupervised word segmentation 을 수행하였습니다. WordRank 는 substring graph 를 만든 뒤, graph ranking 알고리즘을 학습합니다. 그러나 한국어의 언어적 특성은 중국어와 다르기 때문에 WordRank 를 그대로 적용할 수는 없습니다. 
+WordRank 는 띄어쓰기가 없는 중국어와 일본어에서 graph ranking 알고리즘을 이용하여 단어를 추출하기 위해 제안된 방법입니다. WordRank 는 substring graph 를 만든 뒤, graph ranking 알고리즘을 이용하여 단어스러운 substring 을 찾습니다. 그러나 한국어의 언어적 특성은 중국어와 다르기 때문에 WordRank 를 그대로 적용할 수는 없습니다. 
 
-KR-WordRank 는 한국어 어절 구조의 특징인 L + [R] 을 반영한 한국어를 위한 WordRank 입니다. KR-WordRank 는 키워드 추출의 기능도 있습니다. Substring graph 에서의 ranking 은 단어 점수임과 동시에 키워드 점수입니다. 
+KR-WordRank 는 한국어 어절 구조의 특징인 L + [R] 을 반영한 한국어를 위한 WordRank 입니다. KR-WordRank 는 키워드 추출의 기능도 있습니다. 더 자세한 내용은 이전의 [KR-WordRank post][krwordrank] 를 참고하세요.
 
 영화 '라라랜드'의 영화평을 KR-WordRank 에 적용하면 다음의 결과를 얻을 수 있습니다.
 
@@ -69,7 +69,7 @@ for word, r in sorted(keywords.items(), key=lambda x:x[1], reverse=True)[:30]:
 	ㅠㅠ:   12.1447
 	좋아:   11.9586
 
-이 결과를 보니 word cloud 시각화를 하고 싶은 생각이 듭니다.
+이 결과를 word cloud 를 이용하여 시각적으로 표현할 수 있습니다.
 
 
 ## Word Cloud in Python (package wordcloud)
@@ -78,13 +78,13 @@ Word cloud 는 단어의 중요도에 따라 단어의 크기나 색을 변화�
 
 This post includes official tutorial codes of wordcloud.
 
-Python 에서 이용할 수 있는 word cloud 는 [pytagcloud][pytagcloud_git] 와 [wordcloud][wordcloud_git] 가 있습니다. 그 외에도 있겠지만, 이 둘을 찾았습니다. pytagcloud 는 개발이 멈춘 상태로 보이고, wordcloud 가 최근까지 업데이트가 된 것으로 보입니다. 이번 포스트에서는 wordcloud 의 quick starting 을 정리합니다. 
+Python 에서 이용할 수 있는 word cloud packages 중에는 [pytagcloud][pytagcloud_git] 와 [wordcloud][wordcloud_git] 이 있습니다.pytagcloud 는 개발이 멈춘 상태로 보이고, wordcloud 가 최근까지 업데이트가 된 것으로 보입니다. 이번 포스트에서는 wordcloud 의 quick starting 을 정리합니다. 
 
 설치는 pip install 이 가능합니다. 튜토리얼 버전은 1.4.1 입니다. 
 
 	pip install wordcloud
 
-가장 간단한 word cloud 를 그리는 코드는 아래와 같습니다. generate_from_text() 는 텍스트에서 단어의 빈도를 계산하여 이를 기반으로 클라우드를 그리는 함수이며, generate_from_frequencies() 는 미리 정의된 단어의 빈도수 혹은 중요도를 이용하여 클라우드를 그리는 함수입니다. 
+가장 간단한 word cloud 를 그리는 코드는 아래와 같습니다. generate_from_text() 는 텍스트에서 단어의 빈도를 계산하여 이를 기반으로 클라우드를 그리며, generate_from_frequencies() 는 미리 정의된 단어의 빈도수 혹은 중요도를 이용하여 클라우드를 그립니다. 
 
 {% highlight python %}
 from wordcloud import WordCloud
@@ -109,6 +109,15 @@ wordcloud = WordCloud(stopwords=stopwords)
 wordcloud = wordcloud.generate_from_text(texts)
 {% endhighlight %}
 
+하지만 generate_from_frequencies() 를 이용할 때에는 stopwords 가 작동하지 않습니다. 우리는 이후에 generate_from_frequencies() 를 이용하여 word cloud 를 그리기 때문에 keywords 에서 stopwords 를 미리 제거합니다. 
+
+{% highlight python %}
+keywords.pop('영화')
+keywords.pop('관람객')
+keywords.pop('너무')
+keywords.pop('정말')
+{% endhighlight %}
+
 
 ## Word cloud image size
 
@@ -128,7 +137,7 @@ wordcloud = wordcloud.generate_from_frequencies(keywords)
 
 ## 한글 폰트 이용하기
 
-WordCloud 가 이용하는 기본 폰트는 한글을 지원하지 않습니다. Word cloud 를 그릴 때 이용할 폰트를 지정할 수 있습니다. Ubuntu 에서는 `/usr/share/fonts` 폴더 안에 폰트들이 들어있습니다. 저는 나눔고딕 폰트를 이용하여 이후 quick starting 을 하겠습니다. 
+WordCloud 의 기본 폰트는 한글을 지원하지 않습니다. Word cloud 를 그릴 때 이용할 폰트를 지정할 수 있습니다. Ubuntu 에서는 `/usr/share/fonts` 폴더 안에 폰트들이 들어있습니다. 저는 나눔고딕 폰트를 이용하여 이후 quick starting 을 하겠습니다. 
 
 {% highlight python %}
 font_path = '/usr/share/fonts/truetype/nanum/NanumBarunGothic.ttf'
@@ -208,7 +217,7 @@ plt.show()
 
 ## Background color
 
-배경색을 지정하기 위해서는 WordCloud 에서 background 를 조절합니다. 
+배경색을 지정하기 위해서는 WordCloud 에서 background_color 를 설정합니다. 
 
 {% highlight python %}
 wordcloud = WordCloud(
@@ -426,3 +435,4 @@ wordcloud = WordCloud(
 
 [pytagcloud_git]: https://github.com/atizo/PyTagCloud
 [wordcloud_git]: https://github.com/amueller/word_cloud
+[krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-16-krwordrank.md %}
