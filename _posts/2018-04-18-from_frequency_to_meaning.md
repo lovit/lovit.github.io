@@ -149,7 +149,7 @@ $$\frac{p_{i,j}}{p_i \times p_j}$$
 
 PMI 는 위 수식에 $$log$$ 를 취합니다. $$log(1) = 0$$ 이므로, 서로 상관이 없는 $$i$$ 와 $$j$$ 의 pmi 는 0 입니다. 
 
-$$log \left( \frac{p_{i,j}}{p_i \times p_j} \right)$$
+$$PMI_{i,j} = log \left( \frac{p_{i,j}}{p_i \times p_j} \right)$$
 
 반대로 안경을 썼을수록 저녁을 먹을 가능성이 높다면 (서로 양의 상관성이 있다면) pmi 는 0 보다 큽니다. 
 
@@ -157,11 +157,11 @@ $$log \left( \frac{p_{i,j}}{p_i \times p_j} \right)$$
 | 안경을 썼다 |  200 | 100 |
 | 안경을 안썼다 | 300 | 600 |
 
-$$pmi(안경 o, 저녁 o) = log \left( \frac{ \frac{200}{1200} }{ \frac{200}{300} \times \frac{200}{500} } \right) = log(1.2) = 0.182$$
+$$PMI(안경 o, 저녁 o) = log \left( \frac{ \frac{200}{1200} }{ \frac{200}{300} \times \frac{200}{500} } \right) = log(1.2) = 0.182$$
 
 음의 상관관계가 있다면 pmi 는 음수의 값을 가집니다. 자연어처리에서의 semantic 에서는 negative correlation 이 큰 관심사는 아닙니다. PPMI 는 0 보다 작은 PMI 의 값을 모두 0 으로 만들고, positive correlation 에만 초점을 두자는 방법입니다. 
 
-$$ppmi_{i,j} = max(0, pmi_{i,j})$$
+$$PPMI_{i,j} = max(0, PMI_{i,j})$$
 
 Word-context matrix 를 PPMI 로 표현한 뒤, 이를 matrix factorization 으로 압축하면 Word2Vec 이라는 [논문][ppmi_word2vec]도 NIPS 2014 에 등장합니다. Context co-cooccurrence 를 이용하면 semantics 이 표현됩니다. 각 알고리즘별로 그 과정과 output 의 형태는 다르지만 본질은 비슷합니다. 
 
@@ -177,7 +177,7 @@ Word-context matrix 를 PPMI 로 표현한 뒤, 이를 matrix factorization 으�
 - high order co-occurrence : 두 단어가 반드시 한 문서에 등장하지 않았다 하더라도, 마치 SimRank 에서의 word similarity 처럼 두 단어의 유사성이 반영될 수 있습니다. 
 - sparsity reduction : sparsity 가 줄어듭니다. 
 
-5. 장, Open source VSM systems 은 이 논문이 작성된지 10 여년이 지나기도 하였기 때문에 넘어갑니다. 
+(5 장), Open source VSM systems 은 이 논문이 작성된지 10 여년이 지나기도 하였기 때문에 넘어갑니다. 
 
 
 ## (6 장). Applications
