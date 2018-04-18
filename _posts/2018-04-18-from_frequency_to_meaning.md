@@ -1,5 +1,5 @@
 ---
-title: (Review) From frequency to meaning, Vector space models of semantics
+title: (Review) From frequency to meaning, Vector space models of semantics (Turney & Pantel, 2010)
 date: 2018-04-18 21:00:00
 categories:
 - machine learning
