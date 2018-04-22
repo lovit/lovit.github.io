@@ -8,7 +8,7 @@ tags:
 - preprocessing
 ---
 
-NIPS 2014 의 ["Neural Word Embedding as Implicit Matrix Factorization"][nips21014] 에서는 Word2Vec 과 같은 word embedding 이 학습하는 공간과 비슷한 word representation 을 얻는 방법을 소개합니다.  Word - context matrix 에 Point Mutial Information 을 적용한 뒤, pmi 행렬에 Singular Vector Decomposition (SVD) 와 같은 차원축소 방법을 적용하면 비슷한 공간이 학습됩니다. 이번 포스트에서는 이 논문을 재구현합니다. 
+NIPS 2014 의 ["Neural Word Embedding as Implicit Matrix Factorization"][nips21014] 에서는 Word2Vec 과 같은 word embedding 이 학습하는 공간과 비슷한 word representation 을 얻는 방법을 소개합니다.  Word - context matrix 에 Point Mutial Information (PMI) 을 적용한 뒤, PMI matrix 에 Singular Vector Decomposition (SVD) 를 적용하면 Word2Vec 과 비슷한 word embedding 공간이 학습됩니다. 이번 포스트에서는 이 논문을 리뷰하고, PMI + SVD 의 특징에 대해서 알아봅니다.
 
 
 ## Brief review of Word2Vec
@@ -56,24 +56,26 @@ $$SPPMI(x,y) = max(0, PMI(x,y) - \delta )$$
 
 ## Review of Neural Word Embedding as Implicit Matrix Factorization
 
-Levy & Goldberg (2014) 의 논문의 아이디어입니다. Word2Vec 의 context words 의 embedding matrix 를 $$C$$, base word embedding matrix 를 $$W$$ 라 할 때, $$W \cdot C^T = M$$ 은 base word 와 context word 의 유사도입니다. 반대로 $$M$$ 이 있다면, 이를 context words 와 base words 의 embedding vector 로 decomposition 을 할 수 도 있습니다. 
+Levy & Goldberg (2014) 의 논문의 아이디어입니다. Word2Vec 의 context words 의 embedding matrix 를 $$C$$, base word embedding matrix 를 $$W$$ 라 할 때, $$W \cdot C^T = M$$ 은 base word 와 context word 의 유사도입니다. 반대로 $$M$$ 이 있다면, 이를 context words 와 base words 의 embedding vector 로 decomposition 을 할 수 도 있습니다. 이런 맥락에서 Word2Vec 학습은 matrix factorization 의 역할을 하는 것으로 해석할 수 있습니다.
 
-특히 negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 가 됩니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$\#(w,c)$$ 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
+Negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 입니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$\#(w,c)$$ 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
 
 $$l = \sum_{w \in V_W} \sum_{w \in V_C}  \#(w,c) \cdot \left( log \theta (\vec{w} \cdot \vec{c})) + k \cdot E_{C_N ~ P_D} [log \theta (- \vec{w} \cdot \vec{c_N})] \right)$$
 
-수학적인 정리를 지나면 다음의 식을 얻을 수 있습니다. 
+수학적인 정리 과정을 거치면 다음의 식을 얻을 수 있습니다. 
 
 $$\vec{w} \cdot \vec{c} = log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \cdot \frac{1}{k} \right) = log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \right) - log k$$
 
-그리고 $$log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \right)$$ 은 $$PMI(w,c)$$ 입니다. 
+$$log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \right)$$ 은 $$PMI(w,c)$$ 입니다. 
 
 그러나 $$\#(w,c) = 0$$ 인 경우, $$log 0 = - \inf$$ 이기 때문에 정의가 어렵습니다. Word - context matrix 는 sparse matrix 이기 때문에 co-occurrence 가 0 이거나 작은 경우는 무시합니다. 이를 위해 PMI 대신 PPMI 를 이용합니다. 
 
 
 ## Experiments: Building word - context matrix
 
-논문의 내용처럼 word - context 의 PMI 를 계산하여 word embedding vector 를 학습합니다. 이 실험을 위하여 2016-10-20 뉴스 기사, 30,091 건을 이용하였습니다. 
+(참고) 이 블로그에서는 2016-10-20 일 뉴스기사와 '박근혜', '아이오아이'의 예시가 자주 등장합니다. 제가 주로 수행한 미등록단어 처리나 토픽모델링, 연관어분석 등의 작업에 이용할만한 한국어 정답데이터가 없었습니다. 그러다보나 이 날의 뉴스를 자주 보아 데이터의 경향을 아예 외웠습니다. 정답데이터가 없으면 분석할 데이터라도 잘 알고 있어야 정성적으로 평가가 가능하니까요. 그래서 이 블로그에서는 해당 날의 뉴스 기사가 예시로 자주 등장합니다.
+
+논문의 내용처럼 word - context 의 PMI 를 계산하여 word embedding vector 를 학습합니다. 이 실험을 위하여 2016-10-20 뉴스 기사, 30,091 건을 이용합니다. 
 
 토크나이징을 위해 미등록단어 문제가 발생하는 trained tokenizers 대신 soynlp 의 Cohesion score 와 L-Tokenizer 를 이용합니다. 이용 당시 soynlp 의 버전은 (0.0.42) 입니다.
 
@@ -119,9 +121,9 @@ print(x.shape) (48583, 48583)
 
 ## Experiments: Word similarity using context vector
 
-PMI 를 적용하기 이전에 context vector 만을 이용하여 유사어 검색을 수행합니다. 비슷한 문맥에서 등장한 단어는 비슷한 문맥 벡터를 지니기 때문입니다. 
+PMI 를 적용하지 않고 context vector 만을 이용하여도 유사어 검색이 가능합니다. 비슷한 문맥에서 등장한 단어는 비슷한 문맥 벡터를 지니기 때문입니다. 
 
-거리계산은 앞으로도 자주할테니 cosine distance 기준 가장 가까운 10 개 단어를 찾는 함수를 만듭니다. 단, query 와 다른 단어는 출력되지 않도록 합니다. 이 함수에서 vocab2idx, idx2vocab, x 는 context vectors 를 이용할 때와 PMI 를 이용할 때 모두 다르게 적용해야 합니다. 포스트의 뒤에서는 변수의 디테일은 기록하지 않습니다.
+앞으로 유사어를 찾기 위한 계산을 반복할테니 미리 함수를 만들어둡니다. 질의어가 입력되면 cosine distance 기준 가장 가까운 10 개 단어를 찾는 함수를 만듭니다. 질의어와 같은 단어는 출력되지 않도록 합니다. 이 함수에서 vocab2idx, idx2vocab, x 는 context vectors 를 이용할 때와 PMI 를 이용할 때 모두 다르게 적용해야 합니다. 이후 포스트의 뒤에서는 유사어 검색 함수에 대한 이야기는 하지 않습니다.
 
 {% highlight python %}
 from sklearn.metrics import pairwise_distances
@@ -152,11 +154,9 @@ def most_similar_words(query, topk=10):
     return similars
 {% endhighlight %}
 
-위 함수를 이용하여 네개 질의어의 유사어를 cosine similarity 와 함께 출력합니다. 2016-10-20 은 최순실 - 박근혜 게이트의 언론보도가 시작되던 때입니다. 관련 단어들이 어느 정도 검색이 되기는 합니다. 
+위 함수를 이용하여 네개 질의어의 유사어를 cosine similarity 와 함께 출력합니다. 2016-10-20 은 최순실 - 박근혜 게이트의 언론보도가 시작되던 때입니다. 관련 단어들이 어느 정도 검색이 되고 있음을 볼 수 있습니다.
 
-이 블로그에서 아래와 같은 질의어를 계속 예시로 이용하는 이유가 있습니다. 데이터 분석의 연습으로 이 날의 뉴스를 자주 이용하다보니, 적어도 이 날 만큼은 어떤 기사들이 보도되었는지 외우고 있습니다. 테스트용 정답 데이터가 없으니 데이터의 경향을 아예 외워버렸습니다. 그래서 이 블로그에서는 해당 날의 뉴스 기사가 예시로 자주 등장합니다.
-
-그러나 '아이오아이'의 유사어에 '아프리카'가 있습니다. '아프리카'의 유사어는 일반적인 단어들이 등장합니다. Context vectors 를 이용한 유사어 검색이 어느 정도만 됨을 볼 수 있습니다. 
+그런데 잘 이해되지 않은 결과도 있습니다. '아이오아이'의 유사어에 '아프리카'가 있습니다. 이상하여 '아프리카'의 유사어를 확인해보니 일반적인 단어들이 등장합니다. Context vectors 를 이용한 유사어 검색은 언제나 잘 되는 것은 아니라 생각됩니다.
 
 | query = 박근혜 | query = 이화여대 | query = 아이오아이 | query = 아프리카 |
 | --- | --- | --- | --- |
@@ -171,12 +171,12 @@ def most_similar_words(query, topk=10):
 |  ('방북', 0.712) |  ('정씨', 0.492) |  ('과거', 0.529) |  ('이야기', 0.723) |
 |  ('올랑드', 0.704) |  ('정유라씨', 0.487) |  ('태도', 0.527) |  ('도시', 0.721) |
 
-그 이유는 당연하게도, context vectors 의 각 차원 중에는 유사한 단어가 있음에도 불구하고 vector space models 은 이들을 모두 다른 단어로 취급하기 때문입니다. 
+그 이유는 자명합니다. context vectors 의 각 차원 중에는 유사한 단어가 있음에도 불구하고 vector space models 은 이들을 모두 다른 단어로 취급하기 때문입니다. 
 
 
 ## Experiments: Word similarity using PMI of word & contexts
 
-논문처럼 PMI 를 계산한 뒤 SVD 를 적용하여 차원을 축소합니다. PMI 계산을 위하여 soynlp.word.pmi 를 이용합니다. min_pmi=0 으로 설정하면 PPMI 를 얻을 수 있습니다.
+논문처럼 PMI 를 계산한 뒤 SVD 를 적용하는 과정을 재현합니다. PMI 계산을 위하여 soynlp.word.pmi 를 이용합니다. min_pmi=0 으로 설정하면 PPMI 를 얻을 수 있습니다.
 
 {% highlight python %}
 from soynlp.word import pmi as pmi_func
@@ -194,9 +194,9 @@ svd = TruncatedSVD(n_components=300)
 y = svd.fit_transform(pmi)
 {% endhighlight %}
 
-차원이 축소된 y 를 이용하여 유사어를 검색합니다. '박근혜' > '이화여대' > '아이오아이' 순으로 자주 등장하고, 그 문맥도 명확합니다. '박근혜'의 유사어는 크게 달라지지 않았습니다만, '아이오아이'의 유사어는 많이 개선되었습니다. '불독'은 이 시기에 등장한 프로듀스101 출신 그룹입니다. '몬스'는 '몬스터엑스'가 잘못 토크나이징 된 단어입니다 (몬스터엑스 미안..). 대체로 아이돌그룹의 이름이나 노래 제목이 유사어로 검색됩니다. 
+차원이 축소된 y 를 이용하여 유사어를 검색합니다. 이 날 뉴스에서는 '박근혜' > '이화여대' > '아이오아이' 순으로 단어들이 자주 등장하였으며, 각 단어의 문맥들은 대부분 명확합니다. 아래의 결과는 납득이 될 수준의 유사어 검색 결과입니다. '박근혜'의 유사어는 크게 달라지지 않았습니다만, '아이오아이'의 유사어는 많이 개선되었습니다. '불독'은 이 시기에 등장한 프로듀스101 출신 그룹입니다. '몬스'는 '몬스터엑스'가 잘못 토크나이징 된 단어입니다 (몬스터엑스 미안..). 대체로 아이돌그룹의 이름이나 노래 제목이 유사어로 검색됩니다. 
 
-'아프리카'는 확실히 개선이 눈에 띕니다. 나라 이름이나 대륙 이름이 유사어로 검색됩니다. 
+'아프리카' 역시 유사어 검색 성능 향상이 눈에 띕니다. 나라 이름이나 대륙 이름이 유사어로 검색됩니다. 
 
 | query = 박근혜 |query = 이화여대 |query = 아이오아이 |query = 아프리카 |
 | --- | --- | --- | --- |
@@ -211,7 +211,7 @@ y = svd.fit_transform(pmi)
 |  ('수석비서관회의에서', 0.640) | ('입학', 0.790) | ('엠카운트다운', 0.748) | ('케냐', 0.465) |
 |  ('최순실', 0.633) | ('특혜입학', 0.783) | ('불독은', 0.744) | ('해외', 0.463) |
 
-차원을 축소하는 과정에서 어떤 semantics 이 하나의 축 혹은 하나의 방향으로 뭉쳐졌으리라 짐작이 됩니다. 그렇다면 축소한 차원의 개수를 줄이면 semantics 이 제대로 남지 않을 수 있습니다. 
+차원을 축소하는 과정에서 어떤 semantics 이 하나의 축 혹은 하나의 방향으로 뭉쳐졌으리라 짐작이 됩니다. 그렇다면 축소한 차원의 개수를 더 작게 줄이면 semantics 이 제대로 남지 않을 수 있습니다. 
 
 
 ## Experiments: Word similarity using PMI of word & contexts with various SVD dimension
@@ -275,7 +275,7 @@ y = svd.fit_transform(pmi)
 
 ## Experiments: Comparison "Word2Vec" vs "PMI + SVD" vs Context vector + SVD"
 
-Word2Vec 모델도 학습하여 PMI + SVD 와 비교합니다. PMI + SVD 는 300 차원, Word2Vec 은 100 차원입니다. Context vector 만으로는 semantic 이 아주 잘 잡히지는 않다는 것을 확인하였습니다. PMI + SVD 가 semantics 을 잡을 수 있던 원동력이 PMI 에 있는건지, SVD 에 있는건지를 확인하기 위해서 context vector + SVD 도 함께 비교합니다. Context vector 는 L2 norm 을 적용한 뒤 SVD 를 학습한 것과, co-occurrence 를 그대로 이용한 두 버전을 모두 비교합니다.
+Word2Vec 모델도 학습하여 PMI + SVD 와 비교합니다. PMI + SVD 는 300 차원, Word2Vec 은 100 차원입니다. Context vector 만으로는 semantic 이 아주 잘 학습되지는 않음을 확인하였습니다. PMI + SVD 가 semantics 을 학습 할 수 있던 원동력이 PMI 에 있는지, 아니면 SVD 에 있는지를 확인하기 위하여 context vector + SVD 도 함께 비교합니다. Context vector 는 L2 norm 을 적용한 뒤 SVD 를 학습한 버전과 co-occurrence 를 그대로 이용한 두 버전을 모두 비교합니다.
 
 {% highlight python %}
 class Word2VecCorpus:
@@ -298,7 +298,7 @@ word2vec_model = Word2Vec(word2vec_corpus, min_count=10, window=3)
 
 Word2Vec 과 PMI + SVD 의 경향이 조금 다르기는 합니만, semantics 이 보존되어 유사어 검색이 이뤄짐을 볼 수 있습니다. 
 
-이와 다르게 context vectors 에 SVD 를 적용하여도 semantic 이 날카롭게 학습되는 느낌은 없습니다. 그 이유는 PMI 에 있습니다. Frequent words 는 contexts 에서 빈번하게 등장합니다. Co-occurrence frequency 만을 고려하면 빈번한 단어와의 co-occurrence 만을 고려할 가능성이 높습니다. PMI 는 word 와 contexts 가 상대적으로 얼마나 함께 등장하였는지를 고려합니다. Word - context matrix 에서의 PMI 는 frequent context words 의 frequency bias 를 제거하는 term weighting 역할을 합니다.
+이와 다르게 context vectors 에 SVD 를 적용하여도 semantic 이 더 잘 학습되었다는 느낌을 받기는 어렵습니다. 원인은 PMI 입니다. Frequent words 는 contexts 에서 빈번하게 등장합니다. Co-occurrence frequency 만을 고려하면 빈번한 단어와의 co-occurrence 만을 고려할 가능성이 높습니다. PMI 는 word 와 contexts 가 상대적으로 얼마나 함께 등장하였는지를 고려합니다. Word - context matrix 에서의 PMI 는 frequent context words 의 frequency bias 를 제거하는 term weighting 역할을 합니다.
 
 
 질의어 '박근혜'의 유사 단어
@@ -369,7 +369,7 @@ Word2Vec 과 PMI + SVD 의 경향이 조금 다르기는 합니만, semantics �
 
 Word - context matrix 에 PMI 를 이용하여 term weighting 을 한 뒤, SVD 를 이용하여 차원을 축소하면 semantic 을 보존하는 distributed representation 을 얻을 수 있습니다. 
 
-또한 word - context PMI matrix 의 차원을 축소하는 과정에서 principal components 들이 서로 다른 의미를 지닐 수도 있다는 의심을 하였습니다. SVD 를 이용하여 차원을 매우 작게 축소하면, topical similarity 만 남는다는 느낌을 받았습니다. 이를 바탕으로 Word2Vec odyssey 를 한 번 더 쓸 것 같습니다.
+Word - context PMI matrix 의 차원을 축소하는 과정에서 principal components 들이 서로 다른 의미를 지닐 수도 있다는 의심을 하였습니다. SVD 를 이용하여 차원을 매우 작게 축소하면, topical similarity 만 남는다는 느낌을 받았습니다. Word2Vec 의 공간을 이해하는 힌트가 될지도 모르겠습니다.
 
 
 ## References
