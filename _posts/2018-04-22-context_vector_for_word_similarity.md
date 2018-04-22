@@ -58,15 +58,15 @@ $$SPPMI(x,y) = max(0, PMI(x,y) - \delta )$$
 
 Levy & Goldberg (2014) 의 논문의 아이디어입니다. Word2Vec 의 context words 의 embedding matrix 를 $$C$$, base word embedding matrix 를 $$W$$ 라 할 때, $$W \cdot C^T = M$$ 은 base word 와 context word 의 유사도입니다. 반대로 $$M$$ 이 있다면, 이를 context words 와 base words 의 embedding vector 로 decomposition 을 할 수 도 있습니다. 
 
-특히 negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 가 됩니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$#(w,c)$$ 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
+특히 negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 가 됩니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$\#(w,c)$$ 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
 
-$$l = \sum_{w \in V_W} \sum_{w \in V_C}  #(w,c) \cdot \left( log \theta (\vec{w} \cdot \vec{c})) + k \cdot E_{C_N ~ P_D} [log \theta (- \vec{w} \cdot \vec{c_N})] \right)$$
+$$l = \sum_{w \in V_W} \sum_{w \in V_C}  \#(w,c) \cdot \left( log \theta (\vec{w} \cdot \vec{c})) + k \cdot E_{C_N ~ P_D} [log \theta (- \vec{w} \cdot \vec{c_N})] \right)$$
 
 수학적인 정리를 지나면 다음의 식을 얻을 수 있습니다. 
 
-$$\vec{w} \cdot \vec{c} = log \left( \frac{#(w,c) \cdot \vert D \vert}{#(w) \cdot #(c)} \cdot \frac{1}{k} \right) = log \left( \frac{#(w,c) \cdot \vert D \vert}{#(w) \cdot #(c)} \right) - log k$$
+$$\vec{w} \cdot \vec{c} = log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \cdot \frac{1}{k} \right) = log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \right) - log k$$
 
-그리고 $$log \left( \frac{#(w,c) \cdot \vert D \vert}{#(w) \cdot #(c)} \right)$$ 은 $$PMI(w,c)$$ 입니다. 
+그리고 $$log \left( \frac{\#(w,c) \cdot \vert D \vert}{\#(w) \cdot \#(c)} \right)$$ 은 $$PMI(w,c)$$ 입니다. 
 
 그러나 $$\#(w,c) = 0$$ 인 경우, $$log 0 = - \inf$$ 이기 때문에 정의가 어렵습니다. Word - context matrix 는 sparse matrix 이기 때문에 co-occurrence 가 0 이거나 작은 경우는 무시합니다. 이를 위해 PMI 대신 PPMI 를 이용합니다. 
 
