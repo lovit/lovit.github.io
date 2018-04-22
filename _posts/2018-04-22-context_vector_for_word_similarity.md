@@ -58,7 +58,7 @@ $$SPPMI(x,y) = max(0, PMI(x,y) - \delta )$$
 
 Levy & Goldberg (2014) 의 논문의 아이디어입니다. Word2Vec 의 context words 의 embedding matrix 를 $$C$$, base word embedding matrix 를 $$W$$ 라 할 때, $$W \cdot C^T = M$$ 은 base word 와 context word 의 유사도입니다. 반대로 $$M$$ 이 있다면, 이를 context words 와 base words 의 embedding vector 로 decomposition 을 할 수 도 있습니다. 
 
-특히 negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 가 됩니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$#(w,c)## 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
+특히 negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 가 됩니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$#(w,c)$$ 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
 
 $$l = \sum_{w \in V_W} \sum_{w \in V_C}  #(w,c) \cdot \left( log \theta (\vec{w} \cdot \vec{c})) + k \cdot E_{C_N ~ P_D} [log \theta (- \vec{w} \cdot \vec{c_N})] \right)$$
 
@@ -220,7 +220,7 @@ y = svd.fit_transform(pmi)
 
 네 개의 질의어 모두 30 차원까지는 semantics 이 어느 정도 보존되지만, 10 차원에서는 조금씩 정보를 잃어감을 발견할 수 있습니다. 정확히는 topic 관련 semantic 은 남아있지만, (아프리카, 남미) 와 같은 단어 level 의 semantics 은 조금씩 사라짐을 볼 수 있습니다.
 
-| query=박근혜, d=300 | query=박근혜, d=30 | query=박근혜, d=10 |
+| query=박근혜, SVD d=300 | query=박근혜, SVD d=30 | query=박근혜, SVD d=10 |
 | --- | --- | --- |
 | ('대통령', 0.849) | ('대통령', 0.934) | ('박', 0.980) |
 | ('박', 0.795) | ('국정', 0.911) | ('민주당', 0.978) |
@@ -233,7 +233,7 @@ y = svd.fit_transform(pmi)
 | ('수석비서관회의에서', 0.640) | ('파문', 0.845) | ('국민의당', 0.965) |
 | ('최순실', 0.633) | ('수석', 0.844) | ('더민주', 0.964) |
 
-| query=이화여대, d=300 | query=이화여대, d=30 | query=이화여대, d=10 |
+| query=이화여대, SVD d=300 | query=이화여대, SVD d=30 | query=이화여대, SVD d=10 |
 | --- | --- | --- |
 | ('이대', 0.905) | ('이대', 0.972) | ('원장', 0.987) |
 | ('최경희', 0.845) | ('최경희', 0.950) | ('이대', 0.980) |
@@ -246,7 +246,7 @@ y = svd.fit_transform(pmi)
 | ('입학', 0.790) | ('사퇴했지만', 0.917) | ('위원장', 0.956) |
 | ('특혜입학', 0.783) | ('특혜', 0.916) | ('현직', 0.951) |
 
-| query=아이오아이, d=300 | query=아이오아이, d=30 | query=아이오아이, d=10 |
+| query=아이오아이, SVD d=300 | query=아이오아이, SVD d=30 | query=아이오아이, SVD d=10 |
 | --- | --- | --- |
 | ('신용재', 0.809) | ('몬스', 0.958) | ('라디오스타', 0.989) |
 | ('오블리스', 0.807) | ('샤이니', 0.957) | ('불독', 0.989) |
@@ -259,7 +259,7 @@ y = svd.fit_transform(pmi)
 | ('엠카운트다운', 0.748) | ('타이틀곡', 0.928) | ('주연을', 0.984) |
 | ('불독은', 0.744) | ('너무너무', 0.928) | ('달빛', 0.984) |
 
-| query=아프리카, d=300 | query=아프리카, d=30 | query=아프리카, d=10 |
+| query=아프리카, SVD d=300 | query=아프리카, SVD d=30 | query=아프리카, SVD d=10 |
 | --- | --- | --- |
 | ('남미', 0.525) | ('남미', 0.897) | ('코', 0.973) |
 | ('유럽', 0.510) | ('호주', 0.882) | ('에선', 0.971) |
@@ -300,6 +300,9 @@ Word2Vec 과 PMI + SVD 의 경향이 조금 다르기는 합니만, semantics �
 
 이와 다르게 context vectors 에 SVD 를 적용하여도 semantic 이 날카롭게 학습되는 느낌은 없습니다. 그 이유는 PMI 에 있습니다. Frequent words 는 contexts 에서 빈번하게 등장합니다. Co-occurrence frequency 만을 고려하면 빈번한 단어와의 co-occurrence 만을 고려할 가능성이 높습니다. PMI 는 word 와 contexts 가 상대적으로 얼마나 함께 등장하였는지를 고려합니다. Word - context matrix 에서의 PMI 는 frequent context words 의 frequency bias 를 제거하는 term weighting 역할을 합니다.
 
+
+질의어 '박근혜'의 유사 단어
+
 | Word2Vec | PMI + SVD_300 | norm(Context) + SVD_300 | Context + SVD_300 |
 | --- | --- | --- | --- |
 | ('노무현', 0.780) | ('대통령', 0.849) | ('위도도', 0.885) | ('위도도', 0.896) |
@@ -312,6 +315,9 @@ Word2Vec 과 PMI + SVD 의 경향이 조금 다르기는 합니만, semantics �
 | ('위도도', 0.704) | ('실세', 0.645) | ('국가안보실', 0.845) | ('박', 0.864) |
 | ('노', 0.696) | ('수석비서관회의에서', 0.640) | ('방북', 0.841) | ('테메르', 0.857) |
 | ('국가안보실과', 0.682) | ('최순실', 0.633) | ('아키노', 0.840) | ('블라디미르', 0.855) |
+
+
+질의어 '이화여대'의 유사 단어
 
 | Word2Vec | PMI + SVD_300 | norm(Context) + SVD | Context + SVD |
 | --- | --- | --- | --- |
@@ -326,6 +332,9 @@ Word2Vec 과 PMI + SVD 의 경향이 조금 다르기는 합니만, semantics �
 | ('체육과학부', 0.744) | ('입학', 0.790) | ('교수', 0.682) | ('사퇴', 0.713) |
 | ('부장판사', 0.742) | ('특혜입학', 0.783) | ('한겨레', 0.680) | ('경기', 0.713) |
 
+
+질의어 '아이오아이'의 유사 단어
+
 | Word2Vec | PMI + SVD_300 | norm(Context) + SVD | Context + SVD |
 | --- | --- | --- | --- |
 | ('에이핑크', 0.833) | ('신용재', 0.809) | ('트와이스', 0.817) | ('트와이스', 0.863) |
@@ -338,6 +347,9 @@ Word2Vec 과 PMI + SVD 의 경향이 조금 다르기는 합니만, semantics �
 | ('몬스', 0.769) | ('타이틀곡', 0.752) | ('비버', 0.768) | ('에이핑크', 0.818) |
 | ('다이아', 0.767) | ('엠카운트다운', 0.748) | ('무대', 0.762) | ('스트레인지', 0.818) |
 | ('씨엔블루', 0.756) | ('불독은', 0.744) | ('창원시', 0.761) | ('톰', 0.818) |
+
+
+질의어 '아프리카'의 유사 단어
 
 | Word2Vec | PMI + SVD_300 | norm(Context) + SVD | Context + SVD |
 | --- | --- | --- | --- |
