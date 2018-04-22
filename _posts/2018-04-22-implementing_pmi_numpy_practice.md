@@ -74,7 +74,7 @@ print(px) # [0.3 0.2 0.2 0.3]
 print(py) # [0.6 0.2 0.2]
 {% endhighlight %}
 
-$$p(x,y)$$ 를 계산하기 위해서는 $$x$$ 를 x.sum() 으로 나눠주기만 해도 됩니다. 
+$$p(x,y)$$ 를 계산하기 위해서는 $$x$$ 를 x.sum() 으로 나눕니다.
 
 {% highlight python %}
 # convert x to probability matrix
@@ -87,7 +87,7 @@ print(pxy)
 #  [0.2 0.  0.1]]
 {% endhighlight %}
 
-$$p(x,y)$$ 를 $$p(x)$$ 로 나누기 위해서는 행렬곲을 이용할 수 있습니다. 이를 위해서 $$p(x)$$ 와 $$p(y)$$ 를 diagonal matrix 로 만들어야 합니다. $$p(x)$$ 의 $$i$$ 번째 값은 diagonal matrix 의 $$(i,i)$$ 의 값입니다. 이를 위해서 numpy.diag 를 이용합니다. numpy.diag 는 array 의 값을 diagonal elements 로 지니는 diagonal matrix 를 만듭니다.
+$$p(x,y)$$ 를 $$p(x)$$ 로 나누기 위해서는 행렬곲을 이용할 수 있습니다. $p(x)$$ 와 $$p(y)$$ 를 diagonal matrix 로 만듭니다. $$p(x)$$ 의 $$i$$ 번째 값은 diagonal matrix 의 $$(i,i)$$ 의 값입니다. 이를 위해 numpy.diag 를 이용합니다. numpy.diag 는 array 의 값을 diagonal elements 로 지니는 diagonal matrix 를 만듭니다.
 
 {% highlight python %}
 # diagonalize px & py for matrix multiplication
@@ -100,7 +100,7 @@ np.diag(px)
 #        [0. , 0. , 0. , 0.3]])
 {% endhighlight %}
 
-$$p(x)$$ 를 곱하는 것이 아니라, 나누는 것이기 때문에 역수를 취해줍니다. 이 때 $$p(x)$$ 가 0 인 원소는 그 값을 나누지 않고 0 으로 할당합니다.
+$$p(x)$$ 를 곱하는 것이 아니라 나누는 것이기 때문에 역수를 취합니다. 이 때 $$p(x)$$ 가 0 인 원소는 그 값을 나누지 않고 0 으로 할당합니다.
 
 {% highlight python %}
 # inverse elements if the element is greater than 0
@@ -112,7 +112,7 @@ np.diag(np.array([0 if pxi == 0 else 1/pxi for pxi in px]))
 #        [0.        , 0.        , 0.        , 3.33333333]])
 {% endhighlight %}
 
-위 방법을 이용하여 $$p(x)$$ 의 역수와 $$p(y)$$ 의 역수로 이뤄진 diagonal matrix 를 만듭니다. 이 때 $$p(y)$$ 에 $$\alpha$$ 를 더하는 smoothing 도 할 수 있습니다. $$pyi$$ 가 0 이 아닐 때 $$\alpha$$ 를 더해줍니다. 
+위 방법을 이용하여 $$p(x)$$ 의 역수와 $$p(y)$$ 의 역수로 이뤄진 diagonal matrix 를 만듭니다. 이 때 $$p(y)$$ 에 $$\alpha$$ 를 더하는 smoothing 도 할 수 있습니다. $$pyi$$ 가 0 이 아닐 때 $$\alpha$$ 를 더합니다.
 
 {% highlight python %}
 # inverse element diagonal matrix of px and py
@@ -140,7 +140,7 @@ print(exp_pmi)
 
 우리가 행렬곲으로 계산한 결과와 손으로 직접 계산한 결과가 같은지 확인합니다. 이처럼 계산과정이 제대로 구현되었는지 값을 넣어 직접 확인하는 작업은 매우 중요합니다.
 
-행렬곲으로 얻은 값과 손으로 계산한 값이 다르면 그 값을 출력하도록 하였습니다. 네 개의 값이 서로 다릅니다. 하지만 그 값 차이를 살펴보면 float truncated error 때문에 발생한 것임을 알 수 있습니다. 다행히도 우리의 구현이 맞았습니다. 
+행렬곲으로 얻은 값과 손으로 계산한 값이 다르면 그 값을 출력하도록 합니다. 네 개의 값이 서로 다릅니다. 하지만 그 값 차이를 살펴보면 float truncated error 때문에 발생한 것임을 알 수 있습니다. 다행히도 우리의 구현이 맞았습니다. 
 
 {% highlight python %}
 # check value
@@ -159,7 +159,7 @@ for i in range(x.shape[0]):
 # (3, 2), exp_pmi = 1.666666666666667, manually = 1.6666666666666667
 {% endhighlight %}
 
-아직까지는 $$\frac{p(x,y)}{p(x) \times p(y)}$$ 만 계산했습니다. log 값을 취해야 합니다. 이 때 최소 pmi 값이 되지 않는 경우는 제거하고, $$(x, y) = pmi value$$ 의 형식으로 그 값을 dok_matrix 에 저장합니다. Sparse matrix 의 형식 중 하나인 dok_matrix 에 대해서는 [이전 포스트][sparse_post]를 참고하세요. 
+아직까지는 $$\frac{p(x,y)}{p(x) \times p(y)}$$ 만 계산했습니다. log 값을 취해야 합니다. Minimum pmi 보다 작은 경우는 제거하고, $$(x, y) = pmi$$ 의 형식으로 dok_matrix 에 저장합니다. Sparse matrix 의 형식 중 하나입니다. dok_matrix 에 대해서는 [이전 포스트][sparse_post]를 참고하세요. 
 
 numpy.where 를 이용하면 해당 조건을 만족하는 rows, columns 가 return 됩니다. zip(rows, cols) 를 이용하여 각 $$(i, j)$$ 의 값에 접근합니다. 
 
@@ -196,7 +196,7 @@ Numpy 를 이용하여 우리의 구현이 pmi 의 계산에 정확한지 확인
 
 ## Implementing PMI with sparse matrix (scipy.sparse)
 
-앞서서 logic 을 확인하였으니 sparse matrix 에서의 PMI 를 계산하는 과정을 구현합니다. 데이터는 (질문, 답변) pairs 의 단어 간의 co-occurrence matrix 입니다. 질문이 $$x$$, 답변이 $$y$$ 입니다. 17k 개의 단어로 이뤄져 있습니다. 
+앞서서 logic 을 확인하였으니 이를 응용하여 sparse matrix 에서의 PMI 를 계산하는 과정을 구현합니다. 데이터는 (질문, 답변) pairs 의 단어 간의 co-occurrence matrix 입니다. 질문이 $$x$$, 답변이 $$y$$ 입니다. 17k 개의 단어로 이뤄져 있습니다. 
 
 {% highlight python %}
 idx2vocab = [word.strip() for word in f]
@@ -204,7 +204,7 @@ vocab2idx = {vocab:idx for idx, vocab in enumerate(idx2vocab)}
 print(x.shape) # (17761, 17761)
 {% endhighlight %}
 
-sparse matrix 에서도 sum(axis=0) 과 sum(axis=1) 은 같습니다. reshape(-1) 을 이용하여 row vector 를 만들었습니다. 
+sparse matrix 에서도 sum(axis=0) 과 sum(axis=1) 은 같습니다. reshape(-1) 을 이용하여 row vector 를 만듭니다.
 
 {% highlight python %}
 # convert x to probability matrix & marginal probability 
@@ -217,7 +217,7 @@ print(py.shape) # (1, 17761)
 print(pxy.shape) #  (17761, 17761)
 {% endhighlight %}
 
-rows 를 list 로 만든 뒤, 이 값을 diagonal elements 로 지니는 diagonal matrix 를 만듭니다. scipy.sparse 에서도 diagonal matrix 를 제공합니다. 
+rows 를 list 로 만든 뒤, 이를 diagonal elements 로 지니는 diagonal matrix 로 만듭니다. scipy.sparse 에서도 diagonal matrix 를 제공합니다. 
 
 {% highlight python %}
 from scipy.sparse import diags
@@ -257,7 +257,7 @@ exp_pmi = px_diag.dot(pxy).dot(py_diag)
 print(exp_pmi.shape) # (17761, 17761)
 {% endhighlight %}
 
-Minimum pmi 를 이용하여 threshold cutting 을 합니다. Minimum pmi = 0 을 이용하려면 $$exp(0) = 1$$ 이므로, 1 을 threshold 로 이용합니다. 
+Minimum pmi 를 이용하여 threshold cutting 을 합니다. Minimum pmi = 0 을 적용합니다. $$exp(0) = 1$$ 이므로, 1 을 threshold 로 이용합니다. 
 
 pxy 가 scipy.sparse.csr.csr_matrix 이기 때문에 exp_pmi 의 형식도 csr_matrix 입니다. 0 이 아닌 값들에 대해서만 minimum pmi 와의 비교를 하면 되기 때문에 data array 의 0 이 아닌 값의 indices 를 가져옵니다. 
 
@@ -271,7 +271,7 @@ indices = np.where(exp_pmi.data > min_exp_pmi)[0]
 
 csr_matrix.nonzero() 를 통하여 return 되는 rows, cols 와 csr_matrix.data 는 모두 같은 길이의 numpy.ndarray 입니다. zip(rows, cols, data) 를 이용하면 (i, j, value) 를 얻을 수 있습니다. 
 
-이를 이용하여 minimum pmi 값보다 큰 값들에 logarithm 을 적용하여 pmi_dok 에 저장합니다.
+Minimum pmi 값보다 큰 값들에 logarithm 을 적용하여 pmi_dok 에 저장합니다.
 
 {% highlight python %}
 pmi_dok = dok_matrix(exp_pmi.shape)
