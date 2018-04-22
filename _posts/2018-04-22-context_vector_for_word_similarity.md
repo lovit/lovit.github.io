@@ -68,7 +68,7 @@ $$\vec{w} \cdot \vec{c} = log \left( \frac{#(w,c) \cdot \vert D \vert}{#(w) \cdo
 
 그리고 $$log \left( \frac{#(w,c) \cdot \vert D \vert}{#(w) \cdot #(c)} \right)$$ 은 $$PMI(w,c)$$ 입니다. 
 
-그러나 $$#(w,c) = 0$$ 인 경우, $$log 0 = - \inf$$ 이기 때문에 정의가 어렵습니다. Word - context matrix 는 sparse matrix 이기 때문에 co-occurrence 가 0 이거나 작은 경우는 무시합니다. 이를 위해 PMI 대신 PPMI 를 이용합니다. 
+그러나 $$\#(w,c) = 0$$ 인 경우, $$log 0 = - \inf$$ 이기 때문에 정의가 어렵습니다. Word - context matrix 는 sparse matrix 이기 때문에 co-occurrence 가 0 이거나 작은 경우는 무시합니다. 이를 위해 PMI 대신 PPMI 를 이용합니다. 
 
 
 ## Experiments: Building word - context matrix
