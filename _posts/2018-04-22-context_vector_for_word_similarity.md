@@ -60,7 +60,7 @@ Levy & Goldberg (2014) 의 논문의 아이디어입니다. Word2Vec 의 context
 
 Negative sampling 을 이용하여 학습하는 skipgram (SGNS) 의 식을 정리하면 $$M$$ 은 Shifted PPMI matrix 입니다. Skip-gram with neagtive sampling 의 loss function 은 아래와 같습니다. $$\#(w,c)$$ 는 base word $$w$$ 와 context word $$c$$ 의 co-occurrence 이며, $$k$$ 는 negative sampling loss 의 배수값입니다.
 
-$$l = \sum_{w \in V_W} \sum_{w \in V_C}  \#(w,c) \cdot \left( log \theta (\vec{w} \cdot \vec{c})) + k \cdot E_{C_N ~ P_D} [log \theta (- \vec{w} \cdot \vec{c_N})] \right)$$
+$$l = \sum_{w \in V_W} \sum_{w \in V_C}  \#(w,c) \cdot \left( log \delta (\vec{w} \cdot \vec{c})) + k \cdot E_{C_N ~ P_D} [log \delta (- \vec{w} \cdot \vec{c_N})] \right)$$
 
 수학적인 정리 과정을 거치면 다음의 식을 얻을 수 있습니다. 
 
