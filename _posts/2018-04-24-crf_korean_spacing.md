@@ -397,5 +397,5 @@ model('이건진짜좋은영화라라랜드진짜좋은영화')
 
 [crfsuite]: http://www.chokkan.org/software/crfsuite/manual.html
 [pycrfsuite_spacing]: https://github.com/lovit/pycrfsuite_spacing
-[crf]: {{ site.baseurl }}{% links _posts/2018-04-24-crf.md %}
-[demo_data]: {{ site.baseurl }}{% links assets/resources/134963_norm.txt %}
+[crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
+[demo_data]: {{ site.baseurl }}{% link assets/resources/134963_norm.txt %}
