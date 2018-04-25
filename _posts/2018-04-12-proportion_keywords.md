@@ -63,7 +63,7 @@ word2int('아이오아이')
 
 '아이오아이'라는 단어가 포함된 문서 집합을 positive_documents 로, 그렇지 않은 문서 집합을 negative_documents 로 설정합니다. 97 개의 positive documents 가 있습니다. 이 문서 집합의 키워드를 추출해 봅니다.
 
-{% highlight python %}ㅊ
+{% highlight python %}
 word = '아이오아이'
 word_idx = word2int(word)
 positive_documents = x[:,word_idx].nonzero()[0].tolist()
