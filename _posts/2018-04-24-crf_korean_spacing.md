@@ -9,7 +9,7 @@ tags:
 - preprocessing
 ---
 
-Conditional Random Field 는 logistic regression 을 이용하는 sequential labeling 용 알고리즘입니다. 한국어 띄어쓰기 교정 문제는 길이가 $$n$$ 인 character sequence 에 대하여 '띈다 / 안띈다'의 label 을 부여하는 sequential labeling 문제입니다. 이번 포스트에서는 Python 의 pycrfsuite 를 이용하여 한국어 띄어쓰기 교정기를 구현하는 과정과 구현된 소프트웨어의 사용법을 이야기합니다. 
+Conditional Random Field 는 logistic regression 을 이용하는 sequential labeling 용 알고리즘입니다. 한국어 띄어쓰기 교정 문제는 길이가 $$n$$ 인 character sequence 에 대하여 '띈다 / 안띈다'의 label 을 부여하는 sequential labeling 문제입니다. 이번 포스트에서는 Python 의 pycrfsuite 를 이용하여 한국어 띄어쓰기 교정기를 구현하는 과정과, 그 과정을 거쳐 구현된 소프트웨어 (pycrfsuite_spacing)의 사용법을 이야기합니다. 
 
 
 ## Brief review of Conditional Random Field
@@ -111,7 +111,7 @@ print(templates)
 
 	if b * e > 0:
 
-우리는 튜토리얼 코드이기 때문에 짧은 templates 만을 이용합니다. 
+이 포스트는 튜토리얼 코드이기 때문에 짧은 templates 만을 이용합니다. 
 
 {% highlight python %}
 templates = generate_templates(begin=-2, end=2, min_range_length=3, max_range_length=3)
@@ -154,7 +154,7 @@ class CharacterFeatureTransformer:
 
 형식은 list of list of tuple 입니다. 첫번째 list 는 각 시점을, 두번째 list 는 한 시점의 features 입니다. 한 시점의 하나의 feature 는 2 개의 str 로 구성된 tuple 입니다. 
 
-이는 아래처럼 구현할 수도 있습니다. 하지만 아래처럼 구현하면 'X[0,2] = 예문입' 와 'X[-1,1] = 예문입' 라는 str 이 Python 의 모든 메모리에 올라갑니다. Python 의 str 은 그 값이 한 번 만들어진 뒤, 동일한 값이 만들어질 때는 메모리주소를 이용함으로써 메모리 효율을 높입니다. 몇 개의 substring 이 반복적으로 사용된다면 이를 tuple of str 로 나눠 이용하면 메모리 효율이 좋습니다.
+이는 아래처럼 구현할 수도 있습니다. 하지만 아래처럼 구현하면 'X[0,2] = 예문입' 와 'X[-1,1] = 예문입' 라는 모든 str 이 Python 의 메모리에 올라갑니다. Python 의 str 은 그 값이 한 번 만들어진 뒤, 동일한 값이 만들어질 때는 메모리주소를 이용함으로써 메모리 효율을 높입니다. 몇 개의 substring 이 반복적으로 사용된다면 이를 tuple of str 로 나눠 이용하면 메모리 효율이 좋습니다.
 
 	('X[%d,%d] = %s' % (t[0], t[1], chars[b:e]))
 
@@ -231,7 +231,7 @@ trainer = pycrfsuite.Trainer(verbose=False)
 trainer.append(x, y) 
 {% endhighlight %}
 
-pycrfsuite 를 이용할 때 자주 이용하는 parameters 입니다. 기본으로 설정된 iteration 횟수가 많이 큽니다. 이를 적당한 수준으로 조절해주며, c1, c2를 이용하여 L1, L2 regularization을 걸 수 있습니다. c1 == 0 이면, L2 regularization 만 이용합니다. 반대로 c2 = 0, c1 > 0 이면 L1 regularization 을 이용할 수 있습니다. 
+pycrfsuite 를 이용할 때 자주 이용하는 parameters 입니다. 기본으로 설정된 iteration 횟수가 많이 큽니다. 이를 적당한 수준으로 조절합니다. c1, c2를 이용하여 L1, L2 regularization을 걸 수 있습니다. c1 = 0 이면, L2 regularization 만 이용합니다. 반대로 c2 = 0, c1 > 0 이면 L1 regularization 을 이용할 수 있습니다. 
 
 주의해야 할 parameter 중 하나는 feature.minfreq 입니다. 기본값은 0 으로 되어있기 때문에 한 번이라도 등장한 모든 feature 를 이용합니다. 이 경우에는 overfitting 이 일어날 수 있지만, 그 전에 데이터의 크기가 조금만 커져도 수천만차원의 벡터 공간을 만듭니다. 이전에 이를 설정하지 않았다가 3천만차원 logstic regression 을 학습한 적이 있습니다. 이런 상황을 방지하기 위하여 feature.minfreq 를 적절하게 설정해야 합니다. Term frequency matrix 의 minimum frequency 처럼 생각하면 됩니다.
 
