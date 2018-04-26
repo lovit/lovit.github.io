@@ -14,12 +14,12 @@ Plotly 는 Python 에서 data visualization 을 도와주는 패키지입니다.
 Swiss roll data 는 embedding, manifold learning 에서 단골로 이용되는 인공 실험데이터 입니다. Swiss roll 은 우리가 잘 아는 롤케익입니다. 아래의 롤케익처럼 데이터가 둘둘 말려있는 형태입니다. 3차원 공간에서는 말려있는 형태지만, 우리는 이 롤케익을 펼치면 한 장의 판이 있다는 것을 알고 있습니다. 
 
 ![](https://pioneerwoman.files.wordpress.com/2015/12/chocolate-swiss-roll-cake-00.jpg?w=780&h=521)
-<center>Source from http://thepioneerwoman.com/food-and-friends/chocolate-swiss-roll-cake/</center>
+<center>Source from http://thepioneerwoman.com/food-and-friends/chocolate-swiss-roll-cake/</center><br>
 
 Manifold 는 국소적으로 Euclidean distance 가 이용될 수 있지만, 전체에서는 이를 적용할 수 없는 공간입니다. 아래 그림의 A, B 는 swiss roll data 입니다. A 그림처럼 3차원의 두 점 사이의 거리는 Euclidean distance 로 표현할 수도 있습니다. 하지만 우리가 생각하는 (심리적) 거리는 Euclidean 이 아닙니다. 그림 B 처럼 롤케익을 따라 한바퀴 돌아간 거리가 두 점 사이의 거리입니다. 즉, 이 데이터에서의 두 점의 거리는 Euclidean 으로 정의되지 않습니다. 하지만 롤케익의 끝부분을 조금 잘라내면 그 부분에서는 Euclidean distance 로 두 점 사이의 거리를 어느 정도 표현할 수 있습니다. 이처럼 국소적으로는 Euclidean distance 가 적용될 수 있지만, 전체 공간에서는 적용될 수 없는 데이터를 Manifold 라 합니다. 
 
 ![](http://benalexkeen.com/wp-content/uploads/2017/05/isomap.png)
-<center>Source from http://benalexkeen.com/isomap-for-dimensionality-reduction-in-python/</center>
+<center>Source from http://benalexkeen.com/isomap-for-dimensionality-reduction-in-python/</center><br>
 
 Manifold 의 예시로 자주 이용되는 것은 지표 (Earth surface)에서의 이동거리입니다. 한국과 아르헨티나는 지구 반대편에 있습니다. 3 차원 공간에서 두 나라의 Euclidean distance 는 지구의 지름만큼 입니다. 하지만, 실제 우리가 아르헨티나를 가기 위해서 비행기를 탄다면 지표를 따라 돌아가야 합니다. 지표는 Manifold 공간입니다.
 
@@ -168,8 +168,6 @@ plot(fig, filename='plotly-3d-scatter-small.html', auto_open=False)
 아래는 Plotly 를 이용한 swiss roll 의 3d scatter plot 입니다. 마우스를 점 위에 올리면 points #13 같은 text 가 보여집니다. 
 
 <div id="plotly_example"></div>
-
-[(링크)]: https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/plotly-3d-scatter-small.html
 
 마우스 휠을 이용하면 확대, 축소가 가능합니다. 
 
