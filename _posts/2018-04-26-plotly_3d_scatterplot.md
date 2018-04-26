@@ -16,14 +16,14 @@ Swiss roll data 는 embedding, manifold learning 에서 단골로 이용되는 �
 ![](https://pioneerwoman.files.wordpress.com/2015/12/chocolate-swiss-roll-cake-00.jpg?w=780&h=521)
 <center>Source from http://thepioneerwoman.com/food-and-friends/chocolate-swiss-roll-cake/</center><br>
 
-Manifold 는 국소적으로 Euclidean distance 가 이용될 수 있지만, 전체에서는 이를 적용할 수 없는 공간입니다. 아래 그림의 A, B 는 swiss roll data 입니다. A 그림처럼 3차원의 두 점 사이의 거리는 Euclidean distance 로 표현할 수도 있습니다. 하지만 우리가 생각하는 (심리적) 거리는 Euclidean 이 아닙니다. 그림 B 처럼 롤케익을 따라 한바퀴 돌아간 거리가 두 점 사이의 거리입니다. 즉, 이 데이터에서의 두 점의 거리는 Euclidean 으로 정의되지 않습니다. 하지만 롤케익의 끝부분을 조금 잘라내면 그 부분에서는 Euclidean distance 로 두 점 사이의 거리를 어느 정도 표현할 수 있습니다. 이처럼 국소적으로는 Euclidean distance 가 적용될 수 있지만, 전체 공간에서는 적용될 수 없는 데이터를 Manifold 라 합니다. 
+Manifold 는 국소적으로 Euclidean distance 가 이용될 수 있지만, 전체에서는 이를 적용할 수 없는 공간입니다. 아래 그림의 A, B 는 swiss roll data 입니다. A 그림처럼 3차원의 두 점 사이의 거리는 Euclidean distance 로 표현할 수도 있습니다. 하지만 우리가 생각하는 (심리적) 거리는 Euclidean 이 아닙니다. 그림 B 처럼 롤케익을 따라 한바퀴 돌아간 거리가 두 점 사이의 거리입니다. 이 데이터에서의 두 점의 거리는 Euclidean distance 가 아닌 이웃들을 따라 도달하는 거리로 정의해야 합니다. 하지만 롤케익의 일부분에서는 Euclidean distance 를 적용할 수 있습니다. 정확히는 Euclidean distance 의 거리나 이웃을 따라 도달하는 거리가 비슷합니다. 이처럼 국소적으로는 Euclidean distance 가 적용될 수 있지만, 전체 공간에서는 적용될 수 없는 데이터를 Manifold 라 합니다. 
 
 ![](http://benalexkeen.com/wp-content/uploads/2017/05/isomap.png)
 <center>Source from http://benalexkeen.com/isomap-for-dimensionality-reduction-in-python/</center><br>
 
-Manifold 의 예시로 자주 이용되는 것은 지표 (Earth surface)에서의 이동거리입니다. 한국과 아르헨티나는 지구 반대편에 있습니다. 3 차원 공간에서 두 나라의 Euclidean distance 는 지구의 지름만큼 입니다. 하지만, 실제 우리가 아르헨티나를 가기 위해서 비행기를 탄다면 지표를 따라 돌아가야 합니다. 지표는 Manifold 공간입니다.
+Manifold 의 예시로 자주 이용되는 것은 지표 (Earth surface)에서의 이동거리입니다. 한국과 아르헨티나는 지구 반대편에 있습니다. 3 차원 공간에서 두 나라의 Euclidean distance 는 지구의 지름만큼 입니다. 그러나 우리가 아르헨티나를 가기 위해서 비행기를 탄다면 지표를 따라 돌아가야 합니다. 지표는 Manifold 공간입니다.
 
-Manifold learning 을 쉽게 설명하면 swiss roll data 처럼 베베꼬인 공간을 말끔하게 펴는 것입니다. 더 정확히는 원 공간에서의 데이터의 구조를 잘 보존하는 저차원의 표현 방법을 학습하는 것입니다. 다시 말해, 3 차원의 swiss roll data 를 2 차원으로 보고 싶은 것입니다. 
+Manifold learning 을 쉽게 설명하면 swiss roll data 처럼 베베꼬인 공간을 말끔하게 펴는 것입니다. 원 공간 (original space) 에서의 데이터 구조를 잘 보존하는 저차원의 표현 방법을 학습합니다. 다시 말해, 3 차원의 swiss roll data 를 2 차원으로 보고 싶은 것입니다. 
 
 대표적으로 Locally Linear Embedding (LLE), ISOMAP, t-Stochastic Neighbor Embedding (t-SNE) 등이 있습니다.
 
@@ -39,7 +39,7 @@ Plotly 의 설치는 pip install 로 가능합니다. 이 포스트의 작성 �
 
     pip install plotly
 
-Plotly 는 작업한 plot 을 Plotly cloud 에 올릴 수 있는 기능이 있습니다. 하지만 저는 제 local 에 그림을 그리는 것이 목적이기 때문에 plotly.offline 을 이용하였습니다. Pip install 이후 offline 을 이용할 수 있습니다. 
+Plotly 는 작업한 plot 을 Plotly cloud 에 올릴 수 있는 기능이 있습니다. 하지만 저는 제 local 에 그림을 그리는 것이 목적이기 때문에 plotly.offline 을 이용하였습니다. pip install 이후 offline 을 이용할 수 있습니다. 
 
 ## Generate swiss-roll data
 
@@ -98,7 +98,7 @@ marker 는 각 점에 대한 설정입니다. size 는 점의 크기이며, colo
 
 [0, 1] 사이의 color 값에 따른 colormap 을 이용할 수 있습니다. Colorscale 은 matplotlib 의 colormap, Bokeh 의 Palette 입니다. 
 
-line 은 각 점의 외각선 입니다. 우리는 이용하지 않을 것이기 때문에 width=0 으로 설정하였습니다. 
+line 은 각 점의 외각선 입니다. 이용하지 않을 것이기 때문에 width=0 으로 설정하였습니다. 
 
 {% highlight python %}
 data = go.Scatter3d(
