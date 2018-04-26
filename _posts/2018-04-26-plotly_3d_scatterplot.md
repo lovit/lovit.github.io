@@ -176,7 +176,7 @@ plot(fig, filename='plotly-3d-scatter-small.html', auto_open=False)
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
       $(document).ready(function(){
-         $("#plotly").load("https://github.com/lovit/lovit.github.io/blob/master/assets/resources/plotly-3d-scatter-small.html")
+         $("#plotly").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/plotly-3d-scatter-small.html")
       });
 </script>
 
