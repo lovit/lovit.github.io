@@ -167,9 +167,9 @@ plot(fig, filename='plotly-3d-scatter-small.html', auto_open=False)
 
 아래는 Plotly 를 이용한 swiss roll 의 3d scatter plot 입니다. 마우스를 점 위에 올리면 points #13 같은 text 가 보여집니다. 
 
-[(링크)]: https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/plotly-3d-scatter-small.html
+<div id="plotly_example"></div>
 
-<div id="plotly"></div>
+[(링크)]: https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/plotly-3d-scatter-small.html
 
 마우스 휠을 이용하면 확대, 축소가 가능합니다. 
 
@@ -178,7 +178,7 @@ plot(fig, filename='plotly-3d-scatter-small.html', auto_open=False)
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
       $(document).ready(function(){
-         $("#plotly").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/plotly-3d-scatter-small.html")
+         $("#plotly_example").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/plotly-3d-scatter-small.html")
       });
 </script>
 
