@@ -66,7 +66,7 @@ x, y 축의 비율을 다르게 하여 그림을 누르거나 위아래로 늘�
 
 x_gap 은 0 보다 작을수록 서로의 방향으로 가까워집니다. trace 0 은 오른쪽으로, trace 1 은 왼쪽으로 이동합니다. -0.2 만큼 이동하였기 때문에 두 달이 하나로 합쳐지려 합니다.
 
-y_gap 을 늘리면 y 축에서의 서로으 ㅣ거리가 멀어집니다. 
+y_gap 을 늘리면 y 축에서의 서로의 거리가 멀어집니다. 
 
 noise 는 Gaussian distribution 의 standard deviation 으로, 값을 키울수록 달의 두깨가 두꺼워집니다.
 
@@ -75,7 +75,7 @@ X, color = make_moons(n_samples=300,
 xy_ratio=2.0, x_gap=-.2, y_gap=0.2, noise=0.1)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_two_moon.png" | absolute_url }})
 
@@ -98,7 +98,7 @@ gap_between_start_point=0.1, equal_interval=True,
 noise=0.2)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_spiral.png" | absolute_url }})
 
@@ -117,7 +117,7 @@ X, color = make_swiss_roll(n_samples=3000, n_rotations=3,
 gap=0.5, thickness=0.0, width=10.0)
 
 ipython_3d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_swissroll.png" | absolute_url }})
 
@@ -145,7 +145,7 @@ n_sections_per_class=3, gap=0.1, equal_proportion=True,
 radius_min=0.1, radius_base=1.0, radius_variance=0.5)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_radal.png" | absolute_url }})
 
@@ -160,7 +160,7 @@ X, color = make_two_layer_radial(n_samples_per_sections=100, n_classes=2,
 n_sections_per_class=3, gap=0.0, equal_proportion=False)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_two_layer_radial.png" | absolute_url }})
 
@@ -173,7 +173,7 @@ X, color = make_rectangular(n_samples=500,
 label=0, x_b=0, x_e=10, y_b=0, y_e=10)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_rectangular.png" | absolute_url }})
 
@@ -186,7 +186,7 @@ X, color = make_triangular(n_samples=500, upper=True,
 label=0, x_b=0, x_e=10, y_b=0, y_e=10)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_upper_triangular.png" | absolute_url }})
 
@@ -197,7 +197,7 @@ X, color = make_triangular(n_samples=500, upper=False,
 label=0, x_b=0, x_e=10, y_b=0, y_e=10)
 
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_lower_triangular.png" | absolute_url }})
 
@@ -212,7 +212,7 @@ Decision tree dataset 1 은 사각형만으로 이뤄진 데이터이기 때문�
 {% highlight python %}
 X, color = get_decision_tree_data_1(n_samples=2000)
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_decision_tree1.png" | absolute_url }})
 
@@ -223,7 +223,7 @@ Decision tree dataset 2 은 삼각형이 포함되어 있습니다. 한 번에 �
 {% highlight python %}
 X, color = get_decision_tree_data_2(n_samples=2000)
 ipython_2d_scatter(X, color)
-{% endlighlight %}
+{% endhighlight %}
 
 ![]({{ "/assets/figures/soydata_decision_tree2.png" | absolute_url }})
 
@@ -247,13 +247,13 @@ profile = [
     ('upper', 8.25, 1, 2, 7.5, 4, 7),
     ('lower', 8.25, 0, 2, 7.5, 4, 7),
 ]
-{% endlighlight %}
+{% endhighlight %}
 
 Tuple 의 2 번째 값은 samples 개수의 비율입니다. 전체 1000 개의 samples 을 만드려면 다음처럼 한 구성요소에 sample number ratio 의 몇 배 만큼의 samples 을 만들어야 하는지를 미리 계산해야 합니다. 
 
 {% highlight python %}
 factor = n_samples / sum((p[1] for p in profile))
-{% endlighlight %}
+{% endhighlight %}
 
 type 이 'rec' 이면 rectangular 를, 'upper' 나 'lower' 이면 각각에 맞는 삼각형을 만듭니다.
 
@@ -296,7 +296,7 @@ def _get_decision_tree_data(profile, n_samples=1000):
     color = np.concatenate(color_array)
 
     return X, color
-{% endlighlight %}
+{% endhighlight %}
 
 [data_github]: https://github.com/lovit/synthetic_dataset
 [sklearngithub]: https://github.com/scikit-learn/scikit-learn/blob/a24c8b46/sklearn/datasets/samples_generator.py#L1277
