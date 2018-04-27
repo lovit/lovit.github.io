@@ -1,6 +1,6 @@
 ---
 title: soyspacing. Heuristic Korean Space Correction, A safer space corrector.
-date: 2018-04-25 11:00:00
+date: 2018-04-27 23:00:00
 categories:
 - machine learning
 tags:
