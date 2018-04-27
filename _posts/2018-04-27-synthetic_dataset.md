@@ -1,5 +1,5 @@
 ---
-title: soyspacing. Heuristic Korean Space Correction, A safer space corrector.
+title: soydata. 복잡한 인공 데이터 생성을 위한 함수들
 date: 2018-04-27 23:00:00
 categories:
 - machine learning
@@ -23,7 +23,7 @@ Plotly 를 이용하여 직접 생성한 swiss roll 을 시각화하는 이야�
 
 <div id="plotly_example"></div>
 
-위 그림의 swiss roll 은 1.5 바퀴 롤이 말려있는 형태입니다. 사실 이 데이터는 많은 manifold learning 알고리즘들이 잘 풀 수 있는 쉬운 난이도의 데이터셋입니다. 저는 더 복잡한 인공데이터를 만들고 싶습니다. 롤을 3 바퀴 혹은 4 바퀴 말고 싶기도하고, y 축의 width 를 넓히거나 좁히고 싶습니다. scikit-learn 의 [github][sklearngithub] 에서 make_swiss_roll 함수를 살펴보면 그리 어렵지 않게 구현이 되어 있습니다. 우리가 원하는 모양의 데이터를 만들기 위해 이를 수정하는 것은 어렵지 않습니다.
+위 그림의 swiss roll 은 1.5 바퀴 롤이 말려있는 형태입니다. 사실 이 데이터는 많은 manifold learning 알고리즘들이 잘 풀 수 있는 쉬운 난이도의 데이터셋입니다. 저는 더 복잡한 인공데이터를 만들고 싶습니다. 롤을 3 바퀴 혹은 4 바퀴 말거나, y 축의 width 를 넓게도 좁게도 만들고 싶습니다. scikit-learn 의 [github][sklearngithub] 에서 make_swiss_roll 함수는 생각보다 간단합니다. 우리가 원하는 모양의 데이터를 만들기 위해 이를 수정하는 것은 어렵지 않습니다.
 
 {% highlight python %}
 def make_swiss_roll(n_samples=100, noise=0.0, random_state=None):
@@ -46,7 +46,7 @@ def make_swiss_roll(n_samples=100, noise=0.0, random_state=None):
     return X, t
 {% endhighlight %}
 
-이전에도 다양한 모양의 swiss roll 을 만드는 함수를 만들었었는데, 잃어버렸네요. 분명 제 컴퓨터인데 컴퓨터 속 코드를 잃어버리다니.. 이번에는 제가 쓸 데이터를 만드는 함수는 정리해서 [git][data_github] 에 올려야겠다는 생각을 했습니다. 구현된 몇 가지 인공 데이터 생성 함수에 대한 예시와 parameters 를 정리하였습니다.
+귀찮을 뿐입니다. 그리고 이전에도 다양한 모양의 swiss roll 을 만드는 함수를 만들었었는데, 잃어버렸네요. 분명 제 컴퓨터인데 컴퓨터 속 코드를 잃어버리다니.. 이번에는 만든 함수는 정리해서 [git][data_github] 에 올려야겠다는 생각을 했습니다. 구현된 몇 가지 인공 데이터 생성 함수에 대한 예시와 parameters 를 정리하였습니다.
 
 ## soydata
 
@@ -57,6 +57,8 @@ from soydata.data import *
 from soydata.visualize import ipython_2d_scatter
 from soydata.visualize import ipython_3d_scatter
 {% endhighlight %}
+
+현재는 jupyter notebook 에서 출력 가능한 함수만을 구현했습니다. 그림을 파일로 곧바로 저장하는 함수는 며칠안에 (오늘은 2018-04-27) 구현할 예정입니다.
 
 ## Two moon
 
