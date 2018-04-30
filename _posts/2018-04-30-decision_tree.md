@@ -47,7 +47,7 @@ Tree 의 각 section 을 마디 (node) 라 부릅니다. 그 중, #4, #5, #6, #7
 
 Branching 을 할 수 있는 점은 다양합니다. 그 중, 공간을 2 개로 나눴을 때 평균 entropy 가 가장 크게 감소하는 방향으로 branching 을 합니다. 이를 Information gain 이라 합니다. 아래처럼 기술됩니다. 특정 분기를 하였을 때 분기하기 전보다 purity 를 높이는 방향으로 분기합니다.
 
-$$IG(N_0) = p(N_1) \times Ent(N_1) + p(N_2) \times Ent(N_2) - Ent(N_0)$$
+$$IG(N_0) = p(N_1) \times Ent(N_1) + p(N_2) \times Ent(N_2) - Ent(N_0)$$ <br>
 $$ = \frac{9}{21} \times 0.276 + \frac{12}{12} \times 0.301 - 0.297$$
 
 Decision tree 는 한 변수가 어떤 의미를 지닐 때 이용할 수 있는 알고리즘입니다. 그렇기 때문에 Doc2Vec 과 같이 embedding algorithm 을 이용하여 distributed representation 으로 표현된 데이터의 분류에는 적합하지 않습니다. 차원에 특정한 의미가 없기 때문입니다. 
@@ -113,7 +113,7 @@ Term frequency vector 나 tf-idf vector 로 문서를 표현할 경우에도 dec
 
 ![]({{ "/assets/figures/dt_bow_classification.png" |absolute_url }})
 
-그리고 그 과정에서도 한 단어씩 따로따로 살펴봅니다. 복잡하지 않은 난이도의 document classifications 은 특정 단어가 문서에 등장하였느냐가 중요한 힌트입니다. Logistic regression 처럼 한 번에 살펴볼 수 있는 문제를 굳이 tree path 를 따라 classification 할 필요는 없습니다. 
+그 과정에서 한 단어씩 따로따로 살펴봅니다. 복잡하지 않은 난이도의 document classifications 은 특정 단어가 문서에 등장하였느냐가 중요한 힌트입니다. Logistic regression 처럼 한 번에 살펴볼 수 있는 문제를 굳이 tree path 를 따라 classification 할 필요는 없습니다. 
 
 이를 확인하기 위하여 영화 평점 데이터를 이용한 sentiment classification 을 수행하였습니다. 영화평의 감성 분석을 위해서는 데이터 전처리가 필요합니다. 영화 평점은 1 ~ 10 점을 지닙니다. 사람마다 점수의 기준이 다르기 때문에 4 ~ 7 점은 긍/부정을 명확히 판단하기 어려워 제외하였습니다. 또한 1 ~ 3 점을 서로 다른 클래스로 구분하는 것도 큰 의미가 없습니다. 그렇기 때문에 1 ~ 3 점은 negative, 8 ~ 10 점은 positive 로 레이블을 부여하였습니다.
 
@@ -155,7 +155,8 @@ for depth in [10, 20, 30, 50]:
     )
     n_useful_features = len(useful_features)
 
-    print('depth = {}, cross-validation average = {:.4}, n useful featuers = {}'.format(depth, average_score, n_useful_features))
+    print('depth = {}, cross-validation average = {:.4}, n useful featuers = {}'.format(
+        depth, average_score, n_useful_features))
 {% endhighlight %}
 
 더 많은 features 를 이용할 수 있도록 max_depth 만 조절하고 다른 parameters 는 고정였습니다. Depth 가 10 일 때 141 개의 단어를 이용하여 76.65 % 의 정확도를 보입니다. 그러나 depth 가 50 이 되어도 성능의 향상은 그리 크지 않습니다. 하지만 사용한 featuers 의 개수는 2k 가 넘습니다. 15 % 의 단어를 이용하거나 1% 의 단어를 이용하거나 성능은 비슷합니다.
@@ -188,7 +189,8 @@ for cost in [100, 10, 1, 0.1, 0.01]:
 
     n_useful_features = len(useful_features)
 
-    print('L1 lambda = {}, cross-validation = {}, n useful features = {}'.format(1/cost, average_score, n_useful_features))
+    print('L1 lambda = {}, cross-validation = {}, n useful features = {}'.format(
+        1/cost, average_score, n_useful_features))
 {% endhighlight %}
 
 대체로 decision tree 보다 좋은 성능을 보입니다. 
