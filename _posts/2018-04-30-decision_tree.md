@@ -13,7 +13,7 @@ tags:
 
 의사결정나무는 데이터의 공간을 직사각형으로 나눠가며 최대한 같은 종류의 데이터로 이뤄진 부분공간을 찾아가는 classifiers 입니다. 마치 clustering 처럼 비슷한 공간을 하나의 leaf node 로 나눠갑니다.
 
-<div class="container">
+<div class="slider">
     <img src="/assets/figures/dt_growth_1.png" class="slide" />
     <img src="/assets/figures/dt_growth_2.png" class="slide" />
     <img src="/assets/figures/dt_growth_3.png" class="slide" />
@@ -88,7 +88,7 @@ tags:
 </script>
 
 <style>
-    .container {
+    .slider {
         width : 90%;
         margin-left: 5%;
         margin-right: 5%;
