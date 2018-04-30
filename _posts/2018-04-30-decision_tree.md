@@ -11,6 +11,8 @@ tags:
 
 ## Decision trees
 
+의사결정나무는 데이터의 공간을 직사각형으로 나눠가며 최대한 같은 종류의 데이터로 이뤄진 부분공간을 찾아가는 classifiers 입니다. 마치 clustering 처럼 비슷한 공간을 하나의 leaf node 로 나눠갑니다.
+
 <ul class="slider" id="slider">
 <li><img src="/assets/figures/dt_growth_1.png" alt="slide1"/></li>
 <li><img src="/assets/figures/dt_growth_2.png" alt="slide2"/></li>
