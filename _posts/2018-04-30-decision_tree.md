@@ -22,6 +22,7 @@ tags:
 <li><img src="/assets/figures/dt_growth_6.png" alt="slide6"/></li>
 </ul>
 
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="https://lovit.github.io/assets/js/src/slider.min.js"></script>
 <script type="text/javascript">
   $(window).on("load", function() {
