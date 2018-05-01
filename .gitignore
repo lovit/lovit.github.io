@@ -1,5 +1,8 @@
 .DS_Store
 
+# page summary
+page_summary.txt
+
 # Jupyter
 jupyter/*
 !jupyter/*.ipynb
