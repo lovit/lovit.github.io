@@ -61,7 +61,7 @@ layout: page
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 
 
-<font color="#2851a4"><h2>## Data visualization</h2></font>
+<font color="#2851a4"><h2>Data visualization</h2></font>
 - [Python plotting kit Bokeh][bokeh_python_plotting]
 - [Plotly 를 이용한 3D scatter plot][plotly_3d_scatterplot]
 - [Word cloud in Python][word_cloud]
