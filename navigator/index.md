@@ -4,7 +4,7 @@ layout: page
 
 주제별로 모은 포스트들입니다. 한 포스트가 여러 주제에 속하기도 합니다. 
 
-## Machine learning algorithm
+<font color="#2851a4">## Machine learning algorithm</font>
 
 ### Classification
 - [Logitsic regression and Softmax regression for document classification][logistic_regression]
@@ -29,7 +29,7 @@ layout: page
 - [Implementing PageRank. Python dict vs numpy][pagerank_implementation_dict_vs_numpy]
 
 
-## Natural Language Processing
+<font color="#2851a4">## Natural Language Processing</font>
 
 ### Text data preprocessing
 - [From text to term frequency matrix (KoNLPy)][from_text_to_matrix]
@@ -61,20 +61,20 @@ layout: page
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 
 
-## Data visualization
+<font color="#2851a4">## Data visualization</font>
 - [Python plotting kit Bokeh][bokeh_python_plotting]
 - [Plotly 를 이용한 3D scatter plot][plotly_3d_scatterplot]
 - [Word cloud in Python][word_cloud]
 
-## Application: 띄어쓰기 오류 교정
+<font color="#2851a4">## Application: 띄어쓰기 오류 교정</font>
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
 - [Conditional Random Field based Korean Space Correction][crf_korean_spacing]
 - [soyspacing. Heuristic Korean Space Correction, A safer space corrector.][soyspacing]
 
-## Applications: Carblog
+<font color="#2851a4">## Applications: Carblog</font>
 - [Carblog. Problem description][carblog_description]
 
-## and more
+<font color="#2851a4">## and more</font>
 - [soydata. 복잡한 인공 데이터 생성을 위한 함수들][synthetic_dataset]
 
 
