@@ -95,7 +95,7 @@ for doc in docs:
 
 위 코드를 이용하면 아래와 같은 L-R graph 를 만들 수 있습니다.
 
-![]({{ "/assets/figures/noun_lrgraph.png" | absolute_url }})
+![]({{ "/assets/figures/noun_lrgraph.png" | absolute_url }}){: width="70%" height="70%"}
 
 L part 오른쪽에 등장하는 R parts 를 확인하는 함수를 만듭니다.
 
@@ -150,7 +150,7 @@ def noun_score(L):
 
 위 함수는 R parts 의 빈도수를 weights 로 이용하는 weighted average 역할을 합니다.
 
-![]({{ "/assets/figures/noun_classification.png" | absolute_url }})
+![]({{ "/assets/figures/noun_classification.png" | absolute_url }}){: width="70%" height="70%"}
 
 이는 데이터셋의 global information 을 이용하는 역할을 합니다. 많은 종류의 형태소 분석이나 품사 판별기들은 각 문장에 대하여 독립적인 분석을 수행합니다. '너'라는 단어가 '명사'인지 판단하기 위하여 앞이나 뒤에 등장하는 단어와 품사 정보만을 이용합니다. 한 문장에 대한 분석을 마친 다음 다른 문장을 분석할 때에는 이전에 분석했던 경험은 모두 잊혀집니다. 처음 보는 (미등록) 단어에 대하여 명사인지를 판단할 수 있는 근거는 앞, 뒤의 글자 뿐입니다.
 
@@ -179,15 +179,15 @@ def noun_score(L):
 
 | Algorithm \ Dataset | L >= 30, R >= 15 | L >= 10, R >= 10 | L >= 5, R >= 5 |
 | -- | -- | -- | -- |
-| L2-Logistic regression $$\lambda$$=1e-5 | 0.9951 | 0.9947 | 0.9946 |
-| L2-Logistic regression $$\lambda$$=1e-3 | 0.9963 | 0.9956 | 0.9957 |
-| L2-Logistic regression $$\lambda$$=0.01 | 0.9964 | 0.9954 | 0.9955 |
-| L2-Logistic regression $$\lambda$$=0.25 | 0.9963 | 0.9949 | 0.9951 |
-| L2-Logistic regression $$\lambda$$=1 | 0.9958 | 0.9942 | 0.9945 |
-| L2-Logistic regression $$\lambda$$=4 | 0.9948 | 0.9935 | 0.9939 |
-| L1-Logistic regression $$\lambda$$=0.25 | 0.9959 | 0.9956 | 0.9938 |
-| L1-Logistic regression $$\lambda$$=1 | 0.9951 | 0.9948 | 0.9936 |
-| L1-Logistic regression $$\lambda$$=4 | 0.9942 | 0.994 | 0.9926 |
+| L2-Logistic regression<br> $$\lambda$$=1e-5 | 0.9951 | 0.9947 | 0.9946 |
+| L2-Logistic regression<br> $$\lambda$$=1e-3 | 0.9963 | 0.9956 | 0.9957 |
+| L2-Logistic regression<br> $$\lambda$$=0.01 | 0.9964 | 0.9954 | 0.9955 |
+| L2-Logistic regression<br> $$\lambda$$=0.25 | 0.9963 | 0.9949 | 0.9951 |
+| L2-Logistic regression<br> $$\lambda$$=1 | 0.9958 | 0.9942 | 0.9945 |
+| L2-Logistic regression<br> $$\lambda$$=4 | 0.9948 | 0.9935 | 0.9939 |
+| L1-Logistic regression<br> $$\lambda$$=0.25 | 0.9959 | 0.9956 | 0.9938 |
+| L1-Logistic regression<br> $$\lambda$$=1 | 0.9951 | 0.9948 | 0.9936 |
+| L1-Logistic regression<br> $$\lambda$$=4 | 0.9942 | 0.994 | 0.9926 |
 | SVM-L lambda=0.1 | 0.9941 | 0.9946 | 0.9936 |
 | SVM-L lambda=1 | 0.9938 | 0.9946 | 0.994 |
 | SVM-L lambda=10 | 0.9928 | 0.9936 | 0.9928 |
@@ -195,9 +195,9 @@ def noun_score(L):
 | SVM-RBF lambda=1 | 0.8341 | 0.9948 | 0.9942 |
 | SVM-RBF lambda=10 | 0.8341 | 0.9939 | 0.9929 |
 | Naive Bayes | 0.9939 | 0.99 | 0.986 |
-| Feedforward neural network h=(5,) | 0.9968 | 0.9957 | 0.9951 |
-| Feedforward neural network h=(20,) | 0.9968 | 0.996 | 0.9951 |
-| Feedforward neural network h=(50,10) | 0.9964 | 0.9959 | 0.9949 |
+| Feedforward neural network<br> hidden=(5,) | 0.9968 | 0.9957 | 0.9951 |
+| Feedforward neural network<br> hidden=(20,) | 0.9968 | 0.996 | 0.9951 |
+| Feedforward neural network<br> hidden=(50,10) | 0.9964 | 0.9959 | 0.9949 |
 
 Logistic regression 나 Naive Bayes 의 coefficients 를 r_scores 로 이용할 수도 있습니다.
 
