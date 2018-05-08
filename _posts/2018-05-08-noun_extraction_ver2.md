@@ -141,7 +141,14 @@ def _get_nonempty_features(word, features):
         ( (r in _pos_features) and (not _exist_longer_pos(word, r)) ) or
         ( (r in _neg_features) and (not _exist_longer_neg(word, r)) ) )]
 
-def predict(word):
+def predict(word, minimum_noun_score=0.3):
+
+    pos, common, neg, unk, end = _predict(word, features)
+
+    base = pos + neg
+    score = 0 if base == 0 else (pos - neg) / base
+    support = pos + end + common if score >= minimum_noun_score else neg + end + common
+
     features = lrgraph.get_r(word)
     features_ = _get_nonempty_features(word, features)
     if len(features_) > min_num_of_features:        
