@@ -174,7 +174,7 @@ def _batch_prediction_order_by_word_length(
     for i, (word, _) in enumerate(noun_candidates):
 
         # base prediction
-        score, support = self.predict(word, minimum_noun_score)
+        score, support = predict(word, minimum_noun_score)
         prediction_scores[word] = (score, support)
 
         # if their score is higher than minimum_noun_score,
