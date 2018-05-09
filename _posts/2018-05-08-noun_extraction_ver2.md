@@ -170,7 +170,7 @@ def predict(word, minimum_noun_score=0.3):
 {% endhighlight %}
 
 
-## Problem 4. 짧은 단어에 분리한 R parts distribution
+## Problem 4. 짧은 단어에 불리한 R parts distribution
 
 '떡볶이' vs '떡볶 + 이' 의 경우에, '떡볶이'가 명사로 판단된다면 '떡볶'은 명사로 판단할 필요가 없습니다. L parts 에 떡볶이 (100 번), 떡볶 (100 번) 등장하였다면 '떡볶-'은 '떡볶이'의 substring 일 가능성이 높습니다. 하지만 떡볶이 (100 번), 떡볶 (300 번) 등장하였다면, 떡볶 (200 번) 은 '-이' 외에도 다른 조사와 함께 등장하였는지 살펴볼 필요가 있습니다.
 
@@ -200,7 +200,7 @@ def _batch_prediction_order_by_word_length(
 
 명사의 후보도 줄였습니다. 이전 버전의 명사 추출기 에서는 모든 L parts 의 substring 에 대하여 prediction 을 수행하였습니다. 그러나 soynlp 의 명사 추출기는 L-R graph 구조를 가정합니다. R parts 에 positive feature 가 한 개 이상 등장하지 않은 L 은 명사일 가능성이 없습니다. 이들에 대해서는 prediction 을 하지 않습니다 .
 
-이 경우에는 단일 명사가 언제나 하나의 어절을 만든 경우에는 명사 추출 후보에서 제외될 수 있습니다. 그러나 이 경우는 R features 가 존재하지 않기 때문에 어자피 제대로 된prediction 이 이뤄지지 않습니다. 그러나 이 단어가 복합명사라면 아직 기회는 있습니다 (Problem 5 참고).
+단일 명사가 언제나 하나의 어절을 이루는 경우에는 명사 추출 후보에서 제외될 수 있습니다. 그러나 이때는 어자피 R features 가 존재하지 않기 때문에 prediction 이 이뤄지지 않습니다. 그러나 이 단어가 복합명사라면 아직 기회는 있습니다 (Problem 5 참고).
 
 아래는 2016-10-20 뉴스에서 앞의 두 글자가 '아이'인 152 개의 명사 후보들에 대한 prediction score 의 변화입니다. 
 
