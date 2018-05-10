@@ -239,7 +239,7 @@ x, idx2vocab = sent_to_word_context_matrix(
 vocab2idx = {vocab:idx for idx,vocab in enumerate(idx2vocab)}
 {% endhighlight %}
 
-그리고 이를 soynp.word.pmi 를 이용하여 term weighting 을 수행합니다.
+그리고 soynlp.word.pmi 를 이용하여 term weighting 을 수행합니다.
 
 {% highlight python %}
 from soynlp.word import pmi
