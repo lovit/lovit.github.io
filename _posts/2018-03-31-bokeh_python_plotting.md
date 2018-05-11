@@ -4,7 +4,7 @@ date: 2018-03-31 22:00:00
 categories:
 - visualization
 tags:
-- visualiztion
+- visualization
 ---
 
 Python 에서 chart, plot 을 그리는 도구로 널리 알려진 것들 중에는 matplotlib, [seaborn][seaborn], [plotly][plotly], [ggplot][ggplot] 등이 있습니다. 그 중에서 **[Bokeh][bokeh]** 는 Python 혹은 Jupyter notebook 환경에서 d3 만큼이나 멋진 plot 을 그릴 수 있도록 도와줍니다. Bokeh 의 documentation 과 tutorials 은 설명이 매우 친절합니다. 하지만 quick starting 보다 더 quick 하게 이용하고 싶어, 자주 쓰는 기능과 설명을 정리하였습니다. 이 포스트에는 각 라이브러리의 비교가 포함되어있지 않습니다. 

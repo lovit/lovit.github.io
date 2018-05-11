@@ -4,7 +4,7 @@ date: 2018-04-26 22:00:00
 categories:
 - visualization
 tags:
-- visualiztion
+- visualization
 ---
 
 Plotly 는 Python 에서 data visualization 을 도와주는 패키지입니다. Bokeh 처럼 Java scrpit 기반으로 작동되는 시각화 웹을 Python 에서 이용할 수 있도록 도와줍니다. 3D scatter plot 을 그리기 위해 적절한 패키지를 찾던 중 Plotly 를 써보게 되었습니다. Swiss-roll data 를 이용한 3D scatter plot 의 quick starting 을 정리하였습니다.
