@@ -99,7 +99,7 @@ show(p)
 
 아래는 histogram 입니다. 더 많은 samples 에서 cherry picking 을 할수록 samples 의 확률 분포를 왜곡할 수 있습니다.
 
-<div id="cherry_picking"></div>
+![]({{ "/assets/figures/cherry_picking.png" | absolute_url }})
 
 ## 논문의 재현성
 
@@ -120,10 +120,3 @@ show(p)
 일반화 성능의 측정은 문제에 따라 true unseen 상황을 가정해야 할 때도 있고, 그렇지 않을 때도 있습니다.
 
 한 가지 더, 앞서 언급한 것처럼 test dataset 이 cover 하는 상황이 전체의 얼마가 되는지도 중요합니다. 발생할 수 있는 $$X$$ 에 대하여 확신할 수 있는 $$X$$ 의 양을 측정할 수 있다면 모델의 안정성, 신뢰성을 이야기 할 수 있습니다. 
-
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-      $(document).ready(function(){
-         $("#cherry_picking").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/cherry_picking.html")
-      });
-</script>
