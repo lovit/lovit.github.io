@@ -2,9 +2,9 @@
 title: Cherry picking distort distribution.
 date: 2018-05-26 20:00:00
 categories:
-- machine learning
+- analytics
 tags:
-- machine leraning
+- analytics
 ---
 
 머신 러닝 모델은 학습데이터로부터 특정한 패턴을 학습합니다. 그리고 학습된 모델의 성능은 테스트 데이터를 이용하여 측정됩니다. 모델의 일반화 성능은 validation dataset 을 이용한 성능 테스트를 통하여 측정됩니다. 우리는 주로 모델의 학습 과정은 training, test dataset 을 이용한 과정으로 정의합니다. 하지만 사실은 validation dataset 을 이용하여 성능이 가장 좋은 "모델을 선택"하는 과정까지도 학습에 포함됩니다. 사실 우리는 cherry picking 을 하고 있습니다. 이번 포스트에서는 모델의 학습 과정에서 우리가 행하는 cherry picking 의 과정과 그 위험성에 대한 선배의 세미나의 내용을 기록하였습니다.
