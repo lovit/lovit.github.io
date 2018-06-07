@@ -2,7 +2,7 @@
 layout: page
 ---
 
-주제별로 모은 포스트들입니다. 한 포스트가 여러 주제에 속하기도 합니다. 
+주제별로 모은 포스트들입니다. 한 포스트가 여러 주제에 속하기도 합니다.
 
 <font color="#2851a4"><h2>Machine learning algorithm</h2></font>
 
@@ -46,6 +46,9 @@ layout: page
 - [Cohesion score + L-Tokenizer. 띄어쓰기가 잘 되어있는 한국어 문서를 위한 unsupervised tokenizer][cohesion_ltokenizer]
 - [띄어쓰기가 되어있지 않은 한국어를 위한 토크나이저 만들기 (Max Score Tokenizer 를 Python 으로 구현하기)][max_score_tokenizer_dev]
 - [Unsupervised tokenizers in soynlp project][three_tokenizers_soynlp]
+- [명사 추출기 (1) soynlp.noun.LRNounExtractor][noun_extraction_ver1]
+- [명사 추출기 (2) soynlp.noun.LRNounExtractor_v2][noun_extraction_ver2]
+- [명사 추출기 (3) Noun extraction and noun tokenization][noun_extractor_and_tokenizer]
 
 ### Keywords, related-words extraction
 - [Logistic regression with L1, L2 regularization and keyword extraction][lasso_keyword]
@@ -76,6 +79,7 @@ layout: page
 
 <font color="#2851a4"><h2>and more</h2></font>
 - [soydata. 복잡한 인공 데이터 생성을 위한 함수들][synthetic_dataset]
+- [Cherry picking 의 위험성과 testing 설계의 중요성][cherry_picking]
 
 
 [kmeans_initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
@@ -113,3 +117,7 @@ layout: page
 [synthetic_dataset]: {{ site.baseurl }}{% link _posts/2018-04-27-synthetic_dataset.md %}
 [decision_tree]: {{ site.baseurl }}{% link _posts/2018-04-30-decision_tree.md %}
 [get_rules_from_trained_decision_tree]: {{ site.baseurl }}{% link _posts/2018-04-30-get_rules_from_trained_decision_tree.md %}
+[noun_extraction_ver1]: {{ site.baseurl }}{% link _posts/2018-05-07-noun_extraction_ver1.md %}
+[noun_extraction_ver2]: {{ site.baseurl }}{% link _posts/2018-05-08-noun_extraction_ver2.md %}
+[noun_extractor_and_tokenizer]: {{ site.baseurl }}{% link _posts/2018-05-09-noun_extractor_and_tokenizer.md %}
+[cherry_picking]: {{ site.baseurl }}{% link _posts/2018-05-26-cherry_picking.md %}
