@@ -539,7 +539,7 @@ for word in testset:
 위 코드와 테스트는 soynlp.lemmatizer 에 구현되어 있습니다.
 
 ## References
-- [Wikipedia: Lemmatization][lemmatize_wiki]
+- [나무위키: 용언 활용][lemmatize_wiki]
 
 [lemmatize_wiki]: https://en.wikipedia.org/wiki/Lemmatisation
 [korean_lemmatize]: https://namu.wiki/w/%ED%95%9C%EA%B5%AD%EC%96%B4/%EB%B6%88%EA%B7%9C%EC%B9%99%20%ED%99%9C%EC%9A%A9
