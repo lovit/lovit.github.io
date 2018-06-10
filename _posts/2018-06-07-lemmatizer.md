@@ -1,5 +1,5 @@
 ---
-title: 한국어 용언의 원형 복원 (lemmatization)
+title: 한국어 용언의 원형 복원 (Korean lemmatization)
 date: 2018-06-07 22:00:00
 categories:
 - nlp
