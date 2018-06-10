@@ -49,6 +49,8 @@ layout: page
 - [명사 추출기 (1) soynlp.noun.LRNounExtractor][noun_extraction_ver1]
 - [명사 추출기 (2) soynlp.noun.LRNounExtractor_v2][noun_extraction_ver2]
 - [명사 추출기 (3) Noun extraction and noun tokenization][noun_extractor_and_tokenizer]
+- [한국어 용언의 원형 복원 (Korean lemmatization)][lemmatizer]
+- [한국어 용언의 활용 함수 (Korean conjugation)][conjugation]
 
 ### Keywords, related-words extraction
 - [Logistic regression with L1, L2 regularization and keyword extraction][lasso_keyword]
@@ -121,3 +123,5 @@ layout: page
 [noun_extraction_ver2]: {{ site.baseurl }}{% link _posts/2018-05-08-noun_extraction_ver2.md %}
 [noun_extractor_and_tokenizer]: {{ site.baseurl }}{% link _posts/2018-05-09-noun_extractor_and_tokenizer.md %}
 [cherry_picking]: {{ site.baseurl }}{% link _posts/2018-05-26-cherry_picking.md %}
+[lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md %}
+[conjugation]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
