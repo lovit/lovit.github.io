@@ -300,7 +300,7 @@ def my_read(path):
 
 Sparse matrix 를 다룰 때 최대한 피해야 하는 작업들이 있습니다. 
 
-### No slicing
+### No slicing. Avoid to row/column-wise operation
 
 첫째는 slicing 입니다. Row 나 column 단위로 작업을 하기 위하여 다음 같은 코드를 작성할 수도 있습니다. 
 
@@ -335,7 +335,7 @@ class csr_matrix():
                               dtype=self.dtype, copy=False)
 {% endhighlight %}
 
-### No assign 0 to entire row (or column)
+### Do not assign 0 to entire row (or column)
 
 특정 column 이나 row 의 모든 값을 0 으로 만들고 싶을 때, x[i,j] = 0 을 할당할 수 있습니다. Dense matrix 에서는 매우 자연스러운 방법이지만, sparse matrix 에서는 이 작업이 좋지 않습니다.
 
@@ -373,7 +373,7 @@ def remove_column(x, idx):
     return x.__class__((data_, (rows_, cols_)), shape=x.shape)
 {% endhighlight %}
 
-### Use numpy distance functinon
+### Use distance functinon of numpy
 
 sparse matrix 의 연산을 할 경우에는 최대한 numpy, scipy, scikit-learn 의 함수를 이용하는 것이 좋습니다. 내적을 위해서는 numpy.dot 을 이용할 수 있습니다. Distance 계산을 위해서는 sklearn.metric.pairwise_distances 를 이용할 수 있습니다. 
 
