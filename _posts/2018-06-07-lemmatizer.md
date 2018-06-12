@@ -36,7 +36,7 @@ Stemming 과 lemmatization 은 모두 단어의 canonical form 을 **인식**하
 
 **Lemmatization** 은 단어의 원형 (lemma)으로 복원을 합니다. 
 
-	studies = studi + (-i / +y) + es
+	studies = study + (-y / +i) + es
 	studying = study + ing
 
 Lemmatization 을 위해서는 단어의 품사 추정이 함께 이뤄져야 합니다. 또한 데이터 분석에서 '꺼줘'와 '끈'을 모두 '끄다/동사'로 표현하기 위해서는 lemmatization 이 이뤄져야 합니다.
