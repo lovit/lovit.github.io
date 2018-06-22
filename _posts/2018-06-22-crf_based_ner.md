@@ -4,6 +4,7 @@ date: 2018-06-22 19:00:00
 categories:
 - nlp
 tags:
+- sequential labeling
 - ner
 ---
 
