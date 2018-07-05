@@ -58,6 +58,9 @@ layout: page
 - [KR-WordRank, 토크나이저를 이용하지 않는 한국어 키워드 추출기][krwordrank]
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 
+### Named Entity Recognition
+- [Conditional Random Field based Named Entity Recognition][crf_ner]
+
 ### Word Representation
 - [Word / Document embedding (Word2Vec / Doc2Vec)][word_doc_embedding]
 - [Word2Vec understanding, Space odyssey of word embedding (1)][space_odyssey_of_word2vec]
@@ -125,3 +128,4 @@ layout: page
 [cherry_picking]: {{ site.baseurl }}{% link _posts/2018-05-26-cherry_picking.md %}
 [lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md %}
 [conjugation]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
+[crf_ner]: {{ site.baseurl }}{% link _posts/2018-06-22-crf_based_ner.md %}
