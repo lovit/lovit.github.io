@@ -34,6 +34,7 @@ layout: page
 ### Text data preprocessing
 - [From text to term frequency matrix (KoNLPy)][from_text_to_matrix]
 - [Komoran, 코모란 형태소 분석기 사용 방법과 사용자 사전 추가 (Java, Python)][komoran]
+- [Building your KoNLPy. Komoran3 를 Python class 로 만들기][building_your_komoran]
 - [Scipy sparse matrix handling][sparse_mtarix_handling]
 - [Conditional Random Field based Korean Space Correction][crf_korean_spacing]
 - [soyspacing. Heuristic Korean Space Correction, A safer space corrector.][soyspacing]
@@ -129,3 +130,4 @@ layout: page
 [lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md %}
 [conjugation]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
 [crf_ner]: {{ site.baseurl }}{% link _posts/2018-06-22-crf_based_ner.md %}
+[building_your_komoran]: {{ site.baseurl }}{% link _posts/2018-07-06-java_in_python.md %}
