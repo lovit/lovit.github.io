@@ -102,9 +102,9 @@ print(tokenizer('하루의 뉴스를 학습했습니다'))
 Word - context matrix 를 만들기 위하여 soynlp.vectorizer.sent_to_word_context_matrix 를 이용합니다. 문맥의 길이는 windows=3 으로 설정하며, 최소 10 번 이상 등장한 단어만 이용합니다.
 
 {% highlight python %}
-from soynlp.vectorizer import sent_to_word_context_matrix
+from soynlp.vectorizer import sent_to_word_contexts_matrix
 
-x_news, idx2vocab_news = sent_to_word_context_matrix(
+x_news, idx2vocab_news = sent_to_word_contexts_matrix(
     corpus,
     windows=3,
     min_tf=10,
