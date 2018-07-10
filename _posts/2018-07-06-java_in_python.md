@@ -306,11 +306,25 @@ print(komoran.pos(sent))
      ('이', 'VCP'),
      ('ㅂ니다', 'EC')]
 
-### 주의. Java 1.8 (o), 1.7 (x)
+### 주의. Java compile version vs JRE version
 
-작업을 했던 Mac 은 Java 1.8 을 이용하고 있었습니다. 동일한 코드를 Ubuntu, Java 1.7 에서 테스트하였더니 제대로 작동하지 않았습니다. 대신 Ubuntu 의 Java version 을 1.8 로 동일하게 맞추니 작동하였습니다.
+작업을 했던 Mac 은 Java 1.8 을 이용하고 있었습니다. 동일한 코드를 Ubuntu, Java 1.7 에서 테스트하였더니 제대로 작동하지 않았습니다. 상위 버전의 Java 로 컴파일한 JAR 는 하위 버전의 Java 에서 작동하지 않을 수 있습니다. Ubuntu Java 를 1.8 로 업데이트 하였더니, 해당 코드는 작동하였습니다.
 
-아직 어떤 부분에서 문제가 발생한 것인지 찾지 않았습니다만, 1.8 을 이용한다면 [github][komoran3py] 의 코드는 작동합니다.
+Ubuntu 에서 설치된 모든 Java versions 은 다음의 terminal command 로 볼 수 있습니다.
+
+    update-java-alternatives -l
+
+현재 이용하고 있는 Java version 은 다음으로 확인하 수 있습니다.
+
+    java -version
+
+버전을 바꾸고 싶다면 다음의 명령어를 입력한 뒤, 숫자로 원하는 Java version 을 선택합니다.
+
+    sudo update-alternatives --config java 
+
+컴파일러의 Java version 을 1.7 로 내려서 다시 컴파일하면, Java 1.7 에서도 잘 작동합니다. 그리고 Java 1.7 로 컴파일한 파일은 Java 1.8 에서도 제대로 작동합니다.
+
+Java 1.7 로 컴파일한 Komoran 3 의 코드는 [github][komoran3py] 에 올려두었습니다.
 
 ## Jpype2 를 이용한 변수 변환. Converting Python variables to Java variables
 
