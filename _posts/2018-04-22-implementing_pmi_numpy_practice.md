@@ -87,7 +87,7 @@ print(pxy)
 #  [0.2 0.  0.1]]
 {% endhighlight %}
 
-$$p(x,y)$$ 를 $$p(x)$$ 로 나누기 위해서는 행렬곲을 이용할 수 있습니다. $p(x)$$ 와 $$p(y)$$ 를 diagonal matrix 로 만듭니다. $$p(x)$$ 의 $$i$$ 번째 값은 diagonal matrix 의 $$(i,i)$$ 의 값입니다. 이를 위해 numpy.diag 를 이용합니다. numpy.diag 는 array 의 값을 diagonal elements 로 지니는 diagonal matrix 를 만듭니다.
+$$p(x,y)$$ 를 $$p(x)$$ 로 나누기 위해서는 행렬곲을 이용할 수 있습니다. $$p(x)$$ 와 $$p(y)$$ 를 diagonal matrix 로 만듭니다. $$p(x)$$ 의 $$i$$ 번째 값은 diagonal matrix 의 $$(i,i)$$ 의 값입니다. 이를 위해 numpy.diag 를 이용합니다. numpy.diag 는 array 의 값을 diagonal elements 로 지니는 diagonal matrix 를 만듭니다.
 
 {% highlight python %}
 # diagonalize px & py for matrix multiplication
@@ -112,7 +112,7 @@ np.diag(np.array([0 if pxi == 0 else 1/pxi for pxi in px]))
 #        [0.        , 0.        , 0.        , 3.33333333]])
 {% endhighlight %}
 
-위 방법을 이용하여 $$p(x)$$ 의 역수와 $$p(y)$$ 의 역수로 이뤄진 diagonal matrix 를 만듭니다. 이 때 $$p(y)$$ 에 $$\alpha$$ 를 더하는 smoothing 도 할 수 있습니다. $$pyi$$ 가 0 이 아닐 때 $$\alpha$$ 를 더합니다.
+위 방법을 이용하여 $$p(x)$$ 의 역수와 $$p(y)$$ 의 역수로 이뤄진 diagonal matrix 를 만듭니다. 이 때 $$p(y)$$ 에 $$\alpha$$ 를 더하는 smoothing 도 할 수 있습니다. $$p(y)_i$$ 가 0 이 아닐 때 $$\alpha$$ 를 더합니다.
 
 {% highlight python %}
 # inverse element diagonal matrix of px and py
