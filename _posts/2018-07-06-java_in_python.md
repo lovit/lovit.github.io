@@ -326,6 +326,33 @@ Ubuntu 에서 설치된 모든 Java versions 은 다음의 terminal command 로 
 
 Java 1.7 로 컴파일한 Komoran 3 의 코드는 [github][komoran3py] 에 올려두었습니다.
 
+
+### JVM max heap memory 설정
+
+jpype 로부터 JVM 을 시작할 때 argument 로 '-Xmx{}m'.format(max_memory) 를 입력하였습니다. 이 값은 jpype 가 구동한 JVM 이 이용할 수 있는 메모리의 최대값을 설정합니다.
+
+만약 이 값이 지나치게 작다면 Komoran 을 띄우는 과정에서 out of memory 가 일어날 수 있습니다. 그리고 out of memory 가 날 때의 현상 중 하나는, python process 가 이용하는 CPU usage 가 매우 큽니다. 이는 Java 의 GC 가 어떻게던지 oom 을 막아보려 노력하는 과정으로 추정됩니다. (그리고 장렬히 oom 을 띄우며 죽습니다)
+
+{% highlight python %}
+import jpype
+
+if jpype.isJVMStarted():
+    try:
+        jpype.startJVM(
+            jvmpath,
+            '-Djava.class.path=%s' % classpath,
+            '-Dfile.encoding=UTF8',
+            '-ea', '-Xmx{}m'.format(max_memory)
+        )
+    except Exception as e:
+        print(e)
+{% endhighlight %}
+
+만약 '-Xmx{}m'.format(max_memory) 옵션을 넣지 않는다면 32bit 에서는 1Gb 를, 64bit 에서는 32Gb 를 기본값으로 이용하는 것 같습니다. 메모리 최대 사용량을 정의하지 않았더니 문장을 적용할 때마다 메모리 사용량이 늘어납니다. 아마도 JVM 에서 String instance 를 만든 뒤, 이를 버리지 않은 것으로 생각됩니다.
+
+즉, '-Xmx{}m'.format(max_memory) 는 상황에 맞게 적절히 제약을 걸어줄 필요가 있어 보입니다.
+
+
 ## Jpype2 를 이용한 변수 변환. Converting Python variables to Java variables
 
 앞의 Komoran class 파일에서 자연스럽게 넘어갔던 부분이 있습니다. pos() 함수는 str 형식의 sent 를 입력받습니다. self._komoran 은 Java class instance 입니다. self._komoran.analyze(sent) 에서 Python str 변수가 Java instance 에 입력되었습니다. 
