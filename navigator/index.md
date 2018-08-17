@@ -86,6 +86,7 @@ layout: page
 <font color="#2851a4"><h2>and more</h2></font>
 - [soydata. 복잡한 인공 데이터 생성을 위한 함수들][synthetic_dataset]
 - [Cherry picking 의 위험성과 testing 설계의 중요성][cherry_picking]
+- [Github 으로 텍스트 문서 버전 관리하기][latex_with_github]
 
 
 [kmeans_initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
@@ -131,3 +132,4 @@ layout: page
 [conjugation]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
 [crf_ner]: {{ site.baseurl }}{% link _posts/2018-06-22-crf_based_ner.md %}
 [building_your_komoran]: {{ site.baseurl }}{% link _posts/2018-07-06-java_in_python.md %}
+[latex_with_github]: {{ site.baseurl }}{% link _posts/2018-08-17-latex_with_github.md %}
