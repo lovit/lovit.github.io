@@ -15,6 +15,7 @@ layout: page
 
 ### Sequential labeling
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
+- [Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계][ford_for_pos]
 
 ### Clustering
 - [k-means initial points 선택 방법][kmeans_initializer]
@@ -23,10 +24,11 @@ layout: page
 ### Nearest neighbor search
 - [Random Projection and Locality Sensitive Hashing][lsh]
 
-
-### Graph ranking, similarity
+### Graph ranking, similarity, distance
 - [Graph ranking algorithm. PageRank and HITS][pagerank_and_hits]
 - [Implementing PageRank. Python dict vs numpy][pagerank_implementation_dict_vs_numpy]
+- [Ford algorithm 을 이용한 최단 경로 탐색][ford_for_shortestpath]
+- [Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계][ford_for_pos]
 
 
 <font color="#2851a4"><h2>Natural Language Processing</h2></font>
@@ -133,3 +135,5 @@ layout: page
 [crf_ner]: {{ site.baseurl }}{% link _posts/2018-06-22-crf_based_ner.md %}
 [building_your_komoran]: {{ site.baseurl }}{% link _posts/2018-07-06-java_in_python.md %}
 [latex_with_github]: {{ site.baseurl }}{% link _posts/2018-08-17-latex_with_github.md %}
+[ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.mdseconds.md %}
+[ford_for_shortestpath]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
