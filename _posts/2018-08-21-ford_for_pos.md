@@ -1,5 +1,5 @@
 ---
-title: Ford algorithm 을 이용한 품사 판별 (Part-of-speech tagging), 그리고 Hidden Markov Model 과의 관계
+title: Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계
 date: 2017-08-21 09:00:00
 categories:
 - nlp
@@ -394,6 +394,10 @@ ford(g, bos, eos, debug=True)
        ('입', 'Verb', 11, 12),
        ('니다', 'Eomi', 12, 14),
        ('EOS', 'EOS', 15, 15)]]}
+
+## Hidden Markov Model (HMM) 과의 관계
+
+
 
 [prev]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
 [conjugate]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
