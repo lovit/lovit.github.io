@@ -467,11 +467,7 @@ ford(g, start = bos, destination = eos)
 
 ## Hidden Markov Model (HMM) 과의 관계
 
-Hidden Markov Model (HMM) 를 이용하면 길이가 $$n$$ 인 sequence $$x_{1:n} = [x_1, x_2, \dots, x_n]$$ 에 대하여 $$P(y_{1:n} \vert x_{1:n})$$ 가 가장 큰 $$y_{1:n}$$ 를 찾을 수 있습니다. 이 과정을 HMM 의 decoding 이라 합니다. 이 때 $$P(y_{1:n} \vert x_{1:n})$$ 는 다음처럼 계산됩니다.
 
-
-
-이는 우리가 앞서 정의한 transition 과 generation 을 각각 $$log P(y_2 \vert y_1)$$ 와 $$log P(x_2 \vert y_2)$$ 로 생각한다면 결국 HMM 에서 확률이 가장 큰 $$y_{1:n}$$ 을 찾는 것은 그래프에서 비용이 가장 작은 $$(x_i, y_i)$$ 를 연결하는 path 를 찾는 것과 같습니다.
 
 [prev]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
 [conjugate]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
