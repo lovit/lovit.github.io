@@ -135,5 +135,5 @@ layout: page
 [crf_ner]: {{ site.baseurl }}{% link _posts/2018-06-22-crf_based_ner.md %}
 [building_your_komoran]: {{ site.baseurl }}{% link _posts/2018-07-06-java_in_python.md %}
 [latex_with_github]: {{ site.baseurl }}{% link _posts/2018-08-17-latex_with_github.md %}
-[ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.mdseconds.md %}
+[ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
 [ford_for_shortestpath]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
