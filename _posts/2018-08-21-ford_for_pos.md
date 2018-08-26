@@ -13,7 +13,7 @@ Hidden Markov Model (HMM) 은 품사 판별을 위하여 이용되기도 하였�
 
 ## Review of Ford algorithm for shortest path
 
-얼마 전, Hidden Markov Model (HMM) 을 기반으로 하는 품사 판별기의 코드를 공부하던 중, "findPath" 라는 이름의 함수를 보았습니다. HMM 의 decoding 과정을 설명할 때 주로 Dynamic programming 의 관점으로 설명을 하는데, 그 구현체는 최단 경로를 찾는 방법으로 decoding 과정을 설명하고 있었습니다. 한 번도 생각해보지 않았는데, 생각해보니 first-order 를 따르는 HMM 이라면 최단 경로 문제와 동치가 됩니다. 이 이야기를 한 번 정리해야 겠다는 생각을 하였습니다.
+얼마 전, Hidden Markov Model (HMM) 을 기반으로 하는 품사 판별기의 코드를 공부하던 중, "findPath" 라는 이름의 함수를 보았습니다. HMM 의 decoding 과정을 설명할 때 주로 Dynamic programming 의 관점으로 설명을 하는데, 그 구현체는 최단 경로를 찾는 방법으로 decoding 과정을 설명하고 있었습니다. 생각해보니 first-order 를 따르는 HMM 이라면 최단 경로 문제와 동치가 됩니다. 이 이야기를 한 번 정리해야 겠다는 생각을 하였습니다.
 
 이번 포스트에서는 HMM 에 대한 설명은 하지 않습니다. 조만간에 HMM 관련 포스트를 작성하고, 이 부분을 링크로 대체하도록 하겠습니다. 마디 (node) 와 호 (edge) 로 표현된 그래프에서 두 마디를 연결할 수 있는 경로 (path) 는 다양합니다. 그 중 거리가 가장 짧은 경로를 찾는 문제를 최단 경로 문제, shortest path 라 합니다.
 
@@ -29,7 +29,7 @@ if $$C[u] + w(u,v) < C[v]$$, then update $$C[v] \leftarrow C[u] + w(u,v)$$
 
 ## 예문과 사전
 
-우리가 살펴볼 예문은 아래와 같습니다. 예문은 사실 비문이지만, 일단 쉬운 예시를 이용하기 위해 아래의 예문을 이용합니다.
+우리가 살펴볼 예문은 아래와 같습니다. 비문인 예문이지만, 쉬운 설명을 위해 아래의 예문을 이용합니다.
 
 {% highlight python %}
 sentence = '청하는 아이오아이의 출신입니다'
@@ -85,10 +85,10 @@ dictionary.get_pos('청하') # ['Noun', 'Verb']
 
 앞서 만든 dictionary 를 이용하여 문장에서 아는 단어들을 인식합니다. 단어는 띄어쓰기가 포함되어 있지 않다고 가정합니다. 즉 n-gram 은 이번에는 고려하지 않습니다. 그렇다면 일단 띄어쓰기 기준으로 잘려진 어절에서 substring 을 찾은 뒤, dictionary 에 등록된 단어인지를 확인합니다.
 
-word_lookup 은 nested list 를 return 합니다. 이는 어절의 길이와 같은 길이입니다. List 의 각 칸은 각 위치에서의 단어를 의미합니다. Offset 은 문장에서의 단어의 위치를 표시하기 위한 값입니다.
+eojeol_lookup 은 nested list 를 return 합니다. 이는 어절의 길이와 같은 길이입니다. List 의 각 칸은 각 위치에서의 단어를 의미합니다. Offset 은 문장에서의 단어의 위치를 표시하기 위한 값입니다.
 
 {% highlight python %}
-def word_lookup(eojeol, offset):
+def eojeol_lookup(eojeol, offset):
     n = len(eojeol)
     words = [[] for _ in range(n)]
     for b in range(n):
@@ -101,7 +101,7 @@ def word_lookup(eojeol, offset):
                 words[b].append((sub, pos, b+offset, e+offset))
     return words
 
-word_lookup('청하는', offset=0)
+eojeol_lookup('청하는', offset=0)
 {% endhighlight %}
 
 예를 들어 '청하는' 이라는 어절에 offset=0 을 입력하면 아래와 같은 결과가 return 됩니다. List 의 첫번째 칸에는 '청/Noun', '청하/Noun', '청하/Verb' 가 포함되어 있습니다. 그리고 문장에서의 각 단어의 시작과 끝점의 위치가 표시되어 있습니다. Offset=0 은 이 어절이 문장의 첫번째 어절이라는 의미입니다. Tuple 은 (단어, 품사, 문장 내 시작 위치, 문장 내 끝 위치) 로 구성되어 있습니다.
@@ -113,7 +113,7 @@ word_lookup('청하는', offset=0)
 만약 문장에서 해당 어절 앞에 3 글자가 더 있었다면 offset=3 으로 설정합니다.
 
 {% highlight python %}
-word_lookup('청하는', offset=3)
+eojeol_lookup('청하는', offset=3)
 {% endhighlight %}
 
 그 결과, 단어는 동일하지만 단어의 위치가 다르게 표시됩니다.
@@ -122,21 +122,19 @@ word_lookup('청하는', offset=3)
      [('하', 'Verb', 4, 5)],
      [('는', 'Josa', 5, 6), ('는', 'Eomi', 5, 6)]]
 
-위에서 만든 word_lookup 함수를 이용하여 sentence 에 대한 lookup 을 실시합니다.
-
-sent 라는 empty list 를 만든 뒤, 입력된 sentence 의 띄어쓰기 기준으로 word_lookup 을 수행합니다. Offset 은 현재까지의 sent length 를 입력합니다.
+sent 라는 empty list 를 만든 뒤, 입력된 sentence 의 띄어쓰기 기준으로 eojeol_lookup 을 수행합니다. Offset 은 현재까지의 sent length 를 입력합니다.
 
 {% highlight python %}
-def lookup(sentence):
+def sentence_lookup(sentence):
     sent = []
     for eojeol in sentence.split():
-        sent += word_lookup(eojeol, offset=len(sent))
+        sent += eojeol_lookup(eojeol, offset=len(sent))
     return sent
 
-lookup(sentence)
+sentence_lookup(sentence)
 {% endhighlight %}
 
-lookup 함수를 이용하여 예문에 대한 lookup 을 수행하면 아래와 같은 결과를 얻을 수 있습니다. 아래의 tuple 은 이후 그래프에서의 마디가 됩니다.
+sentence_lookup 함수를 이용하여 예문에 대한 lookup 을 수행하면 아래와 같은 결과를 얻을 수 있습니다. 아래의 tuple 은 이후 그래프에서의 마디가 됩니다.
 
     [[('청', 'Noun', 0, 1), ('청하', 'Noun', 0, 2), ('청하', 'Verb', 0, 2)],
      [('하', 'Verb', 1, 2)],
@@ -159,24 +157,24 @@ lookup 함수를 이용하여 예문에 대한 lookup 을 수행하면 아래와
 
 ### 연속된 단어 간 edges 와 Unk 간 edges
 
-앞서 lookup 함수를 이용하여 그래프의 마디들을 만들었으니, 이번에는 이 마디들 간의 edge 를 만들 것입니다. 먼저 몇 가지 함수와 구문을 만듭니다.
+앞서 sentence_lookup 함수를 이용하여 그래프의 마디들을 만들었으니, 이번에는 이 마디들 간의 edge 를 만들 것입니다. 먼저 몇 가지 함수와 구문을 만듭니다.
 
-sent 는 lookup 을 통하여 얻은 nested list 입니다. 
+sent 는 sentence_lookup 을 통하여 얻은 nested list 입니다. 
 
     chars = sentence.replace(' ', '')
-    sent.append([('EOS', 'EOS', n_char + 1, n_char + 1)])
+    sent.append([('EOS', 'EOS', n_char, n_char + 1)])
     n_char = len(chars)
 
-여기에 문장의 마지막을 표시하는 'EOS' tuple 을 입력합니다. 'EOS'의 위치는 문장의 길이보다 1 긴 위치에 위치하도록 하였습니다.
+여기에 문장의 마지막을 표시하는 'EOS' tuple 을 입력합니다. 'EOS'의 위치는 문장의 길이보다 1 긴 위치에서 끝나도록 하였습니다.
 
-또한 get_nonempty_first(sent, offset) 이라는 함수를 만들었습니다. sent 에서 offset 이후, 처음으로 empty list 가 아닌 index 를 출력합니다. get_nonempty_first(sent, offset=0) 를 실행하면 문장에서 처음으로 word lookup 이 된 단어의 위치를 찾을 수 있습니다. 만약 이 위치 (nonempty_first) 가 0 보다 크다면 문장의 맨 앞부터 그 지점까지의 substring 이 그래프에 포함되어 있지 않다는 의미입니다. 그렇기 때문에 Unk 의 태그를 붙인 마디를 sent[0] 에 추가합니다.
+get_nonempty_first(sent, offset) 는 sent 에서 offset 이후, 처음으로 empty list 가 아닌 index 를 출력합니다. get_nonempty_first(sent, offset=0) 를 실행하면 문장에서 처음으로 lookup 이 된 단어의 위치를 찾을 수 있습니다. 만약 이 위치 (nonempty_first) 가 0 보다 크다면 문장의 맨 앞부터 그 지점까지의 substring 이 그래프에 포함되어 있지 않다는 의미입니다. 그렇기 때문에 Unk 의 태그를 붙인 마디를 sent[0] 에 추가합니다.
 
 {% highlight python %}
 def draw_edges(sentence):
     chars = sentence.replace(' ', '')
-    sent = lookup(sentence)
+    sent = sentence_lookup(sentence)
     n_char = len(chars)
-    sent.append([('EOS', 'EOS', n_char + 1, n_char + 1)])
+    sent.append([('EOS', 'EOS', n_char, n_char + 1)])
 
     nonempty_first = get_nonempty_first(sent, offset=0)
     if nonempty_first > 0:
@@ -196,13 +194,11 @@ def get_nonempty_first(sent, offset=0):
     return offset    
 {% endhighlight %}
 
-forward_link, unk_link, add_bos 에 대하여 이어서 설명합니다.
-
 forward_link 함수는 문장 내에서 연속된 두 단어를 (앞의 단어 -> 뒤의 단어)로 연결하는 부분입니다. 예를 들어 ('청하', 'Noun', 0, 2) 는 문장 내에서 (0, 2)의 위치에 존재합니다. 이 단어는 시작점이 2 인 [('는', 'Josa', 2, 3), ('는', 'Eomi', 2, 3)] 와 연결되어야 합니다. word 의 end position 을 찾은 뒤, sent[end] 에 다른 단어들이 존재하는지 살펴봅니다.
 
-만약 단어가 존재하지 않는다면 (if not sent[end]) end position 이후, 가장 처음으로 단어가 존재하는 구간까지를 Unk 의 태그를 붙인 단어로 graph 에 추가합니다. 사전에 '아이/Noun' 은 등록되어 있지만, '오'는 어떤 품사로도 등록되어 있지 않습니다. 이 부분에서 때문에 '아이/Noun' - '오/Unk'를 연결합니다. edges 에 (('아이', 'Noun', 3, 5), ('오', 'Unk', 5, 6), 0)) 가 추가됩니다.
+단어가 존재하지 않는다면 (if not sent[end]) end position 이후, 가장 처음으로 단어가 존재하는 구간까지를 Unk 의 태그를 붙인 단어로 graph 에 추가합니다. 사전에 '아이/Noun' 은 등록되어 있지만, '오'는 어떤 품사로도 등록되어 있지 않습니다. 이 부분에서 때문에 '아이/Noun' - '오/Unk'를 연결합니다. edges 에 (('아이', 'Noun', 3, 5), ('오', 'Unk', 5, 6), 0)) 가 추가됩니다.
 
-만약 연결된 단어가 있다면 edges 에 그 두 단어를 (word, adjacent) 의 형태로 입력합니다. 이 때 edges 에  (('청하', 'Noun', 0, 2), ('는', 'Josa', 2, 3)) 이 추가됩니다.
+연결된 단어가 있다면 edges 에 그 두 단어를 (word, adjacent) 의 형태로 입력합니다. 이 때 edges 에  (('청하', 'Noun', 0, 2), ('는', 'Josa', 2, 3)) 이 추가됩니다.
 
 {% highlight python %}
 def forward_link(sent, chars):
@@ -236,7 +232,7 @@ def unk_link(edges, sent):
 
 {% highlight python %}
 def add_bos(edges, sent):
-    bos = ('BOS', 'BOS', 0, 0)
+    bos = ('BOS', 'BOS', -1, 0)
     for word in sent[0]:
         edges.append((bos, word))
     return edges
@@ -250,9 +246,9 @@ edges, sent = draw_edges(sentence)
 
 draw_edges 함수에 예문을 넣은 결과입니다. dictionary 에 pos2words 에 의하여 등록된 단어 간, 그리고 Unk 단어 간의 edges 가 return 됩니다.
 
-    [(('BOS', 'BOS', 0, 0), ('청', 'Noun', 0, 1)),
-     (('BOS', 'BOS', 0, 0), ('청하', 'Noun', 0, 2)),
-     (('BOS', 'BOS', 0, 0), ('청하', 'Verb', 0, 2)),
+    [(('BOS', 'BOS', -1, 0), ('청', 'Noun', 0, 1)),
+     (('BOS', 'BOS', -1, 0), ('청하', 'Noun', 0, 2)),
+     (('BOS', 'BOS', -1, 0), ('청하', 'Verb', 0, 2)),
      (('청', 'Noun', 0, 1), ('하', 'Verb', 1, 2)),
      (('청하', 'Noun', 0, 2), ('는', 'Josa', 2, 3)),
      (('청하', 'Noun', 0, 2), ('는', 'Eomi', 2, 3)),
@@ -278,8 +274,8 @@ draw_edges 함수에 예문을 넣은 결과입니다. dictionary 에 pos2words 
      (('의', 'Josa', 8, 9), ('출신', 'Noun', 9, 11)),
      (('출신', 'Noun', 9, 11), ('입', 'Verb', 11, 12)),
      (('입', 'Verb', 11, 12), ('니다', 'Eomi', 12, 14)),
-     (('니다', 'Eomi', 12, 14), ('EOS', 'EOS', 15, 15)),
-     (('다', 'Eomi', 13, 14), ('EOS', 'EOS', 15, 15))]
+     (('니다', 'Eomi', 12, 14), ('EOS', 'EOS', 14, 15)),
+     (('다', 'Eomi', 13, 14), ('EOS', 'EOS', 14, 15))]
 
 ### Weight 부여
 
@@ -352,9 +348,9 @@ edges = attach_weight(edges)
 
 그 결과는 아래와 같습니다.
 
-    [(('BOS', 'BOS', 0, 0), ('청', 'Noun', 0, 1), 0),
-     (('BOS', 'BOS', 0, 0), ('청하', 'Noun', 0, 2), -0.2),
-     (('BOS', 'BOS', 0, 0), ('청하', 'Verb', 0, 2), 0),
+    [(('BOS', 'BOS', -1, 0), ('청', 'Noun', 0, 1), 0),
+     (('BOS', 'BOS', -1, 0), ('청하', 'Noun', 0, 2), -0.2),
+     (('BOS', 'BOS', -1, 0), ('청하', 'Verb', 0, 2), 0),
      (('청', 'Noun', 0, 1), ('하', 'Verb', 1, 2), 0),
      (('청하', 'Noun', 0, 2), ('는', 'Josa', 2, 3), -0.7),
      (('청하', 'Noun', 0, 2), ('는', 'Eomi', 2, 3), 0),
@@ -380,8 +376,8 @@ edges = attach_weight(edges)
      (('의', 'Josa', 8, 9), ('출신', 'Noun', 9, 11), 0),
      (('출신', 'Noun', 9, 11), ('입', 'Verb', 11, 12), 0),
      (('입', 'Verb', 11, 12), ('니다', 'Eomi', 12, 14), -0.5),
-     (('니다', 'Eomi', 12, 14), ('EOS', 'EOS', 15, 15), 0),
-     (('다', 'Eomi', 13, 14), ('EOS', 'EOS', 15, 15), 0)]
+     (('니다', 'Eomi', 12, 14), ('EOS', 'EOS', 14, 15), 0),
+     (('다', 'Eomi', 13, 14), ('EOS', 'EOS', 14, 15), 0)]
 
 list of tuple 로 이뤄진 edges 를 dict dict 형식의 그래프로 변환합니다. tuple 의 첫번째 tuple 을 source 로, 두번째 tuple 을 destination 으로 정리합니다.
 
@@ -402,7 +398,7 @@ pprint(g)
 그 결과 아래와 같은 형식의 그래프 g 를 만들 수 있습니다. [앞선 포스트][prev]의 그래프 형식과 동일합니다.
 
     g = {
-        ('BOS', 'BOS', 0, 0): {
+        ('BOS', 'BOS', -1, 0): {
             ('청', 'Noun', 0, 1): 0,
             ('청하', 'Noun', 0, 2): -0.2,
             ('청하', 'Verb', 0, 2): 0
@@ -424,36 +420,46 @@ pprint(g)
 우리는 이 그래프를 이용하여 앞서 만든 ford algorithm 을 적용하였습니다.
 
 {% highlight python %}
-bos = ('BOS', 'BOS', 0, 0)
-eos = ('EOS', 'EOS', 15, 15)
+bos = ('BOS', 'BOS', -1, 0)
+eos = ('EOS', 'EOS', 14, 15)
 ford(g, start = bos, destination = eos)
 {% endhighlight %}
 
 아래는 Ford algorithm 에 의하여 비용이 바뀌는 모습입니다.
 
-    cost[('BOS', 'BOS', 0, 0) -> ('청', 'Noun', 0, 1)] = 24.200000000000003 -> 0
-    cost[('BOS', 'BOS', 0, 0) -> ('청하', 'Noun', 0, 2)] = 24.200000000000003 -> -0.2
-    cost[('BOS', 'BOS', 0, 0) -> ('청하', 'Verb', 0, 2)] = 24.200000000000003 -> 0
-    cost[('청', 'Noun', 0, 1) -> ('하', 'Verb', 1, 2)] = 24.200000000000003 -> 0
+    cost[('는', 'Eomi', 2, 3) -> ('아이오아이', 'Noun', 3, 8)] = 24.200000000000003 -> 23.700000000000003
+    cost[('아이오아이', 'Noun', 3, 8) -> ('의', 'Josa', 8, 9)] = 24.200000000000003 -> 23.000000000000004
+    cost[('BOS', 'BOS', -1, 0) -> ('청하', 'Noun', 0, 2)] = 24.200000000000003 -> -0.2
+    cost[('BOS', 'BOS', -1, 0) -> ('청하', 'Verb', 0, 2)] = 24.200000000000003 -> 0
+    cost[('BOS', 'BOS', -1, 0) -> ('청', 'Noun', 0, 1)] = 24.200000000000003 -> 0
+    cost[('아이오', 'Noun', 3, 6) -> ('아이', 'Noun', 6, 8)] = 24.200000000000003 -> 23.900000000000002
+    cost[('입', 'Verb', 11, 12) -> ('니다', 'Eomi', 12, 14)] = 24.200000000000003 -> 23.700000000000003
+    cost[('니다', 'Eomi', 12, 14) -> ('EOS', 'EOS', 14, 15)] = 24.200000000000003 -> 23.700000000000003
+    cost[('의', 'Josa', 8, 9) -> ('출신', 'Noun', 9, 11)] = 24.200000000000003 -> 23.000000000000004
+    cost[('하', 'Verb', 1, 2) -> ('는', 'Eomi', 2, 3)] = 24.200000000000003 -> 23.700000000000003
+    cost[('청하', 'Noun', 0, 2) -> ('는', 'Eomi', 2, 3)] = 23.700000000000003 -> -0.2
     cost[('청하', 'Noun', 0, 2) -> ('는', 'Josa', 2, 3)] = 24.200000000000003 -> -0.8999999999999999
-    cost[('청하', 'Noun', 0, 2) -> ('는', 'Eomi', 2, 3)] = 24.200000000000003 -> -0.2
     cost[('청하', 'Verb', 0, 2) -> ('는', 'Eomi', 2, 3)] = -0.2 -> -0.5
-    cost[('는', 'Josa', 2, 3) -> ('아이', 'Noun', 3, 5)] = 24.200000000000003 -> -0.8999999999999999
+    cost[('는', 'Josa', 2, 3) -> ('아이오아이', 'Noun', 3, 8)] = 23.700000000000003 -> -1.4
     cost[('는', 'Josa', 2, 3) -> ('아이오', 'Noun', 3, 6)] = 24.200000000000003 -> -0.8999999999999999
-    cost[('는', 'Josa', 2, 3) -> ('아이오아이', 'Noun', 3, 8)] = 24.200000000000003 -> -1.4
+    cost[('는', 'Josa', 2, 3) -> ('아이', 'Noun', 3, 5)] = 24.200000000000003 -> -0.8999999999999999
+    cost[('출신', 'Noun', 9, 11) -> ('입', 'Verb', 11, 12)] = 24.200000000000003 -> 23.000000000000004
     cost[('아이', 'Noun', 3, 5) -> ('오', 'Unk', 5, 6)] = 24.200000000000003 -> -0.8999999999999999
-    cost[('아이오', 'Noun', 3, 6) -> ('아이', 'Noun', 6, 8)] = 24.200000000000003 -> -1.2
-    cost[('아이오아이', 'Noun', 3, 8) -> ('의', 'Josa', 8, 9)] = 24.200000000000003 -> -2.0999999999999996
-    cost[('의', 'Josa', 8, 9) -> ('출신', 'Noun', 9, 11)] = 24.200000000000003 -> -2.0999999999999996
-    cost[('출신', 'Noun', 9, 11) -> ('입', 'Verb', 11, 12)] = 24.200000000000003 -> -2.0999999999999996
-    cost[('입', 'Verb', 11, 12) -> ('니다', 'Eomi', 12, 14)] = 24.200000000000003 -> -2.5999999999999996
-    cost[('니다', 'Eomi', 12, 14) -> ('EOS', 'EOS', 15, 15)] = 24.200000000000003 -> -2.5999999999999996
+    cost[('청', 'Noun', 0, 1) -> ('하', 'Verb', 1, 2)] = 24.200000000000003 -> 0
+    cost[('아이오아이', 'Noun', 3, 8) -> ('의', 'Josa', 8, 9)] = 23.000000000000004 -> -2.0999999999999996
+    cost[('아이오', 'Noun', 3, 6) -> ('아이', 'Noun', 6, 8)] = 23.900000000000002 -> -1.2
+    cost[('입', 'Verb', 11, 12) -> ('니다', 'Eomi', 12, 14)] = 23.700000000000003 -> 22.500000000000004
+    cost[('니다', 'Eomi', 12, 14) -> ('EOS', 'EOS', 14, 15)] = 23.700000000000003 -> 22.500000000000004
+    cost[('의', 'Josa', 8, 9) -> ('출신', 'Noun', 9, 11)] = 23.000000000000004 -> -2.0999999999999996
+    cost[('출신', 'Noun', 9, 11) -> ('입', 'Verb', 11, 12)] = 23.000000000000004 -> -2.0999999999999996
+    cost[('입', 'Verb', 11, 12) -> ('니다', 'Eomi', 12, 14)] = 22.500000000000004 -> -2.5999999999999996
+    cost[('니다', 'Eomi', 12, 14) -> ('EOS', 'EOS', 14, 15)] = 22.500000000000004 -> -2.5999999999999996
 
 그 결과 아래와 같은 비용과 path 가 만들어집니다. 예시 문장은 [('청하', 'Noun'), ('는', 'Josa'), ('아이오아이', 'Noun'), ('의', 'Josa'), ('출신', 'Noun'), ('입', 'Verb'), ('니다', 'Eomi')] 로 품사 판별이 이뤄집니다.
 
     'cost': 2.5999999999999996
 
-     [[('BOS', 'BOS', 0, 0),
+     [[('BOS', 'BOS', -1, 0),
        ('청하', 'Noun', 0, 2),
        ('는', 'Josa', 2, 3),
        ('아이오아이', 'Noun', 3, 8),
@@ -461,7 +467,7 @@ ford(g, start = bos, destination = eos)
        ('출신', 'Noun', 9, 11),
        ('입', 'Verb', 11, 12),
        ('니다', 'Eomi', 12, 14),
-       ('EOS', 'EOS', 15, 15)]]}
+       ('EOS', 'EOS', 14, 15)]]}
 
 앞서 최단 경로를 찾는 알고리즘은 Ford 외에도 Dijkstra 도 있다 하였습니다만, Dijkstra 는 edge weight 가 반드시 0 이상이어야 합니다. Weighter 를 구현하기에 따라 음의 edge weight 가 만들어질 수도 있기 때문에 안전하게 Ford algorithm 을 이용하였던 것입니다.
 
