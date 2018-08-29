@@ -82,15 +82,16 @@ debug = True 에 따라 행렬이 표시됩니다. 우리는 맨 윗줄을 0 번
 
 최종적으로 [꿈, 을, 꾸]가 [아, 이, 오]로 substitution 이 된 뒤, '는'이 deletion 되어 4 의 길이가 계산됩니다.
 
-    [**1**, 2, 3, 4, 5]
-    [2, **2**, 3, 4, 5]
-    [3, 3, **3**, 4, 5]
-    [4, 4, 4, **4**, 5]
-    [4, 5, 5, **4**, 5]
-    [5, 4, 5, 5, **4**]
+    [1*, 2, 3, 4, 5]
+    [2, 2*, 3, 4, 5]
+    [3, 3, 3*, 4, 5]
+    [4, 4, 4, 4*, 5]
+    [4, 5, 5, 4*, 5]
+    [5, 4, 5, 5, 4*]
 
     4
 
+만약 $$s_2$$ 가 $$s_1$$ 보다 길다면, $$s_1, s_2$$ 가 서로 뒤바뀌어 계산됩니다. 이번에는 두 단어의 첫 글자가 같기 때문에 d[0,0] = 0 입니다.
 
 {% highlight python %}
 s1 = '아이돌'
@@ -98,13 +99,15 @@ s2 = '아이오아이'
 levenshtein(s1, s2, debug=True)
 {% endhighlight %}
 
-    [0, 1, 2]
-    [1, 0, 1]
-    [2, 1, 1]
-    [3, 2, 2]
-    [4, 3, 3]
+    [0*, 1, 2]
+    [1, 0*, 1]
+    [2, 1*, 1]
+    [3, 2, 2*]
+    [4, 3, 3*]
 
     3
+
+띄어쓰기가 있는 string 에 대하여 Levenshtein 을 계산합니다. '꿈을' 이라는 어절이 같지만, character 기준으로 Levenshtein 을 적용하기 때문에 두 string 의 거리는 7 입니다.
 
 {% highlight python %}
 s1 = '꿈을 꾸는 아이'
@@ -124,12 +127,16 @@ levenshtein(s1, s2, debug=True)
 
     7
 
+Levenshtein 의 단위를 character 가 아닌, 띄어쓰기 기준으로 나뉘어지는 어절로 정의할 수도 있습니다. 위에서 구현한 코드는 $$s_1, s_2$$ 에 대하여 list 의 각 element 를 순서대로 확인합니다. Python 의 str 은 list of characters 이기 때문에 enumerate(str) 은 한 글자씩을 yield 합니다. $$s_1, s_2$$ 에 대하여 str.split() 을 함으로써 list of str 이 되도록 입력하면 어절 단위로 거리가 계산됩니다.
+
 {% highlight python %}
 # 어절 단위
 s1 = '꿈을 꾸는 아이'
 s2 = '아이는 꿈을 꿔요'
 levenshtein(s1.split(), s2.split(), debug=True)
 {% endhighlight %}
+
+그 결과 어절 단위에서 세 번의 수정으로 두 string 이 변환됩니다.
 
     [1, 1, 2]
     [2, 2, 2]
@@ -138,6 +145,12 @@ levenshtein(s1.split(), s2.split(), debug=True)
     3
 
 ### User define cost + Levenshtein
+
+Insertion, deletion, substitution 의 비용을 글자마다 다르게 적용할 수도 있습니다. 우리는 substitution 비용을 글자마다 다르게 적용할 수 있도록 위의 구현체를 변형합니다. cost 라는 변수를 추가합니다. cost 는 $$c_1$$ 이 $$c_2$$ 로 변하는 비용을 dict 형식으로 저장한 변수입니다.
+
+Python 에서 dict 는 mutable 한 변수이기 때문에 안전한 구현을 위하여 cost=None 으로 초기화 합니다. 사용자가 특별히 substitution 비용을 정의하지 않는다면 levenshtein 함수 내부에서 cost 를 empty dict 로 재정의 합니다.
+
+우리는 substitution_cost 라는 helper 함수를 만들었습니다. $$c_1$$ 이 $$c_2$$ 로 변하는 비용입니다. 두 유닛 (반드시 글자이지 않아도 되니,이후로는 유닛이라고 명합니다) 이 같으면 비용을 0 으로, 그렇지 않다면 cost dict 안에 비용이 있는지 확인합니다. 특별히 정의되지 않았다면 기본 substition cost 를 1 로 정의합니다.
 
 {% highlight python %}
 def levenshtein(s1, s2, cost=None, debug=False):
@@ -150,6 +163,7 @@ def levenshtein(s1, s2, cost=None, debug=False):
     if cost is None:
         cost = {}
 
+    # changed
     def substitution_cost(c1, c2):
         if c1 == c2:
             return 0
@@ -173,12 +187,15 @@ def levenshtein(s1, s2, cost=None, debug=False):
     return previous_row[-1]
 {% endhighlight %}
 
+변형된 levenshtein 함수를 아래의 예시에 대하여 적용합니다.
 
 {% highlight python %}
 s1 = '아이쿠야'
 s2 = '아이쿵야'
 levenshtein(s1, s2, debug=True)
 {% endhighlight %}
+
+특별한 substitution cost 가 적용되지 않았기 때문에 '쿠'와 '쿵'에 대하여 1 의 비용이 들었습니다.
 
     [0, 1, 2, 3]
     [1, 0, 1, 2]
@@ -187,6 +204,8 @@ levenshtein(s1, s2, debug=True)
 
     1
 
+이번에는 '쿠 $$\rightarrow$$ 쿵' 으로의 substitution cost 를 0.1 로 설정합니다.
+
 {% highlight python %}
 cost = {('쿠', '쿵'):0.1}
 s1 = '아이쿠야'
@@ -194,6 +213,7 @@ s2 = '아이쿵야'
 levenshtein(s1, s2, cost, debug=True)
 {% endhighlight %}
 
+그 결과 위의 예시의 Levenshtein distance 는 0.1 이 되었습니다.
 
     [0, 1, 2, 3]
     [1, 0, 1, 2]
@@ -202,12 +222,24 @@ levenshtein(s1, s2, cost, debug=True)
 
     0.1
 
+어떤 도메인에서는 특정한 글자가 서로 자주 교차되기도 합니다. 예를 들어, '서비스'라는 단어는 '써비스'라고 자주 이용됩니다. 초성이 된소리가 된다거나, 종성에 'ㅇ' 받침이 추가되는 경우가 잦다면 (특히 대화데이터에서 그렇습니다), 이 때의 edit distance 의 비용을 글자에 따라 다르게 부과할 수 있습니다.
+
+그리고 이와 같은 변형은 insertion, deletion cost 에 대해서도 동일하게 적용할 수 있습니다.
+
 ### 한글의 초/중/종성 분리
+
+위의 예시에서 '쿠'와 '쿵'을 글자 단위로 비교하였고, 초, 중성이 같지만 종성이 다르기 때문에 비용을 0.1 로 설정하였습니다. 그 외에도 한글을 초/중/종성으로 분리한 뒤, 각각에 대한 Levenshtein distance 를 계산할 수도 있습니다. 우리가 원하는 것은 '쿠'와 '쿵'이 초/중/종성 중 종성만 다르니 그 거리를 1/3 으로 정의하는 것입니다.
+
+이를 위해서 한글의 초/중/종성을 분리할 수 있어야 합니다. 이를 위한 기초 지식에 대해 알아봅니다.
+
+컴퓨터는 각 글자에 대한 숫자가 정의되어 있습니다. 이 체계를 [encoding][encoding_wikipedia] 이라 합니다. 각 글자의 고유 아이디라 생각해도 됩니다. Python 에서 글자를 아이디로 변형하기 위해서는 ord 함수를 이용하면 됩니다. 아래는 각 글자의 ord 값입니다.
 
 {% highlight python %}
 for char in 'azAZ가힣ㄱㄴㅎㅏ':
     print('{} == {}'.format(char, ord(char)))
 {% endhighlight %}
+
+특히 '가'는 완전한 한글의 첫 글자, '힣'은 완전한 한글의 마지막 글자입니다. 한국어의 완전한 글자에 대한 고유 아이디의 범위는 44032 ~ 55203 입니다. 자음과 모음도 특정 범위 안에 위치합니다.
 
     a == 97
     z == 122
@@ -220,10 +252,14 @@ for char in 'azAZ가힣ㄱㄴㅎㅏ':
     ㅎ == 12622
     ㅏ == 12623
 
+반대로 숫자로 표현된 글자의 고유 아이디를 글자로 변형하기 위해서는 chr 함수를 이용할 수 있습니다.
+
 {% highlight python %}
 for idx in [97, 122, 65, 90, 44032, 55203]:
     print('{} == {}'.format(idx, chr(idx)))
 {% endhighlight %}
+
+위의 결과와 반대의 결과가 출력됩니다.
 
     97 == a
     122 == z
@@ -231,6 +267,12 @@ for idx in [97, 122, 65, 90, 44032, 55203]:
     90 == Z
     44032 == 가
     55203 == 힣
+
+그리고 완전 한글과 초/중/종성 사이에는 합성 규칙이 있습니다. 이를 이용하면 완전 한글을 초/중/종성으로 분리하거나, 역으로 결합할 수 있습니다.
+
+초/중/종성으로 분해하기 위해서는 ord 로 글자를 숫자로 변형한 뒤, 완전 한글의 시작값, 44032 를 빼줍니다. 그리고 초성의 기본값 (588) 과 중성의 기본값 (28) 로 각각 나눠주면 그 몫이 초, 중성 list 의 index 가 됩니다. 그리고 그 나머지가 종성 list 의 index 가 됩니다.
+
+Composition 은 그 과정을 반대로 진행하면 됩니다.
 
 {% highlight python %}
 kor_begin = 44032
@@ -280,6 +322,8 @@ def decompose(c):
         return (c, ' ', ' ')
     if (moum_begin <= i <= moum_end):
         return (' ', c, ' ')
+
+    # decomposition rule
     i -= kor_begin
     cho  = i // chosung_base
     jung = ( i - cho * chosung_base ) // jungsung_base 
@@ -293,18 +337,23 @@ def character_is_korean(c):
             (moum_begin <= i <= moum_end))
 {% endhighlight %}
 
+위에서 만든 함수를 적용합니다. '감'이 ('ㄱ', 'ㅏ', 'ㅁ') 로 분해됨을 확인할 수 있습니다.
 
 {% highlight python %}
 decompose('감') # ('ㄱ', 'ㅏ', 'ㅁ')
 {% endhighlight %}
 
+반대로 ('ㄲ', 'ㅜ', 'ㅁ') 이 '꿈'으로 결합되는 것도 확인할 수 있습니다. 만약 ('a', 'ㅜ', 'ㅁ') 처럼 옳지 않은 글자를 입력하면 list.index 함수가 제대로 작동하지 않기 때문에 exception 이 발생합니다.
 
 {% highlight python %}
 compose('ㄲ', 'ㅜ', 'ㅁ') # '꿈'
 {% endhighlight %}
 
-
 ### 초/중/종성 분리를 적용한 Levenshtein distance
+
+위에서 만든 composition, decomposition 함수를 이용하여 초/중/종성 단위의 Levenshtein distance 인 jamo_levenshtein 함수를 구현합니다. Base code 에서 substitution_cost 를 변형합니다. 만약 두 글자가 같으면 비용을 0 으로, 그렇지 않다면 각각을 decomposition 하여 초/중/종성 단위에서의 Levenshtein distance 를 계산합니다. 거리 값의 범위가 0 ~ 3 이기 때문에, 이를 3 으로 나눠줍니다.
+
+이제부터는 debug = True 일 때, 소숫점이 출력될테니, '%.3f'%v 을 이용하여 소수점 아래 셋째자리까지만 str 형식으로 출력합니다.
 
 {% highlight python %}
 def jamo_levenshtein(s1, s2, debug=False):
@@ -337,12 +386,15 @@ def jamo_levenshtein(s1, s2, debug=False):
     return previous_row[-1]
 {% endhighlight %}
 
+아래 예제에 대하여 jamo_levenshtein 함수를 적용합니다.
 
 {% highlight python %}
 s1 = '아이쿠야'
 s2 = '아이쿵야'
 jamo_levenshtein(s1, s2, debug=True)
 {% endhighlight %}
+
+d[2,2] = 0.333 입니다. '쿠'에서 '쿵'으로 변하는 비용이 0.333 이었습니다.
 
     ['0.000', '1.000', '2.000', '3.000']
     ['1.000', '0.000', '1.000', '2.000']
@@ -351,19 +403,25 @@ jamo_levenshtein(s1, s2, debug=True)
 
     0.3333333333333333
 
+맨 앞글자에 전혀 다른 글자를 삽입하면 첫글자에 대하여 deletion 이 발생하기 때문에 d[0,0] = 1 이 됩니다. 그 뒤 '앍 $$\rightarrow$$ 아'로의 substitution cost, 0.333 이 더해집니다. 이후에 '쿠 $$\rightarrow$$ 쿵'이 추가되어 최종적으로 1.666 의 거리가 계산됩니다.
+
 {% highlight python %}
-s1 = '아이쿵야'
-s2 = '훍앜이쿠야'
+s1 = '훍앜이쿠야'
+s2 = '아이쿵야'
 jamo_levenshtein(s1, s2, debug=True)
 {% endhighlight %}
 
-    ['1.000', '2.000', '2.667', '3.667']
-    ['1.333', '1.667', '2.667', '3.333']
-    ['2.333', '1.333', '2.333', '3.000']
-    ['3.333', '2.333', '1.667', '2.667']
-    ['4.333', '3.333', '2.667', '1.667']
+    ['1.000'*, '2.000', '2.667', '3.667']
+    ['1.333'*, '1.667', '2.667', '3.333']
+    ['2.333', '1.333'*, '2.333', '3.000']
+    ['3.333', '2.333', '1.667'*, '2.667']
+    ['4.333', '3.333', '2.667', '1.667'*]
 
     1.6666666666666665
+
+이는 다르게도 구현할 수 있습니다. 먼저 각 글자에 대하여 초/중/종성을 모두 분해하여 concatenation 을 합니다. 그 결과를 각각 $$s_1\_, s_2\_$$ 라 정의합니다. 그 다음 이에 대한 Levenshtein distance 를 계산합니다. 이때도 한 음절에 대한 거리의 범위가 0 ~ 3 이기 때문에 거리 값을 3으로 나눠줍니다.
+
+'아이쿠야 $$\rightarrow$$ 아이쿵야' 로의 거리가 0.333 으로 계산됩니다.
 
 {% highlight python %}
 s1 = '아이쿠야'
@@ -377,6 +435,7 @@ print(s2_) # ㅇㅏ ㅇㅣ ㅋㅜㅇㅇㅑ
 print(levenshtein(s1_, s2_)/3) # 0.3333333333333333
 {% endhighlight %}
 
+'아이쿵야 $$\rightarrow$$ 훍앜이쿠야' 로의 거리도 위와 같이 1.666 으로 계산됩니다.
 
 {% highlight python %}
 s1 = '아이쿵야'
@@ -393,7 +452,9 @@ print(levenshtein(s1_, s2_)/3) # 1.6666666666666667
 
 ## soynlp
 
-앞서 언급한 compose, decompose 함수 및 levenshtein, 초/중/종성 분리를 적용한 jamo_levenshtein 를 soynlp 에 구현해 두었습니다.
+앞서 언급한 compose, decompose 함수 및 levenshtein, 초/중/종성 분리를 적용한 jamo_levenshtein 를 soynlp 에 구현해 두었습니다. 빠르게 해당 함수를 이용하고 싶으시면 `pip install soynlp` 로 soynlp 를 설치하신 뒤 이를 이용할 수 있습니다.
+
+각각의 경우에 맞게 함수를 변형하고 싶다면, 위의 예시를 base 로 이용할 수도 있습니다.
 
 {% highlight python %}
 from soynlp.hangle import levenshtein
@@ -415,5 +476,6 @@ decompose('꼭') # ('ㄲ', 'ㅗ', 'ㄱ')
 
 [string_distance_wikipedia]: https://en.wikipedia.org/wiki/String_metric
 [levenshtein_wikipedia]: https://en.wikipedia.org/wiki/Levenshtein_distance
+[encoding_wikipedia]: https://en.wikipedia.org/wiki/Character_encoding
 [word2vec]: {{ site.baseurl }}{% link _posts/2018-03-26-word_doc_embedding.md %}
 [next]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
