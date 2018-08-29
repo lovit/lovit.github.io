@@ -41,15 +41,15 @@ d[0,0] 은 $$s_1, s_2$$ 의 첫 글자가 같으면 0, 아니면 1로 초기화 
 
 아래 그림은 deletion 이 일어나는 경우입니다. '데이터'의 마지막 글자, '터'를 지우면 '데이'가 되는 겨우입니다.
 
-![]({{ "/assets/figures/string_distance_dp_deletion.png" | absolute_url }})
+![]({{ "/assets/figures/string_distance_dp_deletion.png" | absolute_url }}){: width="80%" height="80%"}
 
 아래 그림은 insertion 이 일어나는 경우입니다. '데이'에 '타'를 추가하여 '데이타'가 되는 경우입니다.
 
-![]({{ "/assets/figures/string_distance_dp_insertion.png" | absolute_url }})
+![]({{ "/assets/figures/string_distance_dp_insertion.png" | absolute_url }}){: width="80%" height="80%"}
 
 아래 그림은 substitution 이 일어나는 경우입니다. '데이터'에서 '데이타'로 마지막 글자가 변환되는 경우입니다.
 
-![]({{ "/assets/figures/string_distance_dp_substitution.png" | absolute_url }})
+![]({{ "/assets/figures/string_distance_dp_substitution.png" | absolute_url }}){: width="80%" height="80%"}
 
 위 세 경우는 위의 식으로 표현 가능하며, 윗 줄의 왼쪽 칸부터 두 개의 for loop 을 돌면서 거리 행렬 d 의 모든 값을 계산합니다. 최종 거리 값은 d[$$len(s_1)$$-1, $$len(s_2)$$-1] 입니다. 
 
