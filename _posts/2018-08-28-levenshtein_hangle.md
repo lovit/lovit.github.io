@@ -11,7 +11,7 @@ tags:
 
 ## Why string distance ?
 
-단어 간 거리는 형태적 거리와 의미적 거리로 분류됩니다. 의미적 거리는 word embedding 과 같은 방법으로 학습할 수 있습니다. 대표적인 word embedding 방법 중 하나인 [Word2Vec][word2vec] 은 단어 간 의미적 유사성 (거리)를 벡터로 표현합니다. Word2Vec 을 통하여 학습된 단어 (영화, 애니메이션)의 벡터 간 cosine distance 는 매우 작습니다. 하지만 두 단어의 형태적 유사성은 없습니다. 2 글자와 5 글자 사이에 공통된 음절이 하나도 존재하지 않습니다. 이처럼 string 의 형태적인 거리를 정의하는 방법을 [string distance][wikipedia] 라 합니다.
+단어 간 거리는 형태적 거리와 의미적 거리로 분류됩니다. 의미적 거리는 word embedding 과 같은 방법으로 학습할 수 있습니다. 대표적인 word embedding 방법 중 하나인 [Word2Vec][word2vec] 은 단어 간 의미적 유사성 (거리)를 벡터로 표현합니다. Word2Vec 을 통하여 학습된 단어 (영화, 애니메이션)의 벡터 간 cosine distance 는 매우 작습니다. 하지만 두 단어의 형태적 유사성은 없습니다. 2 글자와 5 글자 사이에 공통된 음절이 하나도 존재하지 않습니다. 이처럼 string 의 형태적인 거리를 정의하는 방법을 [string distance][string_distance_wikipedia] 라 합니다.
 
 String distance metric 은 매우 다양합니다. Jaro-winkler, Levenshtein 과 같이 string 을 이용하여 정의되는 metrics 도 있으며, Hamming, Cosine, TF-IDF distance 와 같이 string 을 벡터로 표현한 다음 거리를 정의하는 방법도 있습니다. 그 중 Levenshtein distance 는 대표적인 metric 입니다. 이 방법의 별명은 edit distance 입니다. 한 string $$s_1$$ 에서 다른 $$s_2$$ 로 교정하는데 드는 최소 횟수를 두 strings 간의 거리로 정의합니다. 이번 포스트에서는 이 방법에 대하여 알아봅니다. 
 
@@ -29,9 +29,21 @@ $$s_1$$ = '꿈을꾸는아이' 에서 $$s_2$$ = '아이오아이' 로 변환하�
 
 이를 위해 동적 프로그래밍 (dynamic programming) 이 이용됩니다. 이는 전체 문제를 작은 문제의 집합으로 정의하고, 작은 문제를 반복적으로 풂으로써 전체 문제의 해법을 찾는 방법론 입니다. 그리고 Levenshtein 은 dynamic programming 의 연습용으로 자주 등장하는 예제이기도 합니다.
 
+*TODO 좀 더 설명*
+
+*TODO 여기에 그림을 추가하여*
+
 ## Levenshtein distance 구현하기
 
 ### Base version
+
+Levenshtein distance 는 [Wikipedia][levenshtein_wikipedia] 에 기본 코드가 구현되어 있습니다. 이를 바탕으로 Python 함수로 구현을 하였습니다.
+
+current row 는 $$s_2$$ 길이보다 1 깁니다. 이는 $$s_2$$ 가 empty string 일 때를 가정한 비용을 추가하기 위함입니다. 코드의 current_row = [i + 1] 부분은 첫번째 행에 지금까지의 $$s_1$$ 의 길이만큼 deletion 이 일어났을 때의 비용을 의미합니다.
+
+위 설명처럼 각각 insertion, deletion, substitution 이 일어났을 때의 비용을 계산한 뒤, 그 값의 최소값을 [i,j] 의 비용으로 current_row 에 추가합니다.
+
+Distance 계산에는 필요하지 않지만, 이해를 위해 위 그림의 거리 행렬을 출력하기 위해 debug 라는 변수를 추가합니다. debug = True 일 때, initial 비용인 첫번째 행을 제외한 나머지 행, current_row[1:] 를 출력합니다.
 
 {% highlight python %}
 def levenshtein(s1, s2, debug=False):
@@ -58,6 +70,7 @@ def levenshtein(s1, s2, debug=False):
     return previous_row[-1]
 {% endhighlight %}
 
+위 코드에 대하여 아래와 같은 두 단어의 levenshtein distance 를 계산합니다.
 
 {% highlight python %}
 s1 = '꿈을꾸는아이'
@@ -65,12 +78,16 @@ s2 = '아이오아이'
 levenshtein(s1, s2, debug=True)
 {% endhighlight %}
 
-    [1, 2, 3, 4, 5]
-    [2, 2, 3, 4, 5]
-    [3, 3, 3, 4, 5]
-    [4, 4, 4, 4, 5]
-    [4, 5, 5, 4, 5]
-    [5, 4, 5, 5, 4]
+debug = True 에 따라 행렬이 표시됩니다. 우리는 맨 윗줄을 0 번째 row 로, 그 아랫줄을 1 번째 row 로 이야기합니다. d[0,0] = 1 인 이유는 첫글자가 각각 '꿈'과 '아'로 다르기 때문에 substitution 비용이 발생하기 때문입니다. 그리고 0 번째 row 의 다른 값은 $$s_1$$ = '꿈' 이 '아'로 바뀐 뒤, 한글자씩 insertion 이 되기 때문에 [1, 2, 3, 4, 5] 로 비용이 증가합니다. 그 이후는 위의 Levenshtein 식과 같이 계산됩니다.
+
+최종적으로 [꿈, 을, 꾸]가 [아, 이, 오]로 substitution 이 된 뒤, '는'이 deletion 되어 4 의 길이가 계산됩니다.
+
+    [**1**, 2, 3, 4, 5]
+    [2, **2**, 3, 4, 5]
+    [3, 3, **3**, 4, 5]
+    [4, 4, 4, **4**, 5]
+    [4, 5, 5, **4**, 5]
+    [5, 4, 5, 5, **4**]
 
     4
 
@@ -396,6 +413,7 @@ from soynlp.hangle import decompose
 decompose('꼭') # ('ㄲ', 'ㅗ', 'ㄱ')
 {% endhighlight %}
 
-[wikipedia]: https://en.wikipedia.org/wiki/String_metric
+[string_distance_wikipedia]: https://en.wikipedia.org/wiki/String_metric
+[levenshtein_wikipedia]: https://en.wikipedia.org/wiki/Levenshtein_distance
 [word2vec]: {{ site.baseurl }}{% link _posts/2018-03-26-word_doc_embedding.md %}
 [next]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
