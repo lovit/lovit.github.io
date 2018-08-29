@@ -1,6 +1,6 @@
 ---
 title: Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성
-date: 2017-08-28 05:00:00
+date: 2018-08-28 05:00:00
 categories:
 - nlp
 tags:
@@ -29,9 +29,29 @@ $$s_1$$ = '꿈을꾸는아이' 에서 $$s_2$$ = '아이오아이' 로 변환하�
 
 이를 위해 동적 프로그래밍 (dynamic programming) 이 이용됩니다. 이는 전체 문제를 작은 문제의 집합으로 정의하고, 작은 문제를 반복적으로 풂으로써 전체 문제의 해법을 찾는 방법론 입니다. 그리고 Levenshtein 은 dynamic programming 의 연습용으로 자주 등장하는 예제이기도 합니다.
 
-*TODO 좀 더 설명*
+'데이터마이닝 $$\rightarrow$$ 데이타마닝'으로 변환하는 예제로 그 원리를 알아봅니다. Levenshtein distance 계산을 위해서 len($$s_1$$) by len($$s_2$$) 의 거리 행렬, d 를 만듭니다. 우리는 맨 윗줄을 0 번째 row 로, 그 아랫줄을 1 번째 row 로 이야기합니다. 
 
-*TODO 여기에 그림을 추가하여*
+d[0,0] 은 $$s_1, s_2$$ 의 첫 글자가 같으면 0, 아니면 1로 초기화 합니다. 글자가 다르면 substitution cost 가 발생한다는 의미입니다. 그리고 그 외의 d[0,j]에 대해서는 d[0,j] = d[0,j-1] + 1 의 비용으로 초기화 합니다. 한글자씩 insertion 이 일어났다는 의미입니다. 이후에는 좌측, 상단, 좌상단의 값을 이용하여 거리 행렬 d 를 업데이트 합니다. 그 규칙은 아래와 같습니다.
+
+    d[i,j] = min(
+                 d[i-1,j] + deletion cost,
+                 d[i,j-1] + insertion cost,
+                 d[i-1,j-1] + substitution cost
+                )
+
+아래 그림은 deletion 이 일어나는 경우입니다. '데이터'의 마지막 글자, '터'를 지우면 '데이'가 되는 겨우입니다.
+
+![]({{ "/assets/figures/string_distance_dp_deletion.png" | absolute_url }})
+
+아래 그림은 insertion 이 일어나는 경우입니다. '데이'에 '타'를 추가하여 '데이타'가 되는 경우입니다.
+
+![]({{ "/assets/figures/string_distance_dp_insertion.png" | absolute_url }})
+
+아래 그림은 substitution 이 일어나는 경우입니다. '데이터'에서 '데이타'로 마지막 글자가 변환되는 경우입니다.
+
+![]({{ "/assets/figures/string_distance_dp_substitution.png" | absolute_url }})
+
+위 세 경우는 위의 식으로 표현 가능하며, 윗 줄의 왼쪽 칸부터 두 개의 for loop 을 돌면서 거리 행렬 d 의 모든 값을 계산합니다. 최종 거리 값은 d[$$len(s_1)$$-1, $$len(s_2)$$-1] 입니다. 
 
 ## Levenshtein distance 구현하기
 
@@ -78,7 +98,7 @@ s2 = '아이오아이'
 levenshtein(s1, s2, debug=True)
 {% endhighlight %}
 
-debug = True 에 따라 행렬이 표시됩니다. 우리는 맨 윗줄을 0 번째 row 로, 그 아랫줄을 1 번째 row 로 이야기합니다. d[0,0] = 1 인 이유는 첫글자가 각각 '꿈'과 '아'로 다르기 때문에 substitution 비용이 발생하기 때문입니다. 그리고 0 번째 row 의 다른 값은 $$s_1$$ = '꿈' 이 '아'로 바뀐 뒤, 한글자씩 insertion 이 되기 때문에 [1, 2, 3, 4, 5] 로 비용이 증가합니다. 그 이후는 위의 Levenshtein 식과 같이 계산됩니다.
+debug = True 에 따라 행렬이 표시됩니다. d[0,0] = 1 인 이유는 첫글자가 각각 '꿈'과 '아'로 다르기 때문에 substitution 비용이 발생하기 때문입니다. 그리고 0 번째 row 의 다른 값은 $$s_1$$ = '꿈' 이 '아'로 바뀐 뒤, 한글자씩 insertion 이 되기 때문에 [1, 2, 3, 4, 5] 로 비용이 증가합니다. 그 이후는 위의 Levenshtein 식과 같이 계산됩니다.
 
 최종적으로 [꿈, 을, 꾸]가 [아, 이, 오]로 substitution 이 된 뒤, '는'이 deletion 되어 4 의 길이가 계산됩니다.
 
