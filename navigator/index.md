@@ -71,6 +71,8 @@ layout: page
 - [(Review) Neural Word Embedding as Implicit Matrix Factorization (Levy & Goldberg, 2014 NIPS)][context_vector_for_word_similarity]
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 
+### String distance
+- [Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성][levenshtein_hangle]
 
 <font color="#2851a4"><h2>Data visualization</h2></font>
 - [Python plotting kit Bokeh][bokeh_python_plotting]
@@ -137,3 +139,4 @@ layout: page
 [latex_with_github]: {{ site.baseurl }}{% link _posts/2018-08-17-latex_with_github.md %}
 [ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
 [ford_for_shortestpath]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
+[levenshtein_hangle]: {{ site.baseurl }}{% link _posts/2018-08-28-levenshtein_hangle.md %}
