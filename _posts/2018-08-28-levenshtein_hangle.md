@@ -19,7 +19,7 @@ String distance 는 오탈자 교정에 자주 이용됩니다. 정자 (right wo
 
 ## Levenshtein (Edit) distance
 
-Levenshtein distance 는 한 string $$s_1$$ 을 $$s_2$$ 로 변환하는 최소 횟수를 거리로 정의합니다. $$s_1$$ = '꿈을꾸는아이' 에서 $$s_2$$ = '아이오아이' 로 바뀌기 위해서는 (꿈을꾸 -> 아이오) 로 바뀌고, 네번째 글자 '는' 이 제거되면 됩니다. Levenshtein distance 에서는 이처럼 string 을 변화하기 위한 edit 방법을 세 가지로 분류합니다.
+Levenshtein distance 는 한 string $$s_1$$ 을 $$s_2$$ 로 변환하는 최소 횟수를 두 string 간의 거리로 정의합니다. $$s_1$$ = '꿈을꾸는아이' 에서 $$s_2$$ = '아이오아이' 로 바뀌기 위해서는 (꿈을꾸 -> 아이오) 로 바뀌고, 네번째 글자 '는' 이 제거되면 됩니다. Levenshtein distance 에서는 이처럼 string 을 변화하기 위한 edit 방법을 세 가지로 분류합니다.
 
 1. delete: '점심**을**먹자 $$\rightarrow$$ 점심먹자' 로 바꾸기 위해서는 **을** 을 삭제해야 합니다.
 2. insert: '점심먹자 $$\rightarrow$$ 점심**을**먹자' 로 바꾸기 위해서는 반대로 **을** 을 삽입해야 합니다.
