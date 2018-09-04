@@ -7,6 +7,8 @@ tags:
 - string distance
 ---
 
+Levenshtein distance 는 string 간 형태적 유사도를 정의하는 척도입니다. 만약 우리가 단어 사전을 가지고 있고, 사전에 등록되지 않은 단어가 발생한다면 Levenshtein distance 가 가장 가까운 단어로 치환함으로써 오탈자를 교정할 수 있습니다. 그러나 Levenshtein distance 는 계산 비용이 비쌉니다. 이 때 간단한 inverted index 를 이용하여 비슷할 가능성이 있는 단어 후보만을 추린 뒤 몇 번의 Levenshtein distance 를 계산함으로써 효율적으로 오탈자를 교정할 수 있습니다. 이번 포스트에서는 inverted index 를 이용하는 효율적인 Levenshtein distance 기반 오탈자 교정기를 만들어 봅니다.
+
 ## Levenshtein distance
 
 String 간의 형태적 유사도를 정의하는 척도를 string distance 라 합니다. Edit distance 라는 별명을 지닌 Levenshtein distance 는 대표적인 string distance 입니다.
