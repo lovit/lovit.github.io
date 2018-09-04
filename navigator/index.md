@@ -141,4 +141,4 @@ layout: page
 [ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
 [ford_for_shortestpath]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
 [levenshtein_hangle]: {{ site.baseurl }}{% link _posts/2018-08-28-levenshtein_hangle.md %}
-[levenshtein_inverted_index]: {{ site.baseurl }}{% link _posts/levenshtein_inverted_index.md %}
+[levenshtein_inverted_index]: {{ site.baseurl }}{% link _posts/2018-09-04-levenshtein_inverted_index.md %}
