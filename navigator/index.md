@@ -73,6 +73,7 @@ layout: page
 
 ### String distance
 - [Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성][levenshtein_hangle]
+- [Inverted index 를 이용한 빠른 Levenshtein (edit) distance 탐색][levenshtein_inverted_index]
 
 <font color="#2851a4"><h2>Data visualization</h2></font>
 - [Python plotting kit Bokeh][bokeh_python_plotting]
@@ -140,3 +141,4 @@ layout: page
 [ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
 [ford_for_shortestpath]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
 [levenshtein_hangle]: {{ site.baseurl }}{% link _posts/2018-08-28-levenshtein_hangle.md %}
+[levenshtein_inverted_index]: {{ site.baseurl }}{% link _posts/levenshtein_inverted_index.md %}
