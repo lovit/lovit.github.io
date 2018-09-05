@@ -42,7 +42,7 @@ $$\theta$$ 는 logistic regression 의 coefficient vector 입니다. $$\theta_{k
 
 여기까지 정리가 되었다면 softmax regression 은 한 가지만 더 생각하면 됩니다. 클래스가 2 개가 아닌 n 개라면, 총 n 개의 대표벡터를 학습하는 것입니다. 각 클래스를 구분하는 결정단면은 대표벡터의 Voronoi diagram 과 같습니다. 단, 각 대표벡터에 얼마나 가까운지는 벡터 간 내적 (inner product) 로 정의됩니다. 한마디로, $$x$$ 에 대하여 내적이 가장 큰 대표벡터의 클래스로 $$y$$ 를 판단하는 것입니다. 마치 1-NN classifier 처럼 말이죠. 
 
-$$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(-\theta_1^Tx)}{\sum_k exp(-\theta_k^Tx)} \\ \cdots \\ \frac{exp(-\theta_n^Tx)}{\sum_k exp(-\theta_k^Tx)} \end{bmatrix}$$
+$$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(\theta_1^Tx)}{\sum_k exp(\theta_k^Tx)} \\ \cdots \\ \frac{exp(\theta_n^Tx)}{\sum_k exp(\theta_k^Tx)} \end{bmatrix}$$
 
 우리는 인공데이터를 만들어서 softmax regression 의 특징을 좀 더 살펴보겠습니다. 데이터 생성 파일은 [링크]({{ "/assets/resources/logistic_data_generator.py" | absolute_url }})로 올려두었습니다. 총 5 개의 클래스에 대하여 각 클래스 별로 100 개의 2 차원 데이터를 만들었습니다. 방사형으로 퍼진 형태입니다. X 는 데이터, Y 는 각 데이터의 클래스입니다.
 

@@ -15,7 +15,7 @@ Logistic regression 은 feature X 와 클래스 Y 간의 관계인 클래스의 
 
 Softmax (Logistic) regression 은 각 클래스 별 대표벡터를 학습합니다. 그림은 5 개의 클래스의 데이터입니다. 그리고 star marker 는 각 클래스의 대표벡터입니다. 학습된 classifier 는 새로운 $$x$$ 가 입력되었을 때 대표벡터들과의 내적 기준으로 가장 가까운 클래스로 $$x$$ 의 레이블을 판별합니다. 
 
-$$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(-\theta_1^Tx)}{\sum_k exp(-\theta_k^Tx)} \\ \cdots \\ \frac{exp(-\theta_n^Tx)}{\sum_k exp(-\theta_k^Tx)} \end{bmatrix}$$
+$$\begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(\theta_1^Tx)}{\sum_k exp(\theta_k^Tx)} \\ \cdots \\ \frac{exp(\theta_n^Tx)}{\sum_k exp(\theta_k^Tx)} \end{bmatrix}$$
 
 ![]({{ "/assets/figures/logistic_5class_data_w_classvector.png" | absolute_url }})
 
