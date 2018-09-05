@@ -20,9 +20,9 @@ $$y_{\theta}(x) = \frac{1}{1 + exp(-\theta^Tx)}$$
 
 $$\begin{bmatrix} P(y=pos~\vert~x) \\ P(y=neg~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(-\theta_1^Tx)}{exp(-\theta_1^Tx) + exp(-\theta_2^Tx)} \\ \frac{exp(-\theta_2^Tx)}{exp(-\theta_1^Tx) + exp(-\theta_2^Tx)} \end{bmatrix}$$
 
-여기서 $$\frac{exp(-\theta_1^Tx)}{exp(-\theta_1^Tx) + exp(-\theta_2^Tx)}$$ 의 분자, 분모를 $$exp(-\theta_1^Tx)$$ 로 나눠주면 $$\frac{1}{1 + exp(-\theta^Tx)}$$ 이 됩니다. positive 일 확률을 계산하였고, 확률의 총합은 1 이기 때문에 negative 는 따로 계산하지 않아도 되는 것입니다. 
+여기서 $$\frac{exp(\theta_1^Tx)}{exp(\theta_1^Tx) + exp(\theta_2^Tx)}$$ 의 분자, 분모를 $$exp(\theta_1^Tx)$$ 로 나눠주면 $$\frac{1}{1 + exp(-\theta^Tx)}$$ 이 됩니다. positive 일 확률을 계산하였고, 확률의 총합은 1 이기 때문에 negative 는 따로 계산하지 않아도 되는 것입니다. 
 
-혹은 logistic regression 을 기하학적으로 해석하기도 합니다. Bias 를 포함한 logistic regression 의 단면 (hyperplane) 은 빨간색과 파란색의 점들을 구분하는 결정단면 (separating hyperplane) 입니다. 쉽게 말해 경계면을 학습하는 것입니다. 이 결정단면의 수식은 $$(-\theta^Tx)$$ 입니다. 즉, 단면 위에 있는 점은 positive, negative 클래스에 속할 확률이 각각 0.5 라는 의미입니다. 어느 쪽에 속하는지 확신할 수 없으니까요. 
+혹은 logistic regression 을 기하학적으로 해석하기도 합니다. Bias 를 포함한 logistic regression 의 단면 (hyperplane) 은 빨간색과 파란색의 점들을 구분하는 결정단면 (separating hyperplane) 입니다. 쉽게 말해 경계면을 학습하는 것입니다. 이 결정단면의 수식은 $$(\theta^Tx)$$ 입니다. 즉, 단면 위에 있는 점은 positive, negative 클래스에 속할 확률이 각각 0.5 라는 의미입니다. 어느 쪽에 속하는지 확신할 수 없으니까요. 
 
 ![]({{ "/assets/figures/logistic_separate_plane.png" | absolute_url }})
 
