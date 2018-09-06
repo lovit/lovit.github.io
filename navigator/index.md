@@ -70,6 +70,7 @@ layout: page
 - [(Review) From frequency to meaning, Vector space models of semantics (Turney & Pantel, 2010)][from_frequency_to_meaning]
 - [(Review) Neural Word Embedding as Implicit Matrix Factorization (Levy & Goldberg, 2014 NIPS)][context_vector_for_word_similarity]
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
+- [GloVe, word representation][glove]
 
 ### String distance
 - [Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성][levenshtein_hangle]
@@ -142,3 +143,4 @@ layout: page
 [ford_for_shortestpath]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
 [levenshtein_hangle]: {{ site.baseurl }}{% link _posts/2018-08-28-levenshtein_hangle.md %}
 [levenshtein_inverted_index]: {{ site.baseurl }}{% link _posts/2018-09-04-levenshtein_inverted_index.md %}
+[glove]: {{ site.baseurl }}{% link _posts/2018-09-05-glove.md %}
