@@ -23,6 +23,7 @@ layout: page
 
 ### Nearest neighbor search
 - [Random Projection and Locality Sensitive Hashing][lsh]
+- [Small-world phenomenon 을 이용한 network 기반 nearest neighbor search][network_based_nearest_neighbors]
 
 ### Graph ranking, similarity, distance
 - [Graph ranking algorithm. PageRank and HITS][pagerank_and_hits]
@@ -144,3 +145,4 @@ layout: page
 [levenshtein_hangle]: {{ site.baseurl }}{% link _posts/2018-08-28-levenshtein_hangle.md %}
 [levenshtein_inverted_index]: {{ site.baseurl }}{% link _posts/2018-09-04-levenshtein_inverted_index.md %}
 [glove]: {{ site.baseurl }}{% link _posts/2018-09-05-glove.md %}
+[network_based_nearest_neighbors]: {{ site.baseurl }}{% link _posts/2018-09-10-network_based_nearest_neighbors.md %}
