@@ -345,6 +345,62 @@ Small-world phenomenon 은 Stanley Milgram 의 6 단계 분리 이론 실험으�
 
 그리고 기하급수적으로 탐색 영역이 넓어지기 때문에 neighbor networks 가 매우 이상하게 꼬이지 않는다면, 대체로 탐색 횟수 (num steps)는 비슷합니다. 즉, 임의의 query point 에 대하여 안정적인 탐색 속도를 보여준다는 의미입니다.
 
+위 데이터의 2,000 개의 sample queries 에 대하여 search time 과 search steps 를 확인합니다. max stems 는 20 으로 설정하였습니다.
+
+대부분은 7 ~ 12 번 사이에 탐색이 됩니다. 이 횟수는 nearest & random neighbors 의 개수에 따라 달라집니다. 한 step 에 여러 개의 이웃을 살펴본다면 steps 의 횟수는 조금 줄어듭니다. 하지만 그만큼 index 가 많은 정보를 저장하고 있어야 합니다.
+
+| num steps | num case |
+|6 | 35 |
+|7 | 157 |
+|8 | 380 |
+|9 | 443 |
+|10 | 369 |
+|11 | 267 |
+|12 | 154 |
+|13 | 98 |
+|14 | 36 |
+|15 | 28 |
+|16 | 16 |
+|17 | 4 |
+|18 | 8 |
+|19 | 3 |
+|20 | 2 |
+
+시간도 0.001 ~ 0.002 사이에 대부분 몰려 있습니다. 
+
+| search time [secs] | percentage |
+| --- | --- |
+| 0.001015 ~ 0.001292 | 7.75 % |
+| 0.001292 ~ 0.001569 | 34.45 % |
+| 0.001569 ~ 0.001846 | 23.30 % |
+| 0.001846 ~ 0.002122 | 17.65 % |
+| 0.002122 ~ 0.002399 | 9.90 % |
+| 0.002399 ~ 0.002676 | 3.05 % |
+| 0.002676 ~ 0.002953 | 1.65 % |
+| 0.002953 ~ 0.003230 | 0.70 % |
+| 0.003230 ~ 0.003506 | 0.60 % |
+| 0.003506 ~ 0.003783 | 0.35 % |
+| 0.003783 ~ 0.004060 | 0.10 % |
+
+실제로 100,000 개의 reference data 에 대하여 full pairwise distance 의 계산과 sorting 을 하였을 경우 평균 0.027 초의 시간이 걸립니다. 대략 15 ~ 25 배 정도 빠른 nearest neighbor search 가 이뤄집니다.
+
+{% highlight python %}
+from sklearn.metrics import pairwise_distances
+import time
+
+k = 10
+t = time.time()
+
+dist = pairwise_distances(query, x).reshape(-1)
+idxs = dist.argsort()[:k]
+dist = dist[idxs]
+t = time.time() - t
+{% endhighlight %}
+
+물론 성능은 정확하지는 않습니다. 하지만, distance 를 확인하면 큰 차이가 나지 않습니다. 더 주목해야 하는 점은, (이 포스트에서는 다루지 않았지만) 데이터의 개수가 10 배 늘어난다 하여도 network 를 이용한 탐색 시간은 10 배로 늘어나지 않습니다. 이웃의 이웃의 이웃을 한 단계만 더 살펴보아도 10 배 이상의 이웃을 살펴볼 수 있기 때문입니다. 즉, 데이터의 크기의 증가분에 따라 탐색 비용이 선형으로 증가하지 않습니다. 하지만 full pairwise distance computation 은 정직하게 데이터의 크기만큼 계산 시간이 늘어납니다.
+
+## Related posts
+
 잠깐 언급된 NN-descent 는 neighbor search 를 위한 index 는 아닙니다. 주어진 reference data, X 에 대하여 X 간의 (approximated) k-nearest neighbor graph 를 빠르게 찾기 위한 방법입니다. 그리고 이 알고리즘의 작동 원리도 small-world phenomenon 입니다. 이에 대해서는 이후에 다른 포스트에서 다루도록 하겠습니다.
 
 [lsh]: {{ site.baseurl }}{% link _posts/2018-03-28-lsh.md %}
