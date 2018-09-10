@@ -7,6 +7,7 @@ categories:
 tags:
 - shortest path
 - tokenizer
+- graph
 ---
 
 Hidden Markov Model (HMM) 은 품사 판별을 위하여 이용되기도 하였습니다. 특히 앞의 한 단계의 state 정보만을 이용하는 모델을 first-order HMM 이라 합니다. 그런데 이 first-order HMM 을 이용하는 품사 판별기의 품사열은 최단 경로 문제 기법으로도 구할 수 있습니다. 이번 포스트에서는 앞선 포스트에서 다뤘던 Ford algorithm 을 이용하여 품사를 판별하는 방법에 대하여 알아봅니다. 

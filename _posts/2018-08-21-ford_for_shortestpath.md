@@ -6,6 +6,7 @@ categories:
 - graph
 tags:
 - shortest path
+- graph
 ---
 
 마디 (node) 와 호 (edge) 로 표현된 그래프에서 두 마디를 연결할 수 있는 경로 (path) 는 다양합니다. 그 중 거리가 가장 짧은 경로를 찾는 문제를 최단 경로 문제, shortest path 라 합니다. 이번 포스트에서는 최단 경로를 찾는 방법 중 하나인 Ford algorithm 에 대하여 알아보고, Python 으로 이를 간단히 구현합니다.
