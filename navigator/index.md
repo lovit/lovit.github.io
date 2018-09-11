@@ -41,6 +41,7 @@ layout: page
 - [Scipy sparse matrix handling][sparse_mtarix_handling]
 - [Conditional Random Field based Korean Space Correction][crf_korean_spacing]
 - [soyspacing. Heuristic Korean Space Correction, A safer space corrector.][soyspacing]
+- [Hidden Markov Model (HMM) 기반 품사 판별기의 원리와 문제점][hmm_based_tagger]
 
 ### Word extraction, Tokenization, Part of speech tagging
 - [Part of speech tagging, Tokenization, and Out of vocabulary problem][pos_and_oov]
@@ -55,6 +56,7 @@ layout: page
 - [명사 추출기 (3) Noun extraction and noun tokenization][noun_extractor_and_tokenizer]
 - [한국어 용언의 원형 복원 (Korean lemmatization)][lemmatizer]
 - [한국어 용언의 활용 함수 (Korean conjugation)][conjugation]
+- [Hidden Markov Model (HMM) 기반 품사 판별기의 원리와 문제점][hmm_based_tagger]
 
 ### Keywords, related-words extraction
 - [Logistic regression with L1, L2 regularization and keyword extraction][lasso_keyword]
@@ -146,3 +148,4 @@ layout: page
 [levenshtein_inverted_index]: {{ site.baseurl }}{% link _posts/2018-09-04-levenshtein_inverted_index.md %}
 [glove]: {{ site.baseurl }}{% link _posts/2018-09-05-glove.md %}
 [network_based_nearest_neighbors]: {{ site.baseurl }}{% link _posts/2018-09-10-network_based_nearest_neighbors.md %}
+[hmm_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
