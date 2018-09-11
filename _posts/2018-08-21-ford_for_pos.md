@@ -478,7 +478,7 @@ Hidden Markov Model (HMM) 를 이용하면 길이가 $$n$$ 인 sequence $$x_{1:n
 
 $$P(y_{1:n} \vert x_{1:n}) = P(x_1 \vert y_1) \times P(y_1 \vert START) \times P(y_2 \vert y_1) \times P(x_2 \vert y_2) \cdots$$
 
-위 식의 계산 과정과 원리는 HMM 관련 포스트에서 다루겠습니다. 
+위 식의 계산 과정과 원리는 [HMM 관련 포스트][hmm]에서 다루겠습니다. 
 
 숫자 계산에서 곱셈은 덧셈보다 비싼 작업입니다. 그렇기 때문에 확률을 곱하는 작업들은 주로 log 를 씌워 덧셈으로 변환합니다. 위 수식은 아래처럼 변환됩니다.
 
@@ -493,3 +493,4 @@ $$log P(y_{1:n} \vert x_{1:n}) = log P(x_1 \vert y_1)+ log P(y_1 \vert START) + 
 [prev]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_shortestpath.md %}
 [conjugate]: {{ site.baseurl }}{% link _posts/2018-06-11-conjugator.md %}
 [lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md %}
+[hmm]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
