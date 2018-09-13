@@ -301,6 +301,23 @@ where $$\lambda_1 + \lambda_2 + \lambda_3 = 1$$
 
 영어에서는 띄어쓰기 기준으로 나뉘어진 단위 (어절)이 하나의 단어입니다. 그렇기 때문에 suffix 를 이용할 수가 있지만, 한국어의 경우에는 어절의 suffix 에 하나의 단어가 위치할 경우가 많습니다. '-가/조사', '-다던/어미'와 같은 단어, 혹은 형태소가 위치하기 때문에 이 규칙을 적용하기는 어렵습니다. 단, 어절의 앞부분에 위치한 substring 이 미등록 단어이고, 그 다음 -가 이 결합되어 있다면 이 substring 을 명사로 추정하는 것 정도로 적용할 수는 있습니다.
 
+### Appending user dictionary
+
+HMM based tagger 에 사용자 사전을 입력하는 것은 상대적으로 쉽습니다. 특정 단어 $$x$$ 가 품사 $$y$$ 가 될 수 있는 가능성은 emission probability 에만 저장되어 있습니다. 사실 $$P(x \vert y)$$ 는 확률 분포이기는 하지만, $$\sum P(x_i \vert y) > 1$$ 이어도 단어/품사열의 log probability 를 계산하는데 전혀 문제가 되지 않습니다. 우리는 여러 단어/품사열 간의 log probability 에 대한 상대비교만 할 것이기 때문입니다. 이긴 후보가 우리 후보입니다.
+
+만약 새로운 단어 (word) 가 다른 어떤 단어들 보다도 품사 (tag) 에서 우위에 있는 명사임을 알고 그 단어는 학습 말뭉치에 등장하지 않았었다면 $$max P(word \vert tag)$$ 혹은 그보다 조금 더 큰 값으로 새로운 단어의 emission probability 를 저장합니다.
+
+{% highlight python %}
+class TrainedHMM:
+    ...
+    def add_user_dictionary(self, tag, words):
+        append_score = max(self.pos2words[tag].values())
+        for word in words:
+            self.pos2words[tag][word] = append_score
+{% endhighlight %}
+
+이제 이 단어들은 매우 큰 emission probability 를 지니기 때문에 다른 단어/품사열보다 우선적으로 선택될 가능성이 높아졌습니다.
+
 ## Reference
 
 - Brants, T. (2000, April). [TnT: a statistical part-of-speech tagger][tnt]. In Proceedings of the sixth conference on Applied natural language processing (pp. 224-231). Association for Computational Linguistics.
