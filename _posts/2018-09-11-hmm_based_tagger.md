@@ -318,6 +318,8 @@ class TrainedHMM:
 
 이제 이 단어들은 매우 큰 emission probability 를 지니기 때문에 다른 단어/품사열보다 우선적으로 선택될 가능성이 높아졌습니다.
 
+위 코드들은 [링크의 github][hmm_postagger] 에 올려두었습니다. 여기에는 decode 의 가능까지 구현된 코드가 올라갈 예정입니다. Decode 에 대한 구현 과정은 다음 포스트에서 다룹니다.
+
 ## Reference
 
 - Brants, T. (2000, April). [TnT: a statistical part-of-speech tagger][tnt]. In Proceedings of the sixth conference on Applied natural language processing (pp. 224-231). Association for Computational Linguistics.
@@ -327,3 +329,4 @@ class TrainedHMM:
 [crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
 [tnt]: http://www.coli.uni-saarland.de/~thorsten/publications/Brants-ANLP00.pdf
 [sejong_git]: https://github.com/lovit/sejong_corpus/
+[hmm_postagger]: https://github.com/lovit/hmm_postagger/
