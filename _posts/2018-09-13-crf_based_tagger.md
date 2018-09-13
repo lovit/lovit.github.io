@@ -74,7 +74,7 @@ $$n$$ 번의 logistic classification 이 아닌, vector sequences, 즉 matrix �
 
 ### Consider context (Solving unguaranteed independency problem of HMM)
 
-단어열이 주어졌을 때, 한 단어 $$x_i$$ 의 품사를 추정할 때에는 그 주변 단어들, $$x_{i-k:i}$$ 나 $$x_{i:i+l}$$ 가 문맥적인 힌트가 됩니다. 그런데 앞선 [HMM 의 포스트][hmm]에서 언급하였듯이 HMM 은 unguaranteed independency problem 이란 문제가 있습니다. HMM 에서 $$x_i$$ 는 $$y_i$$ 만 그 상관성을 emission probability 로 학습할 수 있습니다. $$x_i$$ 이전에 $$x_{i-1}$$ 에 어떤 단어가 등장하였는지는 상관하지 않습니다. HMM 은 문맥을 "직접적으로" 고려하는 기능이 없습니다. 단지 state 간의 transition probability 인 $$P(y_i \vert y_{i-1}$$ 에 의하여 간접적으로 단어 간 문맥이 반영되길 바랄 뿐입니다. HMM 은 품사 판별처럼 앞, 뒤의 observation 을 함께 고려해야 하는 상황에서의 sequential labeling 에는 적합하지 않은 방법입니다.
+단어열이 주어졌을 때, 한 단어 $$x_i$$ 의 품사를 추정할 때에는 그 주변 단어들, $$x_{i-k:i}$$ 나 $$x_{i:i+l}$$ 가 문맥적인 힌트가 됩니다. 그런데 앞선 [HMM 의 포스트][hmm]에서 언급하였듯이 HMM 은 unguaranteed independency problem 이란 문제가 있습니다. HMM 에서 $$x_i$$ 는 $$y_i$$ 만 그 상관성을 emission probability 로 학습할 수 있습니다. $$x_i$$ 이전에 $$x_{i-1}$$ 에 어떤 단어가 등장하였는지는 상관하지 않습니다. HMM 은 문맥을 "직접적으로" 고려하는 기능이 없습니다. 단지 state 간의 transition probability 인 $$P(y_i \vert y_{i-1})$$ 에 의하여 간접적으로 단어 간 문맥이 반영되길 바랄 뿐입니다. HMM 은 품사 판별처럼 앞, 뒤의 observation 을 함께 고려해야 하는 상황에서의 sequential labeling 에는 적합하지 않은 방법입니다.
 
 그러나 CRF 는 앞, 뒤의 단어로 이뤄진 문맥을 직접적으로 이용합니다. Potential function 을 만들 때, $$x_{i-1:i+1}$$ 을 이용한다면, trigram 의 문맥에서 가운데 단어의 품사를 추정한다는 의미입니다. 예를 들어 아래와 같이 '이' 앞에, $$x_{i-1}$$ = '남', 뒤에 $$x_{i+1}$$ = '빼줬어'가 등장하였을 때, 가운데 단어 $$x_i$ = '이'는 Josa 일 가능성이 높다는 의미입니다.
 
@@ -94,7 +94,7 @@ HMM 은 emission probability, $$P(x_i \vert y_i), P(word \vert tag)$$ 에 의하
 
 ### Appending user dictionary
 
-CRF based tagger 에도 사용자 사전을 입력하는 것이 어렵지 않습니다. 사용자 사전의 단어 $$w$$ 를 품사 $$t$$ 로 입력하려면 $$x_i=w, y_i=t'$$ 라는 state feature 를 만들고, 이 state feature 의 regression coefficient 를 해당 품사의 가장 큰 값으로 정의해주면 됩니다. 
+CRF based tagger 에도 사용자 사전을 입력하는 것이 어렵지 않습니다. 사용자 사전의 단어 $$w$$ 를 품사 $$t$$ 로 입력하려면 $$x_i=w, y_i=t$$ 라는 state feature 를 만들고, 이 state feature 의 regression coefficient 를 해당 품사의 가장 큰 값으로 정의해주면 됩니다. 
 
 State feature 는 potential function 에 의하여 만들어진 feature $$F$$ 에 대한 품사 $$t$$ 의 regression coefficient 입니다. Implementation code 를 살펴보면 이해가 더 빠를 것입니다.
 
@@ -115,7 +115,7 @@ State feature 는 potential function 에 의하여 만들어진 feature $$F$$ �
 
 ### Potential function
 
-특별히 문장이 시작할 때의 state 횟수를 bos 에 저장합니다. 문장의 마지막 state 의 다음에 문장이 끝남을 저장하기 위하여 trans 에 마지막 state 에서 EOS 로의 횟수를 저장합니다. 이 값은 자주 이용할 것이니 bos, eos 라는 변수로 따로 저장해둡니다.
+(단어, 품사)열로 구성된 문장의 앞/뒤에 'BOS' 와 'EOS'를 추가합니다. 이 값은 자주 이용할 것이니 bos, eos 라는 변수로 따로 저장해둡니다.
 
 Conditional Random Field 기반 알고리즘들은 potential function 을 자유롭게 디자인할 수 있습니다. 확장성을 위하여 potential function 의 abstract class 를 하나 만든 뒤, 모든 potential function 은 이를 상속하도록 합니다. AbstractFeatureTramsformer 라는 abstract class 를 만들었습니다. 그리고 공통적으로 이용되는 sentence_to_xy 라는 함수와 potential function 을 구현합니다.
 
