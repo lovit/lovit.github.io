@@ -8,7 +8,7 @@ tags:
 - sequential labeling
 ---
 
-품사 판별 (Part-of-Speech tagging) 은 string 형식의 문장으로부터 [(단어, 품사), (단어, 품사), ... ] 형식으로 문장을 구성하는 단어와 품사를 인식하는 문제입니다. 한 문장은 여러 개의 단어/품사열 (sequence of word and tag) 의 후보가 만들어 질 수 있으며, 품사 판별 과정에서는 가능한 단어/품사열 후보 중 가장 적절한 것을 선택해야 합니다. 이는 길이가 $$n$$ 인 input sequence $$x_{1:n}$$ 에 대하여 가장 적절한 output sequence $$y_{1:n}$$ 을 찾는 문제이기도 합니다. 이를 위하여 sequential labeling 이 이용될 수 있습니다. Sequential labeling 을 이용하는 초기의 품사 판별기는 Hidden Markov Model (HMM) 을 이용하였습니다. 그러나 구조적인 한계 때문에 이후에 Conditional Random Field (CRF) 가 제안된 뒤로 CRF 가 품사 판별 문제의 sequential labeling module 로 이용되었습니다. 최근에는 word embedding 을 features 로 이용하기 위하여 deep neural network 계열의 sequential labeling 방법이 이용되고 있습니다만, 품사 판별기의 원리를 이해하기 위해서 CRF 기반 품사 판별기는 이해하고 가야 합니다. 이번 포스트에서는 CRF 를 이용하여 한국어 품사 판별기를 학습하고, 주어진 단어/품사열에 대한 적합성, score 를 계산하는 부분을 구현합니다. 단 Viterbi style 의 CRF decoding 과정은 다루지 않습니다.
+품사 판별 (Part-of-Speech tagging) 은 string 형식의 문장으로부터 [(단어, 품사), (단어, 품사), ... ] 형식으로 문장을 구성하는 단어와 품사를 인식하는 문제입니다. 한 문장은 여러 개의 단어/품사열 (sequence of word and tag) 의 후보가 만들어 질 수 있으며, 품사 판별 과정에서는 가능한 단어/품사열 후보 중 가장 적절한 것을 선택해야 합니다. 이는 길이가 $$n$$ 인 input sequence $$x_{1:n}$$ 에 대하여 가장 적절한 output sequence $$y_{1:n}$$ 을 찾는 문제이기도 합니다. 이를 위하여 sequential labeling 이 이용될 수 있습니다. Sequential labeling 을 이용하는 초기의 품사 판별기는 Hidden Markov Model (HMM) 을 이용하였습니다. 그러나 구조적인 한계 때문에 이후에 Conditional Random Field (CRF) 가 제안된 뒤로 CRF 가 품사 판별 문제의 sequential labeling module 로 이용되었습니다. 최근에는 word embedding 을 features 로 이용하기 위하여 deep neural network 계열의 sequential labeling 방법이 이용되기도 합니다. 품사 판별기의 원리를 이해하기 위해서는 사람이 이해하기 쉬운 features 를 이용하는 CRF 기반 품사 판별기를 알아보는 것이 좋습니다. 이번 포스트에서는 CRF 를 이용하여 한국어 품사 판별기를 학습하고, 주어진 단어/품사열에 대한 적합성, score 를 계산하는 부분을 구현합니다. 단 Viterbi style 의 CRF decoding 과정은 다루지 않습니다.
 
 ## Conditional Random Field (CRF)
 
