@@ -1,5 +1,5 @@
 ---
-title: [Review] Incorporating Global Information into Supervised Learning for Chinese Word Segmentation
+title: (Review) Incorporating Global Information into Supervised Learning for Chinese Word Segmentation
 date: 2018-09-25 20:00:00
 categories:
 - nlp
@@ -147,9 +147,9 @@ $$cost(S \vert \theta) = - \sum_{i=1}^{n} log P(s_i) $$
 
 그리고 $$\theta$$ 의 cost 는 문장 전체를 나눴을 때의 segments 의 negative log probability 의 합으로 정의합니다. 나뉘어지는 단어가 infrequent 하지 않을수록 비용은 줄어듭니다.
 
-$$cost(\theta) = - \sum_{s \in S} \sum_{s_i \in s} log P(s_i)
+$$cost(\theta) = - \sum_{s \in S} \sum_{s_i \in s} log P(s_i)$$
 
-그 결과 이 기준을 만족하기 위해서는 함께 등장하는 경향이 높은 sub-sequence 를 하나의 unit 으로 인식합니다. 영어에서는 re- 나 -tion 과 같은 prefix, suffix 를 분리하는데 이용되기도 했습니다.
+그 결과 이 기준을 만족하기 위해서는 함께 등장하는 경향이 높은 sub-sequence 를 하나의 unit 으로 인식합니다. 영어에서는 re- 나 -tion 과 같은 prefix, suffix 를 분리하는데 이용되기도 했습니다. 아래는 ([Argamon et al.,2004][mdl2]) 의 예시입니다.
 
 | Words | Units |
 | --- | --- |
@@ -160,8 +160,6 @@ $$cost(\theta) = - \sum_{s \in S} \sum_{s_i \in s} log P(s_i)
 | tire| live |
 | cognition| farm |
 | farm | |
-
-<center>(Referred from [Shlomo et al.][mdl2]</center>
 
 이는 마치 Word Piece Model (WPM) 의 접근법과도 비슷합니다. 학습하는 패턴은 자주 등장하는 sub-sequence 는 units 으로 인식하고, 자주 등장하지 않는 sub-sequence 는 characters 로 나눠서 인식하는 경향이 있습니다.
 
