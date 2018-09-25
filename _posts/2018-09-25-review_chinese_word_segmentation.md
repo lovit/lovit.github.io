@@ -20,6 +20,8 @@ tags:
 
 그렇지만 그 글자수가 많다 하더라도 모호성이 발생합니다.  단어 사전에 'A, B, C, AB, BC' 가 존재한다면 'ABC' 라는 문장을 'A - B - C', 'AB - C' 혹은 'A - BC' 라는 단어열로 나눌 수 있습니다. 이 중 가장 적절한 단어열을 선택해야 합니다. 이는 마치 한국어의 '아버지가방에' $$\rightarrow$$ [아버지, 가, 방, 에] or [아버지, 가방, 에] 와 같은 문제입니다.
 
+Hai Zhao 교수는 Chinese word segmentation 을 연구하였던 교수입니다. 그는 주로 Conditional Random Field 를 이용한 supervised word segmentation 연구를 많이 하였지만, 여기에 unsupervised features 를 추가하는 방법들도 자주 이야기 하였습니다. 이번 포스트는 그의 연구 중 한 편인 "Incorporating Global Information into Supervised Learning for Chinese Word Segmentation" 를 리뷰합니다.
+
 
 ## Conditional Random Field (CRF) for Word Segmentation
 
@@ -207,3 +209,4 @@ Unsupervised features 를 이용한다하여도 수치로는 그 성능이 잘 �
 [mdl]: https://pdfs.semanticscholar.org/c384/adddcad3a017f8dad14c9847dae0e6dde323.pdf
 [mdl2]: http://www.aclweb.org/anthology/C04-1152
 [avbe]: {{ site.baseurl }}{% link _posts/2018-04-09-branching_entropy_accessor_variety.md %}
+[crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
