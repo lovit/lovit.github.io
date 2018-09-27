@@ -16,11 +16,11 @@ tags:
 
 중국어는 띄어쓰기를 포함하지 않는 문자열로 문장을 표현합니다. 중국어 텍스트를 분석할 때에도 품사 판별 (part-of-speech tagging) 은 필요합니다. 품사 판별을 하려면 일단 띄어쓰기가 포함되지 않은 문장에서 단어들을 인식할 수 있어야 하며, 이 과정을 word segmentation 이라 합니다. 한국어는 용언의 어미가 용언의 어간에 결합하는 과정에서 그 형태가 변할 수 있는 교착어이지만, 중국어는 그렇지 않습니다. 중국어의 품사 판별은 문장에서 단어를 인식하는 것으로도 해결이 됩니다. 그렇기 때문에 중국어에서는 word segmentation 의 이름으로 품사 판별이 발전되었습니다.
 
-중국어의 텍스트 전처리가 word segmentation 만으로 해결될 수 있는 이유 중 하나는 중국어에서 이용되는 글자 (characters) 의 종류가 매우 다양하기 때문입니다. 한국어에서는 '이'라는 글자는 '숫자 2, 조사, 이빨, 형용사 이다, 해충 이, ... ' 처럼 많은 의미를 지니지만, 한자에서 이들은 모두 다른 글자 입니다. 물론 한자에도 모호성이 존재하지만 그 수준이 한글보다는 훨씬 적습니다.
+중국어의 텍스트 전처리가 word segmentation 만으로 해결될 수 있는 이유 중 하나는 중국어에서 이용되는 글자 (characters) 의 종류가 다양하기 때문입니다. 한국어에서는 '이'라는 글자는 '숫자 2, 조사, 이빨, 형용사 이다, 해충 이, ... ' 처럼 많은 의미를 지니지만, 한자에서 이들은 모두 다른 글자 입니다. 물론 한자에도 모호성이 존재하지만 그 수준이 한글보다는 훨씬 적습니다.
 
-그렇지만 그 글자수가 많다 하더라도 모호성이 발생합니다.  단어 사전에 'A, B, C, AB, BC' 가 존재한다면 'ABC' 라는 문장을 'A - B - C', 'AB - C' 혹은 'A - BC' 라는 단어열로 나눌 수 있습니다. 이 중 가장 적절한 단어열을 선택해야 합니다. 이는 마치 한국어의 '아버지가방에' $$\rightarrow$$ [아버지, 가, 방, 에] or [아버지, 가방, 에] 와 같은 문제입니다.
+그러나 언어를 구성하는 글자수가 많다 하더라도 모호성은 발생합니다.  단어 사전에 'A, B, C, AB, BC' 가 존재한다면 'ABC' 라는 문장을 'A - B - C', 'AB - C' 혹은 'A - BC' 라는 단어열로 나눌 수 있습니다. 이 중 가장 적절한 단어열을 선택해야 합니다. 이는 마치 한국어의 '아버지가방에' $$\rightarrow$$ [아버지, 가, 방, 에] or [아버지, 가방, 에] 와 같은 문제입니다.
 
-Hai Zhao 교수는 Chinese word segmentation 을 연구하였던 교수입니다. 그는 주로 Conditional Random Field 를 이용한 supervised word segmentation 연구를 많이 하였지만, 여기에 unsupervised features 를 추가하는 방법들도 자주 이야기 하였습니다. 이번 포스트는 그의 연구 중 한 편인 "Incorporating Global Information into Supervised Learning for Chinese Word Segmentation" 를 리뷰합니다.
+Hai Zhao 교수는 Chinese word segmentation 을 연구하였던 교수입니다. 그는 주로 Conditional Random Field 를 이용한 supervised word segmentation 연구 뿐 아니라, supervised CRF model 에 unsupervised features 를 추가하는 방법도 연구 하였습니다. 이번 포스트는 그의 연구 중 한 편인 "Incorporating Global Information into Supervised Learning for Chinese Word Segmentation" 를 리뷰합니다.
 
 
 ## Conditional Random Field (CRF) for Word Segmentation
@@ -50,18 +50,18 @@ Potential function 은 Boolean 필터처럼 작동합니다. 아래는 두 어�
 
 ## Incorporating supervised and unsupervised features
 
-Word segmentation 의 접근법은 학습데이터의 유무에 따라 달라집니다.
+Word segmentation 의 접근법은 학습데이터의 유무에 따라 크게 두 가지로 분류합니다.
 
 Supervised word segmentation 은 문장이 단어열로 나뉘어져 있는 학습 데이터를 이용합니다. 학습 데이터가 존재한다면 이를 이용하여 (1) 단어와 (2) 문맥에 따른 단어열 선호를 학습할 수 있습니다. 첫 번째 학습하는 정보는 단어 입니다. 데이터로부터 '아버지, 가, 가방, 방, 에' 가 단어임을 학습할 수 있습니다. 그러나 이들이 단어임을 알고 있더라도 '아버지가방에' $$\rightarrow$$ '아버지, 가, 방, 에'로 나뉘어지려면 문맥에 따라 '방' 과 '가방'의 선호가 달라져야 합니다.
 
 그러나 supervised word segmentation 은 학습 데이터에 존재하지 않는 단어들을 인식하기가 어렵습니다. 가장 최선의 방법은 처음 보는 단어들을 최대한 길게 놔두는 것입니다.
 
-Unsupervised word segmentation 은 학습 데이터가 존재하지 않는 상황을 고려합니다. 어떤 sub-sequence (sub-string) 가 단어인지 알지 못하는데 오로직 문장들만 주어졌다면, 일단 어떤 sub-sequence 가 단어인지를 판단해야 합니다. 그렇기 때문에 unsupervised word segmentation 은 unsupervised word extraction 문제와 연결되어 있습니다. Word extraction 은 (1) 단어에 대한 인식 부분을 담당합니다. (2) 문맥에 따른 단어열 선호 역할은 주로 단어열 결과의 quality criteria 를 이용하여 가장 품질이 것을 선택하는 방식으로 이뤄집니다.
+Unsupervised word segmentation 은 학습 데이터가 존재하지 않는 상황을 고려합니다. 어떤 sub-sequence (sub-string) 가 단어인지 알지 못하는데 오로직 문장들만 주어졌다면, 일단 어떤 sub-sequence 가 단어인지를 판단해야 합니다. 즉 unsupervised word segmentation 은 unsupervised word extraction 문제와 연결되어 있습니다. Word extraction 은 (1) 단어에 대한 인식 부분을 담당합니다. (2) 문맥에 따른 단어열 선호 역할은 주로 단어열 결과의 quality criteria 를 이용하여 가장 품질이 것을 선택하는 방식으로 이뤄집니다.
 
 
 ### Supervised features
 
-'아버지가방에' $$\rightarrow$$ '아버지, 가, 방, 에' 로 나누기 위해서는 문맥을 알아야 합니다. 그리고 문맥은 주로 앞, 뒤에 등장하는 단어로 이뤄집니다. 한국어에는 길이가 4 ~ 5 정도 되는 단어들이 존재하기도 하지만, 중국어에서는 아주 짧은 문맥 정보 만으로도 word segmentation 을 할 수 있는가 봅니다. 앞, 뒤의 글자만을 이용하여 features 를 만들었습니다.
+'아버지가방에' $$\rightarrow$$ '아버지, 가, 방, 에' 로 나누기 위해서는 문맥을 알아야 합니다. 그리고 문맥은 주로 앞, 뒤에 등장하는 단어로 이뤄집니다. 한국어에는 길이가 4 ~ 5 정도 되는 단어들이 존재하기도 하지만, 중국어에서는 아주 짧은 문맥 정보 만으로도 word segmentation 을 할 수 있나 봅니다 (제가 중국어를 모릅니다). 논문에서는 앞, 뒤의 글자만을 이용하여 features 를 만들었습니다.
 
 | Type | Feature | Description |
 | --- | --- | --- |
@@ -87,7 +87,7 @@ Unsupervised features 라는 것은, 여러 문장들 중에서 어떤 sub-seque
 
 Mutual information 은 association rules 의 [Lift][lift] 와 같은 개념입니다. 'A' 라는 글자 다음에 'B' 가 등장할 확률을 $$P(AB \vert A) = \frac{P(AB)}{P(A)}$$ 로 표현할 수 있습니다. 그러나 'B' 는 본래 어디에서든지 자주 등장하는 값일 수 있기 때문에 평균적으로 'B' 가 등장하는 비율만큼 normalize 를 합니다. 
 
-그리고 해석을 위하여 logaritm 을 적용합니다. Mutual Information 의 값이 0 이라면 어떤 상관도 없다는 의미이며, 이 값이 클수록 'A' 다음에 'B' 가 자주 등장한다는 의미입니다.
+해석과 scaling 을 위하여 logaritm 을 적용합니다. Mutual Information 의 값이 0 이라면 어떤 상관도 없다는 의미이며, 이 값이 클수록 'A' 다음에 'B' 가 자주 등장한다는 의미입니다.
 
 $$MI(A, B) = log \left( \frac{P(AB)}{P(A) \times P(B)} \right)$$
 
@@ -145,11 +145,11 @@ Accessor Variety 와 Branching Entropy 는 단어가 일정 숫자 이상 등장
 
 Minimum Description Length 는 최소한의 units 을 이용하여 데이터 전체를 설명하려는 프레임워크입니다. 텍스트 데이터의 경우에는 한 문장 s 가 [$$s_1, s_2, \dots, s_n$$] 로 나뉘어졌을 때의 cost 를 아래처럼 정의합니다. $$\theta$$ 는 segmentor 입니다.
 
-$$cost(S \vert \theta) = - \sum_{i=1}^{n} log P(s_i) $$
+$$cost(S \vert \theta) = - \sum_{i=1}^{n} P(s_i) \cdot log P(s_i) $$
 
-그리고 $$\theta$$ 의 cost 는 문장 전체를 나눴을 때의 segments 의 negative log probability 의 합으로 정의합니다. 나뉘어지는 단어가 infrequent 하지 않을수록 비용은 줄어듭니다.
+그리고 $$\theta$$ 의 cost 는 문장 전체를 나눴을 때의 segments 의 Entropy 의 합으로 정의합니다. 나뉘어지는 단어가 infrequent 하지 않을수록 비용은 줄어듭니다.
 
-$$cost(\theta) = - \sum_{s \in S} \sum_{s_i \in s} log P(s_i)$$
+$$cost(\theta) = - \sum_{s \in S} \sum_{s_i \in s} P(s_i) \cdot log P(s_i)$$
 
 그 결과 이 기준을 만족하기 위해서는 함께 등장하는 경향이 높은 sub-sequence 를 하나의 unit 으로 인식합니다. 영어에서는 re- 나 -tion 과 같은 prefix, suffix 를 분리하는데 이용되기도 했습니다. 아래는 ([Argamon et al.,2004][mdl2]) 의 예시입니다.
 
