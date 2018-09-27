@@ -57,6 +57,7 @@ layout: page
 - [한국어 용언의 활용 함수 (Korean conjugation)][conjugation]
 - [Hidden Markov Model (HMM) 기반 품사 판별기의 원리와 문제점][hmm_based_tagger]
 - [Conditional Random Field (CRF) 기반 품사 판별기의 원리와 HMM 기반 품사 판별기와의 차이점][crf_based_tagger]
+- [(Review) Incorporating Global Information into Supervised Learning for Chinese Word Segmentation][review_chinese_word_segmentation]
 
 ### Keywords, related-words extraction
 - [Logistic regression with L1, L2 regularization and keyword extraction][lasso_keyword]
@@ -150,3 +151,4 @@ layout: page
 [network_based_nearest_neighbors]: {{ site.baseurl }}{% link _posts/2018-09-10-network_based_nearest_neighbors.md %}
 [hmm_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
 [crf_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-13-crf_based_tagger.md %}
+[review_chinese_word_segmentation]: {{ site.baseurl }}{% link _posts/2018-09-25-review_chinese_word_segmentation.md %}
