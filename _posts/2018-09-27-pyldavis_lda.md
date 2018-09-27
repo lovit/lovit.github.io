@@ -318,4 +318,4 @@ $$\lambda \cdot P(w \vert t) + (1 - \lambda) \cdot \frac{P(w \vert t)}{P(w)}$$
 [tsne_paper]: http://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf
 [ldavis_paper]: http://www.aclweb.org/anthology/W14-3110
 [gensim]: https://radimrehurek.com/gensim/
-[clustering_keyword]: [crf]: {{ site.baseurl }}{% link _posts/2018-03-21-kmeans_cluster_labeling.md %}
+[clustering_keyword]: {{ site.baseurl }}{% link _posts/2018-03-21-kmeans_cluster_labeling.md %}
