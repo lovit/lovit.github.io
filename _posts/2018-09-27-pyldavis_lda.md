@@ -203,7 +203,7 @@ LDA 의 학습은 gensim.models.LdaModel 에 corpus, dictionary 를 입력하고
 {% highlight python %}
 from gensim.models import LdaModel
 
-lda_model = LdaModel(corpus, id2word=dictionary, num_topics=100)
+lda_model = LdaModel(corpus, id2word=dictionary, num_topics=50)
 with open(lda_model_path, 'wb') as f:
     pickle.dump(lda_model, f)
 {% endhighlight %}
