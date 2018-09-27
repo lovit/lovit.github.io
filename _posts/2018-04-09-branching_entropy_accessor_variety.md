@@ -125,7 +125,7 @@ Dynamic programming 기반 segmentation algorithm 은 아래와 같습니다. �
 
 Branching Entropy 는 Accessor Variety 가 이용하는 글자 종류보다도 글자 빈도의 분포가 단어의 경계를 나타나는 더 좋은 정보라 판단하였습니다. Entropy 는 확률분포의 불확실성입니다. 
 
-<center>$$entropy(P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$</center>
+<center>$$entropy P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$</center>
 
 '손나'의 오른쪽에 등장할 글자는 명확하기 때문에 entropy 가 작습니다. 불확실성이 작습니다. 반대로 '공연'의 오른쪽에 등장할 글자는 다양하여 entropy, 불확실성이 높습니다. 
 

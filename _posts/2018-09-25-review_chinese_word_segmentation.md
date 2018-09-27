@@ -132,7 +132,7 @@ $$AV(w) = min(av_l(w), av_r(w))$$
 
 글자 종류의 숫자는 오탈자나 infrequent pattern 에 매우 민감합니다. 이를 보완하기 위해서 entropy 를 이용합니다.
 
-$$entropy(P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$
+$$entropy P(w \vert c) = - \sum_{w^` \in W} P(w^` \vert c) log P(w^` \vert c)$$
 
 이 역시 오른쪽과 왼쪽의 entropy 가 모두 커야 단어입니다.
 
