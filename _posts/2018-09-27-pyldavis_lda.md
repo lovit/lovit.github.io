@@ -13,7 +13,7 @@ LDAvis 는 토픽 모델링에 자주 이용되는 Latent Dirichlet Allocation (
 
 고차원의 벡터를 이해하기 위하여 시각화 방법들이 이용됩니다. 대표적인 방법으로 t-SNE 라 불리는 t-Stochastic Neighbor Embedding 이 있습니다. t-SNE 는 고차원 공간에서 유사한 두 벡터가 2 차원 공간에서도 유사하도록, 원 공간에서의 점들 간 유사도를 보존하면서 차원을 축소합니다. 우리가 이해할 수 있는 공간은 2 차원 모니터 (지도) 혹은 3 차원의 공간이기 때문입니다.
 
-![]({{ "/assets/figures/tsne_mnist.png" | absolute_url }})
+![]({{ "/assets/figures/tsne_mnist.png" | absolute_url }}){: width="70%" height="70%"}
 
 위 그림은 t-SNE 가 제안되었던 [Maaten (2008)][tsne_paper] 에서 10 개의 숫자 손글씨인 MNIST 데이터를 2 차원으로 압축하여 시각화한 그림입니다. 같은 색은 같은 숫자를 의미합니다. MNIST 는 (28, 28) 크기의 784 차원 데이터입니다. 우리가 784 차원을 상상할 수는 없지만, 이를 2 차원으로 압축하면 어떤 이미지들이 유사한지 시각적으로 이해할 수 있습니다.
 
@@ -21,7 +21,7 @@ LDAvis 는 토픽 모델링에 자주 이용되는 Latent Dirichlet Allocation (
 
 t-SNE 외에도 Multi-Dimensional Scaling (MDS) 나 ISOMAP 과 같은 다양한 manifold 알고리즘들이 고차원의 시각화를 위해 이용됩니다. 그리고 더 나아가서는 Deep learning models 들도 시각화를 위해 이용될 수도 있습니다. 아래는 Hinton 교수님의 [2006 년도 논문][hinton2006]의 그림입니다. 약 2 만 개의 단어로 표현되는 20 News group 문서를 deep belief network 에 학습시켜 얻은 2 차원 벡터입니다. 여기서도 같은 색은 같은 카테고리를 의미합니다. 
 
-![]({{ "/assets/figures/hinton2006.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/hinton2006.png" | absolute_url }}){: width="70%" height="70%"}
 
 이 방법들 모두 원 공간에서 유사한 벡터가 저차원 공간에서도 유사하기를 기대합니다. 물론 유사도의 metrics 이 다를 수 있습니다. t-SNE 의 경우에는 2 차원의 공간에서 Euclidean distance 를 기준으로 유사하도록 유도합니다. Hinton 교수님의 그림은 벡터 간 내적 (inner product) 이 유사도로 이용됩니다.
 
@@ -310,7 +310,7 @@ $$\lambda \cdot P(w \vert t) + (1 - \lambda) \cdot \frac{P(w \vert t)}{P(w)}$$
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
       $(document).ready(function(){
-         $("#ldavis_example").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/pyldavis_2016-10-20_lda100.html")
+         $("#ldavis_example").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/pyldavis.html")
       });
 </script>
 
