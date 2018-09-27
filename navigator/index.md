@@ -76,6 +76,9 @@ layout: page
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 - [GloVe, word representation][glove]
 
+### Topic modeling
+- [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
+
 ### String distance
 - [Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성][levenshtein_hangle]
 - [Inverted index 를 이용한 빠른 Levenshtein (edit) distance 탐색][levenshtein_inverted_index]
@@ -152,3 +155,4 @@ layout: page
 [hmm_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
 [crf_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-13-crf_based_tagger.md %}
 [review_chinese_word_segmentation]: {{ site.baseurl }}{% link _posts/2018-09-25-review_chinese_word_segmentation.md %}
+[pyldavis_lda]: {{ site.baseurl }}{% link _posts/2018-09-27-pyldavis_lda.md %}
