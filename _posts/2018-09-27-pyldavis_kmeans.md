@@ -1,6 +1,6 @@
 ---
 title: pyLDAvis 를 이용한 k-means 학습 결과 시각화하기
-date: 2018-09-27 15:00:00
+date: 2018-09-27 22:00:00
 categories:
 - nlp
 tags:
