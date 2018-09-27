@@ -456,7 +456,7 @@ def kmeans_to_prepared_data(bow, index2word, centers, labels, radius=3.5,
 
 2016-10-20 뉴스 30,091 건에 대하여 명사를 추출한 다음 k=100 으로 설정하여 k-means 를 학습하였습니다. 그 뒤 위 함수를 이용하여 PreparedData 를 만들고 display 를 하였습니다.
 
-위 코드들은 깃헙, [https://github.com/lovit/kmeans_to_pyLDAvis](https://github.com/lovit/kmeans_to_pyLDAvis) 에 올려두었습니다.
+위 코드들은 깃헙, [https://github.com/lovit/kmeans_to_pyLDAvis](https://github.com/lovit/kmeans_to_pyLDAvis) 에 올려두었습니다. 
 
 {% highlight python %}
 import pyLDAvis
@@ -466,7 +466,11 @@ prepared_data = kmeans_to_prepared_data(x, index2word, centers, labels)
 pyLDAvis.display(prepared_data)
 {% endhighlight %}
 
+말이 되지 않는 군집들이 존재하기도 합니다. 이들을 걸러내는 것은 k-means 같은 문서 군집화 알고리즘의 역할입니다. 이부분은 일단 넘어갑시다 (문서 군집화의 성능 향상은 따로 다뤄야할 어려운 문제입니다). $$\lambda$$ 를 조절함으로써 군집에 많이 나오는 단어와 다른 군집과 구분이 되는 단어를 살펴볼 수 있습니다. 그리고 비슷한 2 차원 좌표를 지닌 군집들은 비슷한 키워드를 지니고 있음도 볼 수 있습니다.
+
 <div id="ldavis_example"></div>
+
+사실 LDA 대신 k-means 를 이용할 때에는 k 를 훨씬 크게 잡아주고 비슷한 군집을 하나의 군집으로 묶어주는 후처리 과정도 필요합니다. 이에 대해서는 이번 포스트에서 다루지 않았습니다. 하지만, 더 이상 군집화 결과를 군집 레이블의 리스트로 보지 않아도 됩니다.
 
 ## Reference
 - Buchta, C., Kober, M., Feinerer, I., & Hornik, K. (2012). Spherical k-means clustering. Journal of Statistical Software, 50(10), 1-22.
