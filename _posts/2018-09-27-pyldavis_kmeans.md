@@ -134,7 +134,7 @@ vocab 이야 list of str 로, vectorizing 을 하는 과정에서 이미 얻었�
                      R, lambda_step, plot_opts, topic_order):
             ...
 
-각 정보는 모두 pandas.DataFrame 형식으로 저장된 테이블입니다. 즉 csv 형식으로 저장할 수 있는 정보입니다. 그러므로 이 포스트에서는 csv 테이블로 세 정보를 설명합니다.
+앞의 세 개의 arguments 인 topic_coordinates, topic_info, token_table 은 pandas.DataFrame 형식으로 저장된 테이블입니다. 즉 csv 형식으로 저장할 수 있는 정보입니다. 그러므로 이 포스트에서는 csv 테이블로 세 정보를 설명합니다.
 
 제 사견으로는 LDAvis 에서 시각화를 위하여 만든 세 가지 정보가 잘 구조화된 형태는 아닙니다. 하지만, Java Script 를 이용하여 밑바닥부터 시각화 작업을 하는 것보다 적절한 형태로 정보를 가공하여 이를 이용하는 것이 간단하기 때문에 일단 pyLDAvis 를 써봅시다!
 
@@ -182,7 +182,7 @@ token table 은 각 term 이 특정 topic 에 등장한 비율입니다. 즉 한
 |6566|1|0.603|은퇴|
 |3849|1|0.840|백련사|
 
-우리는 loglift, logprob 의 값과 topic coordinate (x, y) 를 만들어야 합니다. token table 의 Freq (topic term proportion) 은 상대적으로 만들기 쉽습니다.
+우리는 loglift, logprob 의 값과 topic coordinate (x, y) 를 만들어야 합니다. token table 의 Freq (topic term proportion) 은 상대적으로 만들기 쉽습니다. topic_order 는 topic coordinates 의 row 순서대로의 topic idx 입니다. 길이가 n_topics 인 list of int 입니다.
 
 ### Making topic coordinates
 
@@ -399,7 +399,7 @@ def _get_token_table(weighted_centers, topic_info, index2word):
 | lambda_step | 0.01 | $$\lambda$$ 값을 조절할 때의 step size|
 | plot_opts | {'xlab': 't-SNE1', 'ylab': 't-SNE2'}) | x, y 좌표축에 입력될 이름 |
 
-위 값들을 입력받아 topic coordinates, token table, topic info 테이블을 만들고, 이를 LDAvis.PreparedData 의 입력 형식인 pandas.DataFrame 으로 변환하여 줍니다. 그 뒤 PreparedData 에 이 값들을 입력합니다.
+위 값들을 입력받아 topic coordinates, token table, topic info 테이블을 만들고, 이를 LDAvis.PreparedData 의 입력 형식인 pandas.DataFrame 으로 변환하여 줍니다. topic oder 는 cluster_size 의 argsort 값을 역순으로 정렬하여 list 로 만들어줍니다. 그 뒤 PreparedData 에 이 값들을 입력합니다.
 
 {% highlight python %}
 def kmeans_to_prepared_data(bow, index2word, centers, labels, radius=3.5,
