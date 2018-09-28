@@ -1,5 +1,5 @@
 ---
-title: pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기
+title: pyLDAvis 를 이용한 Latent Dirichlet Allocation 시각화하기
 date: 2018-09-27 15:00:00
 categories:
 - nlp
