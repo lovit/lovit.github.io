@@ -31,6 +31,8 @@ layout: page
 - [Ford algorithm 을 이용한 최단 경로 탐색][ford_for_shortestpath]
 - [Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계][ford_for_pos]
 
+### Embedding for visualization
+- [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
 
 <font color="#2851a4"><h2>Natural Language Processing</h2></font>
 
@@ -156,3 +158,4 @@ layout: page
 [crf_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-13-crf_based_tagger.md %}
 [review_chinese_word_segmentation]: {{ site.baseurl }}{% link _posts/2018-09-25-review_chinese_word_segmentation.md %}
 [pyldavis_lda]: {{ site.baseurl }}{% link _posts/2018-09-27-pyldavis_lda.md %}
+[tsne]: {{ site.baseurl }}{% link _posts/2018-09-28-tsne.md %}
