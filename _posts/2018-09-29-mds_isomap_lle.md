@@ -26,7 +26,7 @@ $$minimize \sum_{i < j} \left( \vert y_i - y_j \vert - \delta_{ij} \right)^2$$
 
 MDS 는 모든 점들 간의 거리 정보를 보존합니다. 원 논문에서는 지역 간의 거리 정보를 input 으로 이용하여 지역의 위치를 복원하는 예시를 보여줍니다. 아래 그림의 좌측은 미국의 도시 간 거리이며, 우측은 이를 이용하여 MDS 를 학습한 결과입니다. 거리 행렬이 2 차원 좌표 값으로부터 계산된 정보이기 때문에 2 차원 지도가 복원되었음을 알 수 있습니다. 단, $$y$$ 공간은 임의의 방향으로 회전될 수 있습니다.
 
-![]({{ "/assets/figures/embedding_for_vis_mds.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_mds.png" | absolute_url }}){: width="90%" height="90%"}
 
 MDS 는 모든 점들 간의 거리 정보의 중요도가 같습니다. 그렇기 때문에 가까운 점들 간의 거리 정보보다 멀리 떨어진 점들 간의 거리 정보의 영향력이 큽니다. 10 만큼 떨어진 점들 간의 거리가 5 틀리는 것과 1000 만큼 떨어진 점들 간의 거리가 5 만큼 틀리는 것의 중요도는 다릅니다. 하지만 MDS 는 이 두 거리차를 동일하게 중요하다고 판단합니다. 그 결과 가까운 점들 간의 위치를 제대로 맞추는데 실패하게 됩니다. 고차원 공간에서의 거리는 가깝다라는 정보를 제외하면 대부분 차별성이 없는 무의미한 큰 값일 가능성이 높습니다. 하지만 MDS 는 무의미한 정보에 집중하여 고차원의 원 공간에서의 가까운 점들 간의 구조를 보존하지 못합니다. 그리고 고차원 벡터를 저차원으로 임베딩할 때에는 특정 모양의 결과를 학습합니다. 이에 대한 예시는 다음 장의 임베딩 방법 간의 비교에서 이야기 하겠습니다. 
 
@@ -44,7 +44,7 @@ y = MDS(n_components=2).fit_transform(x) # x: numpy.ndarray
 
 2000 년, Science 저널에는 nearest neighbors 정보를 이용하는 임베딩 방법 두 가지가 출간되었습니다. 그 중 첫번째는 Locally Linear Embedding (LLE) 입니다. 이 방법은 MDS 와 다르게 원 공간에서의 최인접 이웃의 정보, locality 에 집중합니다. LLE 의 학습 과정은 아래 그림과 같습니다.
 
-![]({{ "/assets/figures/embedding_for_vis_lle_flow.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_lle_flow.png" | absolute_url }}){: width="50%" height="50%"}
 
 처음 원 공간 $$x$$ 에서 모든 점들에 대하여 k 개의 nearest neighbors 를 찾습니다 (이 과정이 생각보다 매우 비싼 계산 과정입니다). 두번째로 이웃 점들 간의 구조를 $$w_{ij}$$ 라는 패러매터로 학습합니다. 한 점 $$x_i$$ 는 nearest neighbors 인 $$x_j$$ 와 $$w_ij$$ 의 weights 로 선형결합이 될 수 있다 가정합니다. 마치 nearest neighbors 의 선형 결합으로 $$x_i$$ 를 복원하는 것과 같습니다.
 
@@ -56,11 +56,11 @@ $$minimize \vert y_i - \sum_j w_{ij} \cdot y_j \vert^2$$
 
 LLE 는 locality 만을 유지하며 임베딩 공간을 학습합니다. 하지만 이웃 정보만을 보존하여도 global structure 가 어느 정도 보존될 수 있습니다. 아래 그림은 LLE 논문에 기재된 사람의 얼굴 표정 사진을 임베딩한 결과입니다. 매우 많이 찡그린 얼굴 주변에는 찡그린 얼굴이 있고, 그 옆에는 덜 찡그린 얼굴이 있습니다. 조금씩 그 이웃의 이웃의 이웃을 살펴보면 어느 순간 조금 웃는, 그리고 더 많이 웃는 얼굴이 연속됩니다. 이웃 간의 구조를 보존하였더니 이웃의 이웃의 이웃으로 이동할 때 어떠한 정보가 한 축으로 학습될 수 있습니다.
 
-![]({{ "/assets/figures/embedding_for_vis_lle_face.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_lle_face.png" | absolute_url }}){: width="60%" height="60%"}
 
 아래는 단어가 어떤 문서에 등장하였는지를 벡터로 나타낸 term - document matrix 를 LLE 를 이용하여 임베딩한 결과입니다. Term - document matrix 는 각 단어가 [(doc, weight), (doc, weight), ... ] 형태로 표현된 벡터입니다. 비슷한 문서들에서 비슷한 비율로 등장한 단어들이라면 원 공간에서 비슷한 벡터를 지닙니다. 그리고 이 term - document matrix 를 임베딩하면 topically similar 한 두 단어는 비슷한 임베딩 벡터를 지닙니다. 실제로 아래 그림에서 killed, defeat, peace 와 같은 용어들이 비슷한 벡터로 학습되었음을 볼 수 있습니다.
 
-![]({{ "/assets/figures/embedding_for_vis_lle_topic.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_lle_topic.png" | absolute_url }}){: width="60%" height="60%"}
 
 Scikit-learn 은 LLE 를 제공합니다. 사용법은 아래와 같습니다. n_components 외에도 원 공간에서 이용하는 nearest neighbors 의 개수를 조절할 수 있습니다. 5 는 default value 입니다.
 
@@ -117,7 +117,7 @@ p = draw_figure(x, y, title)
 
 두 종류의 데이터는 어느 정도 붙어있으며, 주황색 데이터는 멀리 떨어진 형태입니다.
 
-![]({{ "/assets/figures/ embedding_for_vis_lle_various_k_data.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/embedding_for_vis_lle_various_k_data.png" | absolute_url }}){: width="50%" height="50%"}
 
 다양한 nearest neighbors (2, 3, 5, 10) 을 설정하여 LLE 를 학습합니다. Return 되는 figures 를 모아 gridplot 으로 그립니다.
 
@@ -139,7 +139,7 @@ show(gp)
 
 Nearest neighbors 가 2 일 때에는 한 클래스 외에는 보이지 않습니다. 사실 두 클래스의 점들이 하나의 점으로 뭉쳐졌고, 에머럴드 색의 점들과 겹쳐서 보이지 않는 것입니다. Nearest neighbors = 3 일 때에는 세 클래스의 점들이 모두 보이지만, 각 클래스 별로 일자로 늘어선 것을 볼 수 있습니다. Nearest neighbors = 5 일 때와 10 일 때에는 멀리 떨어져있던 주황색 점들은 한 점으로 모이고, 다른 두 클래스는 일자로 늘어선 것을 볼 수 있습니다. 전혀 원 공간이 복원되지 않는 모습임을 알 수 있습니다.
 
-![]({{ "/assets/figures/ embedding_for_vis_lle_various_k.png" | absolute_url }}){: width="90%" height="90%"}
+![]({{ "/assets/figures/embedding_for_vis_lle_various_k.png" | absolute_url }}){: width="90%" height="90%"}
 
 이런 패턴은 LLE 에서 자주 등장하는 패턴입니다. 사실 위의 사람 얼굴 예시에서도 이미지들이 어떤 선 모양을 그리며 늘어선 것을 볼 수 있습니다. 실제로 이러한 latent axis 는 존재하지 않음에도 말이죠.
 
@@ -184,7 +184,7 @@ show(gp)
 
 Nearest neighbors 가 2 일 때에는 분리된 공간인 주황색이 scatter plot 의 중심에 다른 점들과 겹쳐서 그려졌습니다. Nearest neighbors = 2 일 때에는 왼쪽 오른쪽 손을 잡고 연결된 형태이기 때문에 한 줄로 늘어선 형태의 임베딩 공간이 학습되었습니다. Nearest neighbors = 3 일 때에는 데이터에서 빨간색과 에머럴드 색간에 nearest neighbors 로 연결된 한 점이 존재하였기 때문에 이들이 이어져 임베딩이 됩니다. 그리고 이들과 연결되지 않은 주황색 점들은 가운데에 떨어져 위치합니다. 이후에도 neighbors = 5, 10 일 때 역시 주황색은 독립적으로 떨어지며, 빨간색과 에머럴드 색은 경계를 맞대고 학습됨을 볼 수 있습니다. 이 역시 원 공간의 정보를 보존하지는 못합니다.
 
-![]({{ "/assets/figures/ embedding_for_vis_isomap_various_k.png" | absolute_url }}){: width="90%" height="90%"}
+![]({{ "/assets/figures/embedding_for_vis_isomap_various_k.png" | absolute_url }}){: width="90%" height="90%"}
 
 
 ## t-Stochastic Neighbor Embedding (t-SNE)
@@ -231,7 +231,7 @@ show(gp)
 
 그 결과 perplexity 가 지나치게 작은 2 일 때에는 LLE 처럼 지나치게 좁은 locality 만이 반영되어 왜곡된 공간이 학습되었습니다. Perplexity = 5 일 때에는 각 클래스별로 조금씩 뭉쳐져 있는 점들 끼리 그룹을 지었습니다. 하지만 그룹 간의 거리도 어느 정도 보존되었습니다. Perplexity 가 10 ~ 100 일 때에는 각 클래스 간 간격이 어느 정도 보존되었습을 알 수 있습니다. 하지만 perplexity = 200 처럼 매우 큰 값을 이용하면 점들 사이에 가깝고 먼 정보가 사라져 원 공간의 거리 정보가 보존되지 않습니다. 하지만 t-SNE 는 perplexity 에 크게 민감하게 반응하지 않고 안정적으로 원 공간의 구조를 보존함을 알 수 있습니다. 그리고 이는 고차원 공간의 임베딩에서도 동일합니다.
 
-![]({{ "/assets/figures/ embedding_for_vis_tsne_various_perp.png" | absolute_url }}){: width="90%" height="90%"}
+![]({{ "/assets/figures/embedding_for_vis_tsne_various_perp.png" | absolute_url }}){: width="90%" height="90%"}
 
 이전 포스트에서 $$p_{ij}$$ 와 $$q_{ij}$$ 가 위와 같은 분포를 따르는 이유와 perplexity 의 의미 및 역할에 대하여 이야기하였습니다. 이에 대한 내용은 이전의 [t-SNE 포스트][tsne_post]를 참고하시기 바랍니다.
 
