@@ -33,6 +33,7 @@ layout: page
 
 ### Embedding for visualization
 - [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
+- [Embedding for Word Visualization (LLE, ISOMAP, MDS, t-SNE)][mds_isomap_lle]
 
 <font color="#2851a4"><h2>Natural Language Processing</h2></font>
 
@@ -159,3 +160,4 @@ layout: page
 [review_chinese_word_segmentation]: {{ site.baseurl }}{% link _posts/2018-09-25-review_chinese_word_segmentation.md %}
 [pyldavis_lda]: {{ site.baseurl }}{% link _posts/2018-09-27-pyldavis_lda.md %}
 [tsne]: {{ site.baseurl }}{% link _posts/2018-09-28-tsne.md %}
+[mds_isomap_lle]: {{ site.baseurl }}{% link _posts/2018-09-29-mds_isomap_lle.md %}
