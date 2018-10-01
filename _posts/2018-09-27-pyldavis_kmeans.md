@@ -154,7 +154,7 @@ topic coordinates 는 HTML 의 왼쪽에 위치한 topic vector 의 2 차원 좌
 
 #### topic info
 
-topic info 는 조금 복잡합니다. pyLDAvis 에서 **term** 은 단어의 idx 입니다. 대문자로 시작하는 **Term** 은 단어의 실제 str 값입니다. (term, Category) 는 topic info 테이블의 key 입니다. **Category** 는 각 row 가 어떤 토픽에 해당하는지를 저장합니다. Default 는 어떤 토픽도 선택하지 않았을 때입니다. **Freq** 는 term 이 Category 에 등장한 횟수로 추정값입니다. **Total** 은 문서 전체에서의 term frequency 입니다. **loglift** 는 $$log \frac{P(w \vert t)}{P(w)}$$ 이며, **logprob** $$log P(w \vert t)$$ 입니다. loglift 는 distriminative power 에 관련된 값이며, logprob 는 coverage 에 관련된 값입니다.
+topic info 는 조금 복잡합니다. pyLDAvis 에서 **term** 은 단어의 idx 입니다. 대문자로 시작하는 **Term** 은 단어의 실제 str 값입니다. (term, Category) 는 topic info 테이블의 key 입니다. **Category** 는 각 row 가 어떤 토픽에 해당하는지를 저장합니다. Default 는 어떤 토픽도 선택하지 않았을 때입니다. **Freq** 는 term 이 Category 에 등장한 횟수이며, 추정값입니다. **Total** 은 문서 전체에서의 term frequency 입니다. **loglift** 는 $$log \frac{P(w \vert t)}{P(w)}$$ 이며, distriminative power 를 표현하는 값입니다. **logprob** 는 $$log P(w \vert t)$$ 이며, 단어 $$w$$ 가 토픽 $$t$$ 에 얼만큼 등장하는지 coverage 를 보여주는 값입니다.
 
 |term|Category|Freq|Term|Total|loglift|logprob|
 | --- | --- | --- | --- | --- | --- | --- |
@@ -188,7 +188,7 @@ token table 은 각 term 이 특정 topic 에 등장한 비율입니다. 즉 한
 
 우리는 k-means 를 이용하여 학습한 centroid 와 labels 를 이용하여 LDAvis 에 입력할 정보들을 만듭니다. 
 
-LDAvis 는 PCA 를 이용하여 2 차원 벡터를 학습합니다. 하지만 문처럼 sparse vector 로 표현되는 고차원 벡터간 거리는 Cosine distance 를 이용하여 정의하는 것이 좋습니다. 그리고 시각화의 중요한 점 중 하나는 원 공간에서 비슷한 점들이 2 차원에서도 비슷한 것입니다. 즉 locality 정보가 중요합니다. 하지만 PCA 는 global variance 정보에 집중합니다. 우리는 PCA 대신 locality 를 직접적으로 이용하는 t-SNE 를 이용합니다. 이 값을 이용하여 centroid vector 를 2 차원으로 압축합니다. scikit-learn 의 0.19.1 이후부터는 t-SNE 의 metric 을 'cosine' 으로 설정할 수 있습니다. 각 좌표의 값을 [-5, 5] 사이가 되도록 scaling 합니다.
+LDAvis 는 PCA 를 이용하여 2 차원 벡터를 학습합니다. 하지만 bag-of-words model 처럼 sparse vector 로 표현되는 고차원 벡터간 거리는 Cosine distance 를 이용하는 것이 좋습니다. 그리고 원 공간에서 비슷한 점들은 2 차원에서도 비슷해야 원 공간을 이해하기가 좋습니다. 즉 locality 정보가 중요합니다. 하지만 PCA 는 global variance 정보에 집중합니다. 그러므로 PCA 대신 t-SNE 를 이용합니다. 이 값을 이용하여 centroid vector 를 2 차원으로 압축합니다. scikit-learn 의 0.19.1 이후부터는 t-SNE 의 metric 을 'cosine' 으로 설정할 수 있습니다. 각 좌표의 값을 [-5, 5] 사이가 되도록 scaling 도 합니다.
 
 {% highlight python %}
 coordinates = TSNE(n_components=2, metric='cosine').fit_transform(centers)
@@ -240,7 +240,7 @@ def _get_topic_coordinates(centers, cluster_size, radius=5):
 
 loglift 와 logprob 는 keyword score 에 해당합니다. [이전 포스트][clustering_keyword]에서 군집화의 키워드를 정의하는 방법을 이야기하였습니다. 간단히 요약하면 아래와 같습니다.
 
-우리는 cluster center vectors 를 이용하여 salient and discriminative 한 키워드 집합을 선택합니다. 일단 salient terms 는 각 군집의 center 벡터에서 large weight 를 지닌 단어입니다. 다음으로 우리가 해야 할 작업은 discriminative power 를 수식으로 정의하는 것입니다. Discriminative power 는 레이블을 달고 싶은 군집에서는 자주 등장하지만, 다른 군집에서는 등장하지 않은 단어가 클 것입니다. 즉, 유독 weight 가 큰 단어임을 의미합니다. 이를 바탕으로 우리는 다음과 같이 군집 c 에서의 단어 v 의 키워드 점수를 정의하였습니다. 
+우리는 cluster center vectors 를 이용하여 salient and discriminative 한 키워드 집합을 선택합니다. Salient terms 는 각 군집의 center 벡터에서 큰 weight 를 지닌 단어입니다. 다음으로 우리가 해야 할 작업은 discriminative power 를 수식으로 정의하는 것입니다. Discriminative power 가 큰 단어는 해당 군집에서는 자주 등장하지만, 다른 군집에서는 등장하지 않은 단어입니다. 즉, 유독 weight 가 큰 단어입니다. 이를 다음과 같은 수식으로 정의합니다. $$c$$ 는 군집이며 $$v$$ 는 단어입니다. $w(v, c)$$ 는 단어 $$v$$ 의 군집 $$c$$ 에서의 weight 입니다.
 
 $$s(v, c) = \frac{w(v \vert c)}{w(v \vert c) + w(v \vert \tilde{c})}$$
 
@@ -383,7 +383,7 @@ def _get_token_table(weighted_centers, topic_info, index2word):
 
 ### Making my_prepare 
 
-세 종류의 테이블을 만드는 함수를 준비했습니다. 이제 데이터를 입력받아서 각각 세 함수에게 넘겨줘, 우리가 필요한 정보를 정리하는 kmeans_to_prepared_data 함수를 만듭니다.
+세 종류의 테이블을 만들 함수는 준비했습니다. 이제 데이터를 입력받아 세 테이블을 만드는 kmeans_to_prepared_data 함수를 만듭니다.
 
 이 함수의 입력값은 bow model, index 2 word, centroid vector, labels, 이며, setting 을 위한 값들도 입력받습니다. 각각의 정보는 아래와 같습니다.
 
