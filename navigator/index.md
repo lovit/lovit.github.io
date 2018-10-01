@@ -90,6 +90,8 @@ layout: page
 - [Python plotting kit Bokeh][bokeh_python_plotting]
 - [Plotly 를 이용한 3D scatter plot][plotly_3d_scatterplot]
 - [Word cloud in Python][word_cloud]
+- [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
+- [Embedding for Word Visualization (LLE, ISOMAP, MDS, t-SNE)][mds_isomap_lle]
 
 <font color="#2851a4"><h2>Application: 띄어쓰기 오류 교정</h2></font>
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
