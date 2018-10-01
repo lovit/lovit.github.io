@@ -275,7 +275,7 @@ for name, method in zip(names, methods):
 | LLE | 4089.274 |
 | ISOMAP | 4009.104 |
 
-학습한 임베딩 공간을 Bokeh 를 이용하여 그려 봅니다. 아래의 네 그림은 Bokeh 를 이용하여 그린 HTML 로, toolbar 를 이용하여 공간을 drag zoom-in/out 할 수 있으며, 점 위에 마우스 커서를 올려두면 해당 좌표와 단어가 표시됩니다.
+학습한 임베딩 공간을 Bokeh 를 이용하여 그려 봅니다. 아래의 네 그림은 Bokeh 를 이용하여 그린 HTML 의 스냅샷입니다. HTML 파일의 크기가 커서 이는 [링크][html_link]로 공유합니다. HTML 파일을 브라우저로 여시면 toolbar 를 이용하여 공간을 drag zoom-in/out 할 수 있으며, 점 위에 마우스 커서를 올려두면 해당 좌표와 단어가 표시됩니다.
 
 {% highlight python %}
 from bokeh.models import ColumnDataSource, Div
@@ -324,7 +324,10 @@ for name in 'tsne mds lle isomap'.split():
 
 아래 그림에서 t-SNE 는 부분적으로 방사형을 띄고, 전체적으로는 원형을 띕니다. 이는 Barnes-hut tree 를 이용하는 t-SNE 의 전형적인 임베딩 공간 패턴입니다. 그리고 대체로 납득될만한 공간이 학습되었습니다. 하지만 그 아래 MDS 는 가득찬 원을 그립니다. 그리고 왠만한 고차원 공간에서는 이러한 모습을 보입니다. 이전의 [k-means 포스트][kmeans_initializer]에서 언급하였듯이 고차원 공간에서는 대부분의 pairwise distances 가 비슷한 값을 지닙니다. 그리고 MDS 는 대부분의 정보가 무의미한 pairwise distances 정보를 보존하려 노력하다보니 이러한 모양으로 임베딩 공간을 학습합니다. LLE 는 예시 데이터에서와 같이 직선형으로 늘어선 임베딩 공간을 학습합니다. Global structure 가 반영되지 않은 임베딩 공간을 학습하였습니다. ISOMAP 은 이번 예시에서는 어느 정도 괜찮은 그림이 그려졌습니다만, 조금 더 날카로운 형태의 모양을 띄는 경우가 많습니다. 그리고 중심부로 들어간 모양의 공간이 학습되는 경우가 많습니다.
 
-<div id="bokeh_example"></div>
+![]({{ "/assets/figures/embedding_for_vis_termdoc_tsne.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_termdoc_mds.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_termdoc_lle.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/embedding_for_vis_termdoc_isomap.png" | absolute_url }}){: width="70%" height="70%"}
 
 ## Reference
 
@@ -333,12 +336,7 @@ for name in 'tsne mds lle isomap'.split():
 - Tenenbaum, J. B., De Silva, V., & Langford, J. C. (2000). A global geometric framework for nonlinear dimensionality reduction. Science,
 - Van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. Journal of Machine Learning Research, 9(2579-2605), 85.
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-      $(document).ready(function(){
-         $("#bokeh_example").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/embedding_for_vis_termdoc.html")
-      });
-</script>
 
 [tsne_post]: {{ site.baseurl }}{% link _posts/2018-09-28-tsne.md %}
 [kmeans_initializer]:  {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
+[html_link]: https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/embedding_for_vis_termdoc.html
