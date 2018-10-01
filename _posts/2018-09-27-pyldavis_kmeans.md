@@ -136,7 +136,7 @@ vocab 이야 list of str 로, vectorizing 을 하는 과정에서 이미 얻었�
 
 앞의 세 개의 arguments 인 topic_coordinates, topic_info, token_table 은 pandas.DataFrame 형식으로 저장된 테이블입니다. 즉 csv 형식으로 저장할 수 있는 정보입니다. 그러므로 이 포스트에서는 csv 테이블로 세 정보를 설명합니다.
 
-제 사견으로는 LDAvis 에서 시각화를 위하여 만든 세 가지 정보가 잘 구조화된 형태는 아닙니다. 하지만, Java Script 를 이용하여 밑바닥부터 시각화 작업을 하는 것보다 적절한 형태로 정보를 가공하여 이를 이용하는 것이 간단하기 때문에 일단 pyLDAvis 를 써봅시다!
+솔직히 LDAvis 가 이용하는 세 종류 table 의 naming 이나 각 table 의 column name 이 직관적이지 않고, 잘 정리된 형태도 아닙니다. 하지만 Java Script 를 이용하여 밑바닥부터 시각화 작업을 하는 것보다 만들어져 있는 LDAvis 를 이용하여 k-means 를 시각화 하는 것이 더 빠를테니 도전해 봅시다!
 
 #### topic coordinates
 
