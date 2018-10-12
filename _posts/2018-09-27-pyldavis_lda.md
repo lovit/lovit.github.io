@@ -208,15 +208,26 @@ with open(lda_model_path, 'wb') as f:
     pickle.dump(lda_model, f)
 {% endhighlight %}
 
-학습된 LDA model 은 (doc, topic) 행렬 정보를 가지고 있지 않습니다. 대신 $$P(w \vert t)$$ 인 (topic, term) 행렬 정보와 $$P(t)$$ 인 topic probability 를 저장하고 있습니다. 각각의 위치는 아래와 같습니다.
+학습된 LDA model 은 doc - topic 행렬 정보를 가지고 있지 않습니다. 대신 $$P(w \vert t)$$ 인 (topic, term) 행렬 정보와 $$P(t)$$ 인 topic probability 를 저장하고 있습니다. 각각의 위치는 아래와 같습니다.
 
-LdaModel.alpha 에는 (n_topics,) 크기의 numpy.ndarray 가 저장되어 있습니다. Topic probability vector 입니다. LdaModel.expElogbeta 에는 (topic, term) vector 가 저장되어 있습니다. 확률 벡터이기 때문에 하나의 row 의 합은 1 입니다.
+LDA 는 Gibbs sampling 에 기반하여 topic - term probability 를 학습합니다. Gensim 의 구현체는 학습 과정에서 발생한 topic - term frequency 정보가 모델에 저장되어 있습니다. lda_model.get_lambda() 를 실행하면 이 값을 받을 수 있습니다. 각 topic 의 빈도수의 합으로 topic - term frequency 를 나눠줌으로써 topic - term probability 를 구할 수 있습니다. 이 과정을 get_topic_term_prob 라는 함수로 만듭니다.
+
+{% highlight python %}
+def get_topic_term_prob(lda_model):
+    topic_term_freqs = lda_model.state.get_lambda()
+    topic_term_prob = topic_term_freqs / topic_term_freqs.sum(axis=1)[:, None]
+    return topic_term_prob
+{% endhighlight %}
+
+LdaModel.alpha 에는 (n_topics,) 크기의 numpy.ndarray 가 저장되어 있습니다. Topic probability vector 입니다. get_topic_term_prob 함수를 이용하여 topic - term probability 를 가져옵니다. 확률 벡터이기 때문에 하나의 row 의 합은 1 입니다.
 
 {% highlight python %}
 print(lda_model.alpha.shape) # (n_topics,)
 print(lda_model.alpha.sum()) # 1.0
-print(lda_model.expElogbeta.shape)     # (n_topics, n_terms)
-print(LdaModel.expElogbeta[0].sum())   # 1.0
+
+topic_term_prob = get_topic_term_prob(lda_model)
+print(topic_term_prob.shape)     # (n_topics, n_terms)
+print(topic_term_prob[0].sum())  # 1.0
 {% endhighlight %}
 
 ### Train and visualize trained LDA
@@ -239,15 +250,15 @@ import pyLDAvis.gensim as gensimvis
 prepared_data = gensimvis.prepare(lda_model, corpus, dictionary)
 {% endhighlight %}
 
-위에서 살펴본 바와 같이 term_topic_dists 는 LdaModel.expElogbeta 에 저장되어 있습니다. 그러나 doc_topic_dists 는 gensim.LdaModel 이 학습 후 버려버립니다. 이는 아래와 같은 함수를 실행시켜 얻을 수 있습니다. prepare 함수 내부에서 아래 함수를 실행시킵니다. vocab 과 term_frequency 는 corpus 와 dictionary 를 이용하여 정보를 추출합니다.
+위에서 살펴본 바와 같이 term_topic_dists 는 학습된 모델로부터 간단히 만들 수 있습니다. 그러나 doc_topic_dists 는 gensim.LdaModel 이 학습 후 버려버립니다. 이는 아래와 같은 함수를 실행시켜 얻을 수 있습니다. inference 함수는 gensim 의 Corpus 를 입력해야 하며, 모델 학습 시에는 gamma 외에도 다른 값이 return 됩니다. 새로운 문서에 대한 inference 시에는 gamma 와 None 이 함께 return 되기 때문에 gamma, \_ 로 inference 의 return 값을 받습니다.
 
-그러나 이는 내부에서 작동할 뿐 우리가 실행할 함수는 오로직 gensimvis.prepare(lda_model, corpus, dictionary) 입니다.
- 
 {% highlight python %}
-gamma = topic_model.inference(corpus)
+gamma, _ = topic_model.inference(corpus)
 {% endhighlight %}
 
-추출된 정보들은 pyLDAvis._prepare.prepare 함수에 넘겨집니다. 최종적으로 PreparedData 라는 class 의 instance 가 return 됩니다. 이는 namedtuple 을 상속받은 함수로, to_dict 와 to_json 함수가 내장되어 있습니다. LDAvis 의 역할은 시각화에 필요한 정보들을 추출한 뒤, 이를 JSON 으로 변환하여 D3 로 구현된 시각화 HTML 페이지에 rendering 을 하는 것 입니다. 
+그러나 위 부분은 pyLDAvis 의 prepare 함수 내부에구현되어 있습니다. 우리가 실행할 함수는 오로직 gensimvis.prepare(lda_model, corpus, dictionary) 입니다.
+
+학습된 LDA 모델로부터 추출된 정보들은 pyLDAvis._prepare.prepare 함수에 넘겨집니다. 최종적으로 PreparedData 라는 class 의 instance 가 return 됩니다. 이는 namedtuple 을 상속받은 함수로, to_dict 와 to_json 함수가 내장되어 있습니다. LDAvis 의 역할은 시각화에 필요한 정보들을 추출한 뒤, 이를 JSON 으로 변환하여 D3 로 구현된 시각화 HTML 페이지에 rendering 을 하는 것 입니다. 
 
 이 과정은 아래의 함수 하나로 실행됩니다. Jupyter notebook 에서 위 부분을 실행중이라면 output cell 에 HTML page 가 뜹니다.
 
