@@ -153,8 +153,8 @@ $$cost(\theta) = - \sum_{s \in S} \sum_{s_i \in s} P(s_i) \cdot log P(s_i)$$
 
 그 결과 이 기준을 만족하기 위해서는 함께 등장하는 경향이 높은 sub-sequence 를 하나의 unit 으로 인식합니다. 영어에서는 re- 나 -tion 과 같은 prefix, suffix 를 분리하는데 이용되기도 했습니다. 아래는 ([Argamon et al.,2004][mdl2]) 의 예시입니다.
 
-| Words | relic, retire, recognition, relive, tire, cognition, farm |
-| Units | re, lic, tire, cognition, live, farm |
+- Words : relic, retire, recognition, relive, tire, cognition, farm
+- Units : re, lic, tire, cognition, live, farm
 
 이는 마치 Word Piece Model (WPM) 의 접근법과도 비슷합니다. 학습하는 패턴은 자주 등장하는 sub-sequence 는 units 으로 인식하고, 자주 등장하지 않는 sub-sequence 는 characters 로 나눠서 인식하는 경향이 있습니다.
 
