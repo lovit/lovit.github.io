@@ -48,7 +48,7 @@ centers = kmeans.cluster_centers_
 
 Euclidean distance 를 이용한 두 벡터 $$v_1, v_2$$ 의 거리는 아래처럼 정의됩니다. 두 벡터의 L2 norm 의 합에서 두 벡터의 내적의 두 배를 뺀 값입니다. 즉, 벡터의 크기가 거리에 영향을 미칩니다.
 
-$$d_{euc}(v_1, v_2) = \sqrt{\vert v_1 \vert_2^2 + \vert v_1 \vert_2^2 - 2 \cdot v_1 \cdot v_2}$$
+$$d_{euc}(v_1, v_2) = \sqrt{v_1^2 + v_2^2 - 2 \cdot v_1 \cdot v_2}$$
 
 아래 그림의 문서 1 과 문서 3 은 사용된 단어의 종류와 비율이 같지만, 문서 3 이 단어의 개수가 더 많이 등장하였습니다. 각각의 L2 norm 크기는 $$\sqrt{3}$$ 과 $$\sqrt{6}$$ 입니다. 그리고 Euclidean distance 를 이용한 문서 1 과 3 의 거리도 $$\sqrt{3}$$ 입니다. 그런데 문서 1 과 문서 2 의 Euclidean distance 역시 $$\sqrt{3}$$ 으로 같습니다.
 
@@ -56,13 +56,13 @@ $$d_{euc}(v_1, v_2) = \sqrt{\vert v_1 \vert_2^2 + \vert v_1 \vert_2^2 - 2 \cdot 
 
 사람이 생각하는 비슷한 두 문서는 사용되는 단어들의 분포가 비슷하여 topically similar 한 경우입니다. 그러나 Cosine distance 를 이용하면 문서 1 과 3 의 거리는 0 입니다. Cosine similarity 는 아래처럼 두 벡터의 내적을 두 벡터의 L2 norm 으로 나눈 값이며, Cosine distance 는 1 - Cosine similarity 입니다. 이는 두 벡터를 unit vector 화 시킨 뒤 내적하는 것과 같습니다. 즉, 모든 벡터의 크기가 무시됩니다. 그리고 내적을 하기 때문에 두 벡터에 공통으로 들어있는 단어들이 무엇인지, 그리고 그 비율이 얼만큼이 되는지를 측정합니다.
 
-$$d_{cos}(v_1, v_2) = 1 - \frac{v_1 \cdot v_2}{\vert v_1 \vert_2 \vert v_2 \vert_2 }
+$$d_{cos}(v_1, v_2) = 1 - \frac{v_1 \cdot v_2}{\vert v_1 \vert_2 \vert v_2 \vert_2}$$
 
 이러한 내용은 (Anna Huang, 2008) 에서도 언급됩니다. 이 논문에서는 고차원의 sparse vectors 간의 거리 척도는 두 벡터에 포함된 공통 성분의 무엇인지를 측정하는 것이 중요하기 때문에 Jaccard distance, Pearson correlation, Cosine distance 와 같은 척도를 쓰면 거리가 잘 정의되나, Euclidean distance 를 이용하면 안된다고 말합니다.
 
-그리고 Cosine distance 를 이용하면 모든 벡터가 unit vector 화 되고, 이 벡터 공간에서의 k-means 군집화는 아래 그림처럼 각도가 비슷한, 즉 단어 분포가 비슷한 문서를 하나의 군집으로 묶는 의미로 해석할 수 있습니다.  이처럼 sparse vector 로 표현되는 문서 집합에 대한 k-means 는 Cosine distance 를 이용하는 것이 좋고, Euclidean distance 대신 Cosine distance 를 이용하는 k-means 를 **Spherical k-means** (Inderjit et al., 2001) 라 합니다.
+그리고 Cosine distance 를 이용하면 모든 벡터가 unit vector 화 되고, 이 벡터 공간에서의 k-means 군집화는 아래 그림처럼 각도가 비슷한, 즉 단어 분포가 비슷한 문서를 하나의 군집으로 묶는 의미로 해석할 수 있습니다.  이처럼 sparse vector 로 표현되는 문서 집합에 대한 k-means 는 Cosine distance 를 이용하는 것이 좋고, Euclidean distance 대신 Cosine distance 를 이용하는 k-means 를 **Spherical k-means** 라 합니다 (Inderjit et al., 2001).
 
-![]({{ "/assets/figures/spherical_kmeans_angle.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/spherical_kmeans_angle.png" | absolute_url }})
 
 그런데 Euclidean distance 를 이용하는 k-means 를 손쉽게 Spherical k-means 로 바꿀 수도 있습니다. Lloyd k-means 처럼 한 군집 안의 벡터의 합을 rows 의 개수로 나누는 것은 L1 normalize 의 효과가 있으며, centroid 의 크기가 1 이라는 보장이 없습니다. 그렇기 때문에 다음 번 반복 계산에서 모든 rows 와 centroids 간의 거리를 계산할 때 군집의 centroid vector 의 크기에 영향을 받게 됩니다. 일단 input 으로 입력되는 벡터를 unit vector 로 정규화 합니다. 그러면 학습 데이터의 모든 벡터는 unit vector 가 됩니다. 그리고 k-means 의 centroid update 시 한 군집에 포함된 모든 벡터의 합을 군집에 포함된 rows 의 개수로 나누는 것이 아니라, L2 normalize 를 하면 centroids 역시 unit vector 가 됩니다. 이 때에는 Euclidean distance 를 이용하는 것과 Cosine distance 를 이용하는 것이 동일한 학습 결과를 가집니다. 모든 벡터의 크기가 1 이라면 Euclidean distance 기준으로 가장 가까운 벡터는 벡터의 내적이 가장 큰 (Cosine similarity 가 가장 큰) 벡터이기 때문입니다.
 
@@ -104,7 +104,7 @@ class KMeans:
 
 ## Packages
 
-initializer, labeler, 그리고 오늘 이야기한 Spherical k-means 까지 포함하여 코드를 구현하였습니다. 이는 [github.com/lovit/clustering4doc][clustering4docs] 에 올려두었습니다. 아래는 패키지 사용법입니다.
+initializer, labeler, 그리고 오늘 이야기한 Spherical k-means 까지 포함하여 코드를 구현하였습니다. 이는 [github][clustering4docs] 에 올려두었습니다. 아래는 패키지 사용법입니다.
 
 k-means 는 매우 빠르게 수렴하기 때문에 max_iter 를 크게 잡을 필요가 전혀 없습니다. 오히려 n_clusters 를 크게 잡아야 합니다. 이 내용에 대해서는 이후에 k 를 결정하는 방법에 대한 다른 포스트에서 자세히 다룹니다. init 은 initializer 의 이름입니다. 'similar_cut' 은 앞서 언급한 [initializer][initializer] 의 가제입니다.
 
@@ -148,6 +148,42 @@ keywords = proportion_keywords(
     index2word=vocabs)
 {% endhighlight %}
 
+122M 개의 문서로 이뤄진 IMDB reviews 입니다. k=1000 으로 설정하여 k-means 를 학습한 뒤, 위의 proportion keywords 함수를 이용하여 군집 레이블을 추출하였습니다. 아래는 5 개 군집의 예시입니다.
+
+<table>
+  <colgroup>
+    <col width="20%" />
+    <col width="80%" />
+  </colgroup>
+  <thead>
+    <tr class="query_and_topic">
+      <th>군집의 의미</th>
+      <th>키워드 (레이블)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td markdown="span"> 영화 “타이타닉” </td>
+      <td markdown="span"> iceberg, zane, sinking, titanic, rose, winslet, camerons, 1997, leonardo, leo, ship, cameron, dicaprio, kate, tragedy, jack, di saster, james, romance, love, effects, special, story, people, best, ever, made </td>
+    </tr>
+    <tr>
+      <td markdown="span"> Marvle comics 의 heros (Avengers) </td>
+      <td markdown="span"> zemo, chadwick, boseman, bucky, panther, holland, cap, infinity, mcu, russo, civil, bvs, antman, winter, ultron, airport, ave ngers, marvel, captain, superheroes, soldier, stark, evans, america, iron, spiderman, downey, tony, superhero, heroes </td>
+    </tr>
+    <tr>
+      <td markdown="span"> Cover-field, District 9 등 외계인 관련 영화 </td>
+      <td markdown="span"> skyline, jarrod, balfour, strause, invasion, independence, cloverfield, angeles, district, los, worlds, aliens, alien, la, budget, scifi, battle, cgi, day, effects, war, special, ending, bad, better, why, they, characters, their, people </td>
+    </tr>
+    <tr>
+      <td markdown="span"> 살인자가 출연하는 공포 영화 </td>
+      <td markdown="span"> gayheart, loretta, candyman, legends, urban, witt, campus, tara, reid, legend, alicia, englund, leto, rebecca, jared, scream, murders, slasher, helen, killer, student, college, students, teen, summer, cut, horror, final, sequel, scary </td>
+    </tr>
+    <tr>
+      <td markdown="span"> 영화 “매트릭스" </td>
+      <td markdown="span"> neo, morpheus, neos, oracle, trinity, zion, architect, hacker, reloaded, revolutions, wachowski, fishburne, machines, agents, matrix, keanu, smith, reeves, agent, jesus, machine, computer, humans, fighting, fight, world, cool, real, special, effects </td>
+    </tr>
+  </tbody>
+</table>
 
 ## Reference
 
