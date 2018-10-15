@@ -20,6 +20,7 @@ layout: page
 ### Clustering
 - [k-means initial points 선택 방법][kmeans_initializer]
 - [Cluster labeling for text data][kmeans_cluster_labeling]
+- [Spherical k-means for document clustering][spherical_kmeans]
 
 ### Nearest neighbor search
 - [Random Projection and Locality Sensitive Hashing][lsh]
@@ -163,3 +164,4 @@ layout: page
 [pyldavis_lda]: {{ site.baseurl }}{% link _posts/2018-09-27-pyldavis_lda.md %}
 [tsne]: {{ site.baseurl }}{% link _posts/2018-09-28-tsne.md %}
 [mds_isomap_lle]: {{ site.baseurl }}{% link _posts/2018-09-29-mds_isomap_lle.md %}
+[spherical_kmeans]: {{ site.baseurl }}{% link _posts/2018-10-16-spherical_kmeans.md %}
