@@ -189,6 +189,7 @@ keywords = proportion_keywords(
 
 - Anna Huang. Similarity measures for text document clustering. In Proceedings of the sixth new zealand computer science research 20 student conference (NZCSRSC2008), Christchurch, New Zealand, pages 49–56, 2008
 - Inderjit S Dhillon and Dharmendra S Modha. Concept decompositions for large sparse text data 120 using clustering. Machine learning, 42(1):143–175, 2001.
+- github.com/lovit/clustering4docs
 
 
 [initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
