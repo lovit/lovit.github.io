@@ -82,6 +82,7 @@ layout: page
 
 ### Topic modeling
 - [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
+- [pyLDAvis 를 이용한 k-means 학습 결과 시각화하기][pyldavis_kmeans]
 
 ### String distance
 - [Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성][levenshtein_hangle]
@@ -93,6 +94,8 @@ layout: page
 - [Word cloud in Python][word_cloud]
 - [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
 - [Embedding for Word Visualization (LLE, ISOMAP, MDS, t-SNE)][mds_isomap_lle]
+- [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
+- [pyLDAvis 를 이용한 k-means 학습 결과 시각화하기][pyldavis_kmeans]
 
 <font color="#2851a4"><h2>Application: 띄어쓰기 오류 교정</h2></font>
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
@@ -162,6 +165,7 @@ layout: page
 [crf_based_tagger]: {{ site.baseurl }}{% link _posts/2018-09-13-crf_based_tagger.md %}
 [review_chinese_word_segmentation]: {{ site.baseurl }}{% link _posts/2018-09-25-review_chinese_word_segmentation.md %}
 [pyldavis_lda]: {{ site.baseurl }}{% link _posts/2018-09-27-pyldavis_lda.md %}
+[pyldavis_kmeans]: {{ site.baseurl }}{% link _posts/2018-09-27-pyldavis_kmeans.md %}
 [tsne]: {{ site.baseurl }}{% link _posts/2018-09-28-tsne.md %}
 [mds_isomap_lle]: {{ site.baseurl }}{% link _posts/2018-09-29-mds_isomap_lle.md %}
 [spherical_kmeans]: {{ site.baseurl }}{% link _posts/2018-10-16-spherical_kmeans.md %}
