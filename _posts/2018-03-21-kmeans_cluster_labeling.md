@@ -85,7 +85,7 @@ Saliency 와 discriminative power 를 모두 고려하기 위하여 우리는 �
 
 ## IMDB review experiment
 
-제안된 방법이 cluster labeling 에 적합한지 실험을 수행하였습니다. 실험에 이용한 데이터는 122M 개의 문서로 이뤄진 IMDB reviews 입니다. 이 데이터에 대하여 100 개의 initial points 를 선택하였습니다. 
+제안된 방법이 cluster labeling 에 적합한지 실험을 수행하였습니다. 실험에 이용한 데이터는 122M 개의 문서로 이뤄진 IMDB reviews 입니다. 
 
 | Dataset name | Num of docs | Num of terms | Num of nonzero | Sparsity |
 | --- | --- | --- | --- | --- |
