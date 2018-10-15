@@ -8,6 +8,8 @@ tags:
 - kmeans
 ---
 
+k-means 는 빠르고 값싼 메모리 비용 때문에 대량의 문서 군집화에 적합한 방법입니다. scikit-learn 의 k-means 는 Euclidean distance 를 이용합니다. 그러나 고차원 벡터인 문서 군집화 과정에서는 문서 간 거리 척도의 정의가 매우 중요합니다. Bag-of-words model 처럼 sparse vector 로 표현되는 고차원 데이터에 대해서는 Euclidean distance 보다 Cosine distance 를 사용하는 것이 좋습니다. 그리고 Cosine distance 를 이용하는 k-means 를 Spherical k-means 라 합니다. 이번 포스트에서는 왜 문서 군집화에 Cosine distance 를 이용해야 하는지에 대하여 알아보고, Spherical k-means + fast initializer + clustering labeling 기능을 제공하는 패키지에 대해 알아봅니다.
+
 ## k-means
 
 k-means 는 다른 군집화 알고리즘과 비교하여 매우 적은 계산 비용을 요구하면서도 안정적인 성능을 보입니다. 그렇기 때문에 큰 규모의 데이터 군집화에 적합합니다. 문서 군집화의 경우에는 문서의 개수가 수만건에서 수천만건 정도 되는 경우가 많기 때문에 다른 알고리즘보다도 k-means 가 더 많이 선호됩니다. k-partition problem 은 데이터를 k 개의 겹치지 않은 부분데이터 (partition)로 분할하는 문제 입니다. 이 때 나뉘어지는 k 개의 partiton 에 대하여, **"같은 partition 에 속한 데이터 간에는 서로 비슷하며, 서로 다른 partition 에 속한 데이터 간에는 이질적"**이도록 만드는 것이 군집화라 생각할 수 있습니다. k-means problem 은 각 군집 (partition)의 평균 벡터와 각 군집에 속한 데이터 간의 거리 제곱의 합 (분산, variance)이 최소가 되는 partition 을 찾는 문제입니다. 
