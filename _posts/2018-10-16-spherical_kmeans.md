@@ -56,7 +56,7 @@ $$d_{euc}(v_1, v_2) = \sqrt{v_1^2 + v_2^2 - 2 \cdot v_1 \cdot v_2}$$
 
 사람이 생각하는 비슷한 두 문서는 사용되는 단어들의 분포가 비슷하여 topically similar 한 경우입니다. 그러나 Cosine distance 를 이용하면 문서 1 과 3 의 거리는 0 입니다. Cosine similarity 는 아래처럼 두 벡터의 내적을 두 벡터의 L2 norm 으로 나눈 값이며, Cosine distance 는 1 - Cosine similarity 입니다. 이는 두 벡터를 unit vector 화 시킨 뒤 내적하는 것과 같습니다. 즉, 모든 벡터의 크기가 무시됩니다. 그리고 내적을 하기 때문에 두 벡터에 공통으로 들어있는 단어들이 무엇인지, 그리고 그 비율이 얼만큼이 되는지를 측정합니다.
 
-$$d_{cos}(v_1, v_2) = 1 - \frac{v_1 \cdot v_2}{\vert v_1 \vert_2 \vert v_2 \vert_2}$$
+$$d_{cos}(v_1, v_2) = 1 - \frac{v_1 \cdot v_2}{\vert v_1 \vert \vert v_2 \vert}$$
 
 이러한 내용은 (Anna Huang, 2008) 에서도 언급됩니다. 이 논문에서는 고차원의 sparse vectors 간의 거리 척도는 두 벡터에 포함된 공통 성분의 무엇인지를 측정하는 것이 중요하기 때문에 Jaccard distance, Pearson correlation, Cosine distance 와 같은 척도를 쓰면 거리가 잘 정의되나, Euclidean distance 를 이용하면 안된다고 말합니다.
 
