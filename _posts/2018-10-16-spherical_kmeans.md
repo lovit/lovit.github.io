@@ -46,27 +46,27 @@ centers = kmeans.cluster_centers_
 
 ## Spherical k-means for sparse vector clustering
 
-그러나 위 코드는 Euclidean distance 를 이용하여 문서 간 거리를 정의합니다. 하지만 bag-of-words model 처럼 sparse vector 로 표현되는 고차원 데이터 간의 거리를 정의하기에 Euclidean distance 는 적합하지 않습니다. 그 이유는 Euclidean distance 는 벡터의 크기에 영향을 받기 때문입니다. 
+위 코드의 scikit-learn k-means 는 Euclidean distance 를 이용하여 문서 간 거리를 정의합니다. 하지만 bag-of-words model 처럼 sparse vector 로 표현되는 고차원 데이터 간의 거리를 정의하기에 Euclidean distance 는 적합하지 않습니다. Euclidean distance 는 벡터의 크기에 영향을 받기 때문입니다.
 
-Euclidean distance 를 이용한 두 벡터 $$v_1, v_2$$ 의 거리는 아래처럼 정의됩니다. 두 벡터의 L2 norm 의 합에서 두 벡터의 내적의 두 배를 뺀 값입니다. 즉, 벡터의 크기가 거리에 영향을 미칩니다.
+Euclidean distance 를 이용한 두 벡터 $$v_1, v_2$$ 의 거리는 아래처럼 정의됩니다. 두 벡터의 L2 norm 의 합에서 두 벡터의 내적의 두 배를 뺀 값으로, 두 벡터 간의 거리에 크기가 영향을 미칩니다.
 
 $$d_{euc}(v_1, v_2) = \sqrt{v_1^2 + v_2^2 - 2 \cdot v_1 \cdot v_2}$$
 
-아래 그림의 문서 1 과 문서 3 은 사용된 단어의 종류와 비율이 같지만, 문서 3 이 단어의 개수가 더 많이 등장하였습니다. 각각의 L2 norm 크기는 $$\sqrt{3}$$ 과 $$\sqrt{6}$$ 입니다. 그리고 Euclidean distance 를 이용한 문서 1 과 3 의 거리도 $$\sqrt{3}$$ 입니다. 그런데 문서 1 과 문서 2 의 Euclidean distance 역시 $$\sqrt{3}$$ 으로 같습니다.
+아래 그림은 세 문서의 예시입니다. 문서 1 과 문서 3 은 사용된 단어의 종류와 비율이 같지만, 문서 3 이 단어의 개수가 2 배씩 많습니다. 문서 1 과 3 의 L2 norm 크기는 $$\sqrt{3}$$ 과 $$\sqrt{6}$$ 이며, 문서 1 과 3의 Euclidean distance 또한 $$\sqrt{3}$$ 입니다. 그런데 문서 1 과 문서 2 의 Euclidean distance 역시 $$\sqrt{3}$$ 으로 같습니다. 문서 1 과 3 은 벡터의 크기에 의하여 길이가 생겼고, 문서 1 과 2 는 사용된 단어 분포가 달라서 길이가 생겼습니다.
 
 ![]({{ "/assets/figures/spherical_kmeans_x.png" | absolute_url }}){: width="70%" height="70%"}
 
-사람이 생각하는 비슷한 두 문서는 사용되는 단어들의 분포가 비슷하여 topically similar 한 경우입니다. 그러나 Cosine distance 를 이용하면 문서 1 과 3 의 거리는 0 입니다. Cosine similarity 는 아래처럼 두 벡터의 내적을 두 벡터의 L2 norm 으로 나눈 값이며, Cosine distance 는 1 - Cosine similarity 입니다. 이는 두 벡터를 unit vector 화 시킨 뒤 내적하는 것과 같습니다. 즉, 모든 벡터의 크기가 무시됩니다. 그리고 내적을 하기 때문에 두 벡터에 공통으로 들어있는 단어들이 무엇인지, 그리고 그 비율이 얼만큼이 되는지를 측정합니다.
+사람은 단어 분포가 비슷할 때 두 문서가 topically similar 하다고 생각합니다. Cosine distance 를 이용하면 문서 1 과 3 의 거리는 0 입니다. 이 둘은 단어의 분포가 같기 때문입니다. 좀 더 자세히 살펴보면 Cosine similarity 는 아래처럼 두 벡터의 내적을 두 벡터의 L2 norm 으로 나눈 값이며, Cosine distance 는 1 - Cosine similarity 입니다. 이는 두 벡터를 unit vector 화 시킨 뒤 내적하는 것과 같습니다. 모든 벡터의 크기가 무시됩니다. 그리고 내적을 하기 때문에 두 벡터에 공통으로 들어있는 단어들이 무엇인지, 그리고 그 비율이 얼만큼이 되는지를 측정합니다.
 
 $$d_{cos}(v_1, v_2) = 1 - \frac{v_1 \cdot v_2}{\vert v_1 \vert \vert v_2 \vert}$$
 
 이러한 내용은 (Anna Huang, 2008) 에서도 언급됩니다. 이 논문에서는 고차원의 sparse vectors 간의 거리 척도는 두 벡터에 포함된 공통 성분의 무엇인지를 측정하는 것이 중요하기 때문에 Jaccard distance, Pearson correlation, Cosine distance 와 같은 척도를 쓰면 거리가 잘 정의되나, Euclidean distance 를 이용하면 안된다고 말합니다.
 
-그리고 Cosine distance 를 이용하면 모든 벡터가 unit vector 화 되고, 이 벡터 공간에서의 k-means 군집화는 아래 그림처럼 각도가 비슷한, 즉 단어 분포가 비슷한 문서를 하나의 군집으로 묶는 의미로 해석할 수 있습니다.  이처럼 sparse vector 로 표현되는 문서 집합에 대한 k-means 는 Cosine distance 를 이용하는 것이 좋고, Euclidean distance 대신 Cosine distance 를 이용하는 k-means 를 **Spherical k-means** 라 합니다 (Inderjit et al., 2001).
+Cosine distance 를 이용하면 모든 벡터가 unit vector 화 되기 떄문에 k-means 군집화는 아래 그림처럼 각도가 비슷한 (단어 분포가 비슷한) 문서를 하나의 군집으로 묶는 의미로 해석할 수 있습니다. 이처럼 sparse vector 로 표현되는 문서 집합에 대한 k-means 는 Cosine distance 를 이용하는 것이 좋고, Cosine distance 를 이용하는 k-means 를 **Spherical k-means** 라 합니다 (Inderjit et al., 2001).
 
 ![]({{ "/assets/figures/spherical_kmeans_angle.png" | absolute_url }})
 
-그런데 Euclidean distance 를 이용하는 k-means 를 손쉽게 Spherical k-means 로 바꿀 수도 있습니다. Lloyd k-means 처럼 한 군집 안의 벡터의 합을 rows 의 개수로 나누는 것은 L1 normalize 의 효과가 있으며, centroid 의 크기가 1 이라는 보장이 없습니다. 그렇기 때문에 다음 번 반복 계산에서 모든 rows 와 centroids 간의 거리를 계산할 때 군집의 centroid vector 의 크기에 영향을 받게 됩니다. 일단 input 으로 입력되는 벡터를 unit vector 로 정규화 합니다. 그러면 학습 데이터의 모든 벡터는 unit vector 가 됩니다. 그리고 k-means 의 centroid update 시 한 군집에 포함된 모든 벡터의 합을 군집에 포함된 rows 의 개수로 나누는 것이 아니라, L2 normalize 를 하면 centroids 역시 unit vector 가 됩니다. 이 때에는 Euclidean distance 를 이용하는 것과 Cosine distance 를 이용하는 것이 동일한 학습 결과를 가집니다. 모든 벡터의 크기가 1 이라면 Euclidean distance 기준으로 가장 가까운 벡터는 벡터의 내적이 가장 큰 (Cosine similarity 가 가장 큰) 벡터이기 때문입니다.
+만약 사용하는 k-means 가 Euclidean distance 를 이용하고 있다면 두 가지만 변경하여 k-means 를 Spherical k-means 로 손쉽게 바꿀 수 있습니다. 첫째는 input 으로 입력되는 행렬 x 의 모든 rows 를 unit vectors 로 만드는 것입니다. 둘째, centroid update 를 할 때, 한 군집에 포함된 모든 벡터의 합을 rows 의 개수로 나누는 것이 아니라, 벡터의 합을 L2 normalize 하여 centroid 를 unit vector 로 만드는 것입니다. Lloyd k-means 처럼 한 군집 안의 벡터의 합을 rows 의 개수로 나누는 것은 L1 normalize 의 효과가 있으며, centroid 의 크기가 1 이라는 보장이 없습니다. 그렇기 때문에 다음 번 반복 계산에서 모든 rows 와 centroids 간의 거리를 계산할 때 군집의 centroid vector 의 크기에 영향을 받게 됩니다. 이렇게 두 경우만 바꾸면 Euclidean distance 를 이용하는 것과 Cosine distance 를 이용하는 것이 동일한 학습 결과를 가집니다. 모든 벡터의 크기가 1 이라면 Euclidean distance 기준으로 가장 가까운 벡터는 벡터의 내적이 가장 큰 (Cosine similarity 가 가장 큰) 벡터이기 때문입니다.
 
 {% highlight python %}
 import numpy as np
@@ -104,9 +104,13 @@ class KMeans:
 
 또한 bag-of-words model 로 표현된 문서 집합을 k-means 로 학습하면 데이터 기반으로 군집의 레이블을 부여할 수 있다는 내용도 [clustering labeling 포스트][labeler]에서 언급하였습니다.
 
+위 두 관련 블로그의 내용은 아래의 soyclustering 패키지에 구현되어 있습니다.
+
 ## Packages
 
 initializer, labeler, 그리고 오늘 이야기한 Spherical k-means 까지 포함하여 코드를 구현하였습니다. 이는 [github][clustering4docs] 에 올려두었습니다. 아래는 패키지 사용법입니다.
+
+    https://github.com/lovit/clustering4docs
 
 k-means 는 매우 빠르게 수렴하기 때문에 max_iter 를 크게 잡을 필요가 전혀 없습니다. 오히려 n_clusters 를 크게 잡아야 합니다. 이 내용에 대해서는 이후에 k 를 결정하는 방법에 대한 다른 포스트에서 자세히 다룹니다. init 은 initializer 의 이름입니다. 'similar_cut' 은 앞서 언급한 [initializer][initializer] 의 가제입니다.
 
