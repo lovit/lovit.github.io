@@ -283,6 +283,7 @@ for word, w2v_sim in word2vec_similars:
 
 
 ## Reference
+
 - Bojanowski, P., Grave, E., Joulin, A., & Mikolov, T. (2016). [Enriching word vectors with subword information.][paper] arXiv preprint arXiv:1607.04606.
 
 [paper]: https://arxiv.org/abs/1607.04606
