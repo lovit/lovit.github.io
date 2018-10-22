@@ -207,7 +207,7 @@ Gensim 에서 Doc2Vec 은 Word2Vec 과 매우 비슷합니다. Doc2Vec 학습에
 {% highlight python %}
 from gensim.doc2vec import TaggedDocument
 
-class Word2VecCorpus:
+class Doc2VecCorpus:
     def __init__(self, fname):
         self.fname = fname
     def __iter__(self):
@@ -217,6 +217,8 @@ class Word2VecCorpus:
                 yield TaggedDocument(
                     words = text.split(), 
                     tags = ['MOVIE_%s' % movie_idx])
+
+doc2vec_corpus = Doc2VecCorpus(path)
 {% endhighlight %}
 
 학습 역시 동일합니다. 이번에는 기본 설정이 되어 있는 arguments 에 대해서는 설명하지 않습니다. 
