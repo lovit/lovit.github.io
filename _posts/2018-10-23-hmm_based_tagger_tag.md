@@ -855,6 +855,6 @@ hmm_tagger.tag('tt도예시였다')
 
 [ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
 [hmm_tagger]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
-[lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md.md %}
+[lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md %}
 [sejong_cleaner]: https://github.com/lovit/sejong_corpus_cleaner/
 [hmm_postagger_git]: https://github.com/lovit/hmm_postagger/
