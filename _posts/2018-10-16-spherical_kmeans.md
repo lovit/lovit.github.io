@@ -197,7 +197,6 @@ keywords = proportion_keywords(
 - Inderjit S Dhillon and Dharmendra S Modha. Concept decompositions for large sparse text data 120 using clustering. Machine learning, 42(1):143–175, 2001.
 - github.com/lovit/clustering4docs
 
-
 [initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
 [labeler]: {{ site.baseurl }}{% link _posts/2018-03-21-kmeans_cluster_labeling.md %}
 [clustering4docs]: https://github.com/lovit/clustering4docs
