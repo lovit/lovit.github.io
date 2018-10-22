@@ -205,7 +205,7 @@ word2vec_model.most_similar('4d')
 Gensim 에서 Doc2Vec 은 Word2Vec 과 매우 비슷합니다. Doc2Vec 학습에 이용할 데이터가 label\tsentence 형식으로 탭 구분이 되어있다면 다음처럼 input class 를 만들면 됩니다. 
 
 {% highlight python %}
-from gensim.doc2vec import TaggedDocument
+from gensim.models.doc2vec import TaggedDocument
 
 class Doc2VecCorpus:
     def __init__(self, fname):
