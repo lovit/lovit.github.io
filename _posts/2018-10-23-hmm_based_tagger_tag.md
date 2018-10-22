@@ -1,5 +1,5 @@
 ---
-title: Hidden Markov Model (HMM) 기반 품사 판별기의 tag 함수 구현
+title: Hidden Markov Model 기반 품사 판별기의 decode 함수
 date: 2018-10-23 23:00:00
 categories:
 - nlp

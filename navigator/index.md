@@ -16,6 +16,7 @@ layout: page
 ### Sequential labeling
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
 - [Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계][ford_for_pos]
+- [Hidden Markov Model 기반 품사 판별기의 decode 함수][hmm_based_tagger_tag]
 
 ### Clustering
 - [k-means initial points 선택 방법][kmeans_initializer]
@@ -60,6 +61,7 @@ layout: page
 - [한국어 용언의 원형 복원 (Korean lemmatization)][lemmatizer]
 - [한국어 용언의 활용 함수 (Korean conjugation)][conjugation]
 - [Hidden Markov Model (HMM) 기반 품사 판별기의 원리와 문제점][hmm_based_tagger]
+- [Hidden Markov Model 기반 품사 판별기의 decode 함수][hmm_based_tagger_tag]
 - [Conditional Random Field (CRF) 기반 품사 판별기의 원리와 HMM 기반 품사 판별기와의 차이점][crf_based_tagger]
 - [(Review) Incorporating Global Information into Supervised Learning for Chinese Word Segmentation][review_chinese_word_segmentation]
 
@@ -171,3 +173,4 @@ layout: page
 [mds_isomap_lle]: {{ site.baseurl }}{% link _posts/2018-09-29-mds_isomap_lle.md %}
 [spherical_kmeans]: {{ site.baseurl }}{% link _posts/2018-10-16-spherical_kmeans.md %}
 [fasttext_subword]: {{ site.baseurl }}{% link _posts/2018-10-22-fasttext_subword.md %}
+[hmm_based_tagger_tag]: {{ site.baseurl }}{% link _posts/2018-10-23-hmm_based_tagger_tag.md %}
