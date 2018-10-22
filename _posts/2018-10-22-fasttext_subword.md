@@ -151,24 +151,24 @@ FastText 는 하나의 단어에 대하여 벡터를 직접 학습하지 않습�
 {% highlight python %}
 from soynlp.hangle import decompose
 
-def preprocessing(s):
-    s_ = ' '
-    for c in s:
-        if c == ' ' and s_[-1] != ' ':
-            s_ += ' '
-            continue
-        jamo = decompose(c)
-        if (not jamo):
-            if s_[-1] != ' ':
-                s_ += ' '
-            continue
-        if (len(jamo) != 3) or (jamo[0] == ' ' or jamo[1] == ' '):
-            s_ += ' '
-            continue
-        s_ += ''.join([jamo[0], jamo[1], '-' if jamo[2] == ' ' else jamo[2]])
-    return s_.strip()
+doublespace_pattern = re.compile('\s+')
 
-preprocessing('어이고ㅋaaf 켁켁 아이고오aaaaa')
+def jamo_sentence(sent):
+
+    def transform(char):
+        if char == ' ':
+            return char
+        cjj = decompose(char)
+        if len(cjj) == 1:
+            return cjj
+        cjj_ = ''.join(c if c != ' ' else '-' for c in cjj)
+        return cjj_
+
+    sent_ = ''.join(transform(char) for char in sent)
+    sent_ = doublespace_pattern.sub(' ', sent_)
+    return sent_
+
+jamo_sentence('어이고ㅋaaf 켁켁 아이고오aaaaa')
 # 'ㅇㅓ-ㅇㅣ-ㄱㅗ- ㅋㅔㄱㅋㅔㄱ ㅇㅏ-ㅇㅣ-ㄱㅗ-ㅇㅗ-'
 {% endhighlight %}
 
@@ -208,8 +208,8 @@ skipgram_model = fasttext.cbow(
 
 {% highlight python %}
 def cosine_similarity(word1, word2):
-    cjj1 = preprocessing(word1)
-    cjj2 = preprocessing(word2)
+    cjj1 = jamo_sentence(word1)
+    cjj2 = jamo_sentence(word2)
     cos_sim = skipgram_model.cosine_similarity(cjj1, cjj2)
     return cos_sim
 {% endhighlight %}
