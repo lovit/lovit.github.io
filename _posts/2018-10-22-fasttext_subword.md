@@ -146,10 +146,6 @@ FastText 는 하나의 단어에 대하여 벡터를 직접 학습하지 않습�
 
 이는 Edit distance 에서 언급한 것과 같습니다. 한국어의 오탈자는 초/중/종성에서 한군데 정도가 틀리기 때문에 자음/모음을 풀어서 FastText 를 학습하는게 좋습니다. 즉 어디야는 'ㅇㅓ-ㄷㅣ-ㅇㅑ-'로 표현됩니다. 종성이 비어있을 경우에는 -으로 표시하였습니다. FastText 가 word 를 학습할 때 띄어쓰기를 기준으로 나누기 때문입니다. 
 
-Subwords 는 반드시 2글자는 아닙니다. subwords 의 frequency 를 기준으로 fasttext 모델이 적절한 수준의 subwords 를 선택하여 학습합니다. subwords 의 예시를 적자면 아래와 같습니다. 
-
-    'ㅇㅓ-ㄷㅣ-ㅇㅑ-' = [ㅇㅓ-, ㄷㅣ, -ㅇㅑ-]
-
 아래는 초/중/종성이 완전한 한글을 제외한 다른 글자를 제거하며 음절을 초/중/종성으로 분리하는 코드입니다. 이를 이용하여 단어를 초/중/종성으로 나눠놓은 jamo_corpus 를 만들어서 skipgram_jamo_model 을 학습 해야 합니다.
 
 {% highlight python %}
@@ -283,7 +279,6 @@ for word, w2v_sim in word2vec_similars:
 
 
 ## Reference
-
 - Bojanowski, P., Grave, E., Joulin, A., & Mikolov, T. (2016). [Enriching word vectors with subword information.][paper] arXiv preprint arXiv:1607.04606.
 
 [paper]: https://arxiv.org/abs/1607.04606
