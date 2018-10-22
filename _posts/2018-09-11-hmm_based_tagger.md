@@ -94,7 +94,7 @@ bigram HMM tagger 를 학습하려면 transition probability $$P(y_i \vert y_{i-
 
 그런데 위의 식이 직관적일 뿐 아니라 Maximum Likelihood Estimation (MLE) 관점에서도 확률을 학습하는 solution 입니다. 즉, 학습 말뭉치에서의 빈도수를 계산하는 것만으로 학습을 할 수 있습니다.
 
-우리는 corpus 가 nested list 구조라 가정합니다. 각 문장 sent 는 [(word, tag), (word, tag), ... ] 형식입니다. 우리가 해야 할 일은 각 태그 별로 단어가 발생한 횟수와 $$tag_{i-1}, tag{i}$$ 의 횟수를 세는 것 뿐입니다.
+우리는 corpus 가 nested list 구조라 가정합니다. 각 문장 sent 는 [(word, tag), (word, tag), ... ] 형식입니다. 우리가 해야 할 일은 각 태그 별로 단어가 발생한 횟수와 $$tag_{i-1}, tag_{i}$$ 의 횟수를 세는 것 뿐입니다.
 
 특별히 문장이 시작할 때의 state 횟수를 bos 에 저장합니다. 문장의 마지막 state 의 다음에 문장이 끝남을 저장하기 위하여 trans 에 마지막 state 에서 EOS 로의 횟수를 저장합니다.
 
