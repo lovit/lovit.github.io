@@ -79,6 +79,7 @@ layout: page
 - [(Review) Neural Word Embedding as Implicit Matrix Factorization (Levy & Goldberg, 2014 NIPS)][context_vector_for_word_similarity]
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 - [GloVe, word representation][glove]
+- [FastText, Word representation using subword][fasttext_subword]
 
 ### Topic modeling
 - [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
@@ -169,3 +170,4 @@ layout: page
 [tsne]: {{ site.baseurl }}{% link _posts/2018-09-28-tsne.md %}
 [mds_isomap_lle]: {{ site.baseurl }}{% link _posts/2018-09-29-mds_isomap_lle.md %}
 [spherical_kmeans]: {{ site.baseurl }}{% link _posts/2018-10-16-spherical_kmeans.md %}
+[fasttext_subword]: {{ site.baseurl }}{% link _posts/2018-10-22-fasttext_subword.md %}
