@@ -769,13 +769,13 @@ class HMMTagger:
             morphs = to_node[0].split(' + ')
 
             # score of first word
-            w = self.emission.get(to_node[2], {}).get(morphs[0], _min_emission)
-            w += self.transition.get((from_node[3], to_node[2]), _min_transition)
+            w = self.emission.get(to_node[2], {}).get(morphs[0], self._min_emission)
+            w += self.transition.get((from_node[3], to_node[2]), self._min_transition)
 
             # score of second word
             if len(morphs) == 2:
-                w += self.emission.get(to_node[3], {}).get(morphs[1], _min_emission)
-                w += self.transition.get(to_node[2], {}).get(to_node[3], _min_transition)
+                w += self.emission.get(to_node[3], {}).get(morphs[1], self._min_emission)
+                w += self.transition.get(to_node[2], {}).get(to_node[3], self._min_transition)
             return w
 
         graph = []
