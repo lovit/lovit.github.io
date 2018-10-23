@@ -66,7 +66,7 @@ Hidden Markov Model (HMM) 은 길이가 $$n$$ 인 sequence $$x_{1:n} = [x_1, x_2
 
 $$P(y_{1:n} \vert x_{1:n}) = P(x_1 \vert y_1) \times P(y_1 \vert START) \times P(y_2 \vert y_1) \times P(x_2 \vert y_2) \cdots$$
 
-위의 식은 현재 시점 $$i$$ 의 state 인 $$y_i$$ 를 판별 (classification, or labeling) 하기 위하여 이전 시점의 state 인 $$y_{i-1}$$ 이 이용됩니다. 이처럼 이전의 한 단계 전의 state 정보를 이용하는 모델을 first-order Markov Model 이라 합니다. 만약 이전 두 단계의 states 정보를 모두 이용한다면 $$P(y_i \vert y_{i-2}, y_{i-1}$$ 이 학습되어야 하며, 이는 second-order Markov Model 이라 합니다. 그 외의 멀리 떨어진 state 정보는 이용하지 않습니다.
+위의 식은 현재 시점 $$i$$ 의 state 인 $$y_i$$ 를 판별 (classification, or labeling) 하기 위하여 이전 시점의 state 인 $$y_{i-1}$$ 이 이용됩니다. 이처럼 이전의 한 단계 전의 state 정보를 이용하는 모델을 first-order Markov Model 이라 합니다. 만약 이전 두 단계의 states 정보를 모두 이용한다면 $$P(y_i \vert y_{i-2}, y_{i-1})$$ 이 학습되어야 하며, 이는 second-order Markov Model 이라 합니다. 그 외의 멀리 떨어진 state 정보는 이용하지 않습니다.
 
 이처럼 state 간의 변화 확률을 transition probability (전이 확률) 라 합니다. HMM 은 각 state 에서 우리가 관측 가능한 값 (observation) 이 발생할 확률이 있다고 가정합니다. 이를 emission probability, $$P(x_i \vert y_i)$$ 라 합니다. 품사 판별에서는 명사 집합에서 '아이오아이'라는 단어가 존재할 확률 입니다.
 
