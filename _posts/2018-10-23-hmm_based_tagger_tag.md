@@ -849,10 +849,6 @@ hmm_tagger.tag('tt도예시였다')
 
 이 과정에 품사의 선호나 1 음절 단어에 대한 패널티 기능을 추가한 코드를 [github][hmm_postagger_git] 에 올려두었습니다.
 
-## Reference
-
-- Brants, T. (2000, April). [TnT: a statistical part-of-speech tagger][tnt]. In Proceedings of the sixth conference on Applied natural language processing (pp. 224-231). Association for Computational Linguistics.
-
 [ford_for_pos]: {{ site.baseurl }}{% link _posts/2018-08-21-ford_for_pos.md %}
 [hmm_tagger]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
 [lemmatizer]: {{ site.baseurl }}{% link _posts/2018-06-07-lemmatizer.md %}
