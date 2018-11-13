@@ -7,9 +7,9 @@ tags:
 - preprocessing
 ---
 
-자연어처리를 위한 형태소 분석기들 중에는 Java 로 구현된 것들이 많습니다. 알고리즘을 Python 으로 옮겨 재구현하지 않고도 Python 환경에서 이를 이용할 수 있습니다. KoNLPy 는 다양한 언어로 구현된 형태소 분석기들을 Python 환경에서 이용할 수 있도록 도와줍니다. 여기에서 Jpype 는 Java 구현체들을 Python 에서 이용할 수 있도록 두 언어를 연결해줍니다. [이전 포스트][komoran_before]에서 Jupyter notebook 의 Python 환경에서 Komoran 을 이용하는 과정을 이야기하였습니다. 이번 포스트에서는 Komoran 3 을 Python package 로 만드는 과정에 대하여 이야기합니다. 특히 JVM starting 과 호환 가능한 데이터 형식에 대하여 이야기합니다.
+자연어처리를 위한 형태소 분석기들 중에는 Java 로 구현된 것들이 많습니다. 알고리즘을 Python 으로 옮겨 재구현하지 않고도 Python 환경에서 이를 이용할 수 있습니다. KoNLPy 는 다양한 언어로 구현된 형태소 분석기들을 Python 환경에서 이용할 수 있도록 도와줍니다. 여기에서 Jpype 는 Java 구현체들을 Python 에서 이용할 수 있도록 두 언어를 연결해줍니다. [이전 포스트][komoran_before]에서 IPython notebook 의 Python 환경에서 Komoran 을 이용하는 과정을 이야기하였습니다. 이번 포스트에서는 Komoran 3 을 Python package 로 만드는 과정에 대하여 이야기합니다. 특히 JVM starting 과 호환 가능한 데이터 형식에 대하여 이야기합니다.
 
-## Use Komoran in Jupyter notebook (이전 포스트 요약)
+## Use Komoran in IPython notebook (이전 포스트 요약)
 
 코모란은 Java 로 구현된 한국어 형태소 분석기입니다. shin285 의 github 에는 [version 3.x][komoran3] 가 공개되어 있습니다. 
 
@@ -28,7 +28,7 @@ Jpype 는 Python 에서 JVM 을 띄운 뒤, 서로 통신을 하는 라이브러
     pos.table
     transition.model
 
-소스 파일은 JAR 로 압축하였습니다. 이전 포스트에서 Jupyter notebook 에서 이용할 수 있는 Komoran class 를 만들었습니다.
+소스 파일은 JAR 로 압축하였습니다. 이전 포스트에서 IPython notebook 에서 이용할 수 있는 Komoran class 를 만들었습니다.
 
 {% highlight python %}
 import jpype
@@ -74,7 +74,7 @@ class Komoran:
 
 ### One JVM in one Python kernel
 
-Jpype 는 하나의 Python kernel 에 하나의 JVM 을 만듭니다. 만약 두 개 이상의 JVM 을 실행하려하면 이전의 JVM 도 제대로 작동하지 않습니다. 아래처럼 JVM 이 실행중인지 확인하는 부분이 필요합니다.
+Jpype 는 하나의 Python kernel 에 하나의 JVM 을 만듭니다. 만약 두 개 이상의 JVM 을 실행하려하면 이전의 JVM 도 제대로 작동하지 않습니다. 아래처럼 JVM 이 실행중인지 확인하는 부분이 필요합니다. IPython notebook 환경에서 클래스를 정의하지 말고, py 파일로 만들어서 import 하는 형태로 이용하는게 좋습니다. Jpype 도 한 번만 start 하고요.
 
 {% highlight python %}
 import jpype
@@ -200,7 +200,7 @@ def init_jvm(libraries=None, max_heap=1024):
         print(e)
 {% endhighlight %}
 
-komoran.py 파일에 Komoran class 를 만듭니다. jvm.py 의 init_jvm 함수를 import 합니다.
+komoran.py 파일에 KomoranPy class 를 만듭니다. 자바의 Komoran 이란 클래스 이름과 혼동되지 않도록 KomoranPy 라는 이름으로 만들었습니다. jvm.py 의 init_jvm 함수를 import 합니다.
 
 model_path 에 절대 주소를 입력하기 위하여 installpath 와 동일한 방법으로 komoran.py 파일의 절대 주소를 확인한 뒤, models 폴더의 주소를 추가합니다.
 
@@ -215,7 +215,7 @@ import os
 import jpype
 from .jvm import init_jvm
 
-class Komoran:
+class KomoranPy:
 
     def __init__(self):
 
@@ -248,8 +248,8 @@ class Komoran:
     git clone https://github.com/lovit/komoran3py.git
 
 {% highlight python %}
-from komoran3py import Komoran
-komoran = Komoran()
+from komoran3py import KomoranPy
+komoran = KomoranPy()
 
 sent = '청하는아이오아이멤버입니다'
 print(komoran.pos(sent))
@@ -292,7 +292,7 @@ print(komoran.pos(sent))
 komoran instance 를 새로 만들면, 사용자 사전의 정보는 초기화됩니다.
 
 {% highlight python %}
-komoran = Komoran()
+komoran = KomoranPy()
 print(komoran.pos(sent))
 {% endhighlight %}
 
