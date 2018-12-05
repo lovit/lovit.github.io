@@ -82,6 +82,7 @@ layout: page
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 - [GloVe, word representation][glove]
 - [FastText, Word representation using subword][fasttext_subword]
+- [(Gensim) Word2Vec 의 최소 빈도수 설정][min_count_of_word2vec]
 
 ### Topic modeling
 - [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
@@ -174,3 +175,4 @@ layout: page
 [spherical_kmeans]: {{ site.baseurl }}{% link _posts/2018-10-16-spherical_kmeans.md %}
 [fasttext_subword]: {{ site.baseurl }}{% link _posts/2018-10-22-fasttext_subword.md %}
 [hmm_based_tagger_tag]: {{ site.baseurl }}{% link _posts/2018-10-23-hmm_based_tagger_tag.md %}
+[min_count_of_word2vec]: {{ site.baseurl }}{% link _posts/2018-12-05-min_count_of_word2vec.md %}
