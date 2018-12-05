@@ -1,6 +1,6 @@
 ---
 title: (Gensim) Word2Vec 의 최소 빈도수 설정
-date: 2018-03-26 21:00:00
+date: 2018-12-05 21:00:00
 categories:
 - nlp
 - representation
