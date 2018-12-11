@@ -16,7 +16,7 @@ L1 regularity 는 분류/예측 성능은 유지하면서 모델의 coefficients
 
 scikit learn 의 많은 모델들이 L1 regularity 를 제공합니다. 대표적으로 Logistic Regression 과 Nonnegative Matrix Factorization (NMF) 는 간단한 argument 설정으로 L1 regularity 를 부여할 수 있습니다. Logistic Regression 에서 penalty 를 `l1` 으로 설정하면 아래의 비용 함수를 최소화 하는 solutions 을 계산합니다. cost 는 모델이 얼마나 분류를 잘하느냐의 loss 와 모델의 L1 norm 으로 정의되는 regularity 를 더한 형태로 정의됩니다. 아래 식의 의미는 **분류를 잘하면서도 $$\theta$$ 는 sparse 하게** 학습하라는 것입니다.
 
-$$cost = \begin{bmatrix} P(y=1~\vert~x) \\ \cdots \\ P(y=n~\vert~x) \end{bmatrix} = \begin{bmatrix} \frac{exp(\theta_1^Tx)}{\sum_k exp(\theta_k^Tx)} \\ \cdots \\ \frac{exp(\theta_n^Tx)}{\sum_k exp(\theta_k^Tx)} \end{bmatrix} + \frac{1}{C} \vert \theta \vert$$
+$$cost = \begin{bmatrix} \frac{exp(\theta_1^Tx)}{\sum_k exp(\theta_k^Tx)} \\ \cdots \\ \frac{exp(\theta_n^Tx)}{\sum_k exp(\theta_k^Tx)} \end{bmatrix} + \frac{1}{C} \vert \theta \vert$$
 
 {% highlight python %}
 from sklearn.linear_model import LogisticRegression
@@ -25,9 +25,9 @@ logistic_l1 = LR(penalty='l1', C=1.0)
 logistic_l1.fit(x, y_true)
 {% endhighlight %}
 
-Nonnegative Matrix Factorization 은 데이터 $$X$$ 를 representation $$W$$ 와 dictionary $$H$$ 로 분해하되, $$W, H$$ 의 components 가 모두 non-negative 하게 만드는 factorization 방법입니다. 이 때에도 L1 regularity 를 적용할 수 있습니다. Scikit-learn 의 NMF 는 아래의 비용 함수를 최소화 합니다. `l1_ratio` 를 1 로 설정하면 L1 regularity 만을 적용합니다.
+Nonnegative Matrix Factorization 은 데이터 $$X$$ 를 representation $$W$$ 와 dictionary $$H$$ 로 분해하되, $$W, H$$ 의 components 가 모두 non-negative 하게 만드는 factorization 방법입니다. 이 때에도 L1 regularity 를 적용할 수 있습니다. Scikit-learn 의 NMF 는 아래의 비용 함수를 최소화 합니다. `l1_ratio` $$=\gamma$$ 를 1 로 설정하면 L1 regularity 만을 적용합니다.
 
-$$cost = 0.5 \times \vert X - WH \vert_{Fro^2} + \alpha \cdot l1\_ratio \cdot (\vert W \vert_1 + \vert H \vert_1) + 0.5 \cdot \alpha \cdot (1 - l1\_ratio) \cdot (\vert W \vert_{Fro^2} + \vert H \vert_{Fro^2})$$
+$$cost = 0.5 \times \vert X - WH \vert_{Fro^2} + \alpha \cdot \gamma \cdot (\vert W \vert_1 + \vert H \vert_1) + 0.5 \cdot \alpha \cdot (1 - \gamma) \cdot (\vert W \vert_{Fro^2} + \vert H \vert_{Fro^2})$$
 
 {% highlight python %}
 from sklearn.decomposition import NMF
@@ -282,7 +282,7 @@ nn.CrossEntropyLoss(weight=None, size_average=True)
 
 만약 regularity coefficient 인 `c` 가 너무 크다면 loss 보다는 regularity 에만 집중하는 모델이 될 수 있습니다. 위 실험에서는 `c=0.01` 을 설정하였기 때문에 loss 와 regularity 가 어느 정도 균형이 맞습니다. 아래의 logs 를 살펴보면 대체로 L1 norm 이 26 수준에서 수렴합니다. `c` 를 곱하면 0.26 수준입니다.
 
-그런데 epoch 을 늘릴수록 L1 norm 의 크기는 고정되는데 L2 norm 의 크기가 조금씩 증가합니다. 그리고 zero elements 의 개수도 증가합니다. 이는 몇 개의 elements 의 weight 의 크기를 키우고, 대부분의 weight 를 0 에 가깝게 보낸다는 의미입니다. (0.25, 0.25, 0.25, 0.25) 의 L1 norm 과 L2 norm 의 크기는 각각 1 과 0.5 입니다. 하지만 (0.5, 0.5, 0, 0) 의 L1 norm 과 L2 norm 의 크기는 각각 1 과 $$sqrt{2}$$ 입니다. 극단적으로 (1, 0, 0, 0) 의 L1, L2 norm 은 모두 1 입니다. 아래의 logs 는 coefficients 가 점점 더 sparse 한 형태로 바뀌고 있음을 의미합니다.
+그런데 epoch 을 늘릴수록 L1 norm 의 크기는 고정되는데 L2 norm 의 크기가 조금씩 증가합니다. 그리고 zero elements 의 개수도 증가합니다. 이는 몇 개의 elements 의 weight 의 크기를 키우고, 대부분의 weight 를 0 에 가깝게 보낸다는 의미입니다. (0.25, 0.25, 0.25, 0.25) 의 L1 norm 과 L2 norm 의 크기는 각각 1 과 0.5 입니다. 하지만 (0.5, 0.5, 0, 0) 의 L1 norm 과 L2 norm 의 크기는 각각 1 과 0.707 입니다. 극단적으로 (1, 0, 0, 0) 의 L1, L2 norm 은 모두 1 입니다. 아래의 logs 는 coefficients 가 점점 더 sparse 한 형태로 바뀌고 있음을 의미합니다.
 
     epoch = 0, training accuracy = 0.489, l1=75.908, l2=0.805, nz=12
     epoch = 1, training accuracy = 0.616, l1=74.749, l2=0.795, nz=14
