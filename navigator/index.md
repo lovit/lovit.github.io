@@ -101,6 +101,9 @@ layout: page
 - [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
 - [pyLDAvis 를 이용한 k-means 학습 결과 시각화하기][pyldavis_kmeans]
 
+<font color="#2851a4"><h2>PyTorch</h2></font>
+- [PyTorch 에서 L1 regularity 부여하기][pytorch_l1_regularity]
+
 <font color="#2851a4"><h2>Application: 띄어쓰기 오류 교정</h2></font>
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
 - [Conditional Random Field based Korean Space Correction][crf_korean_spacing]
@@ -176,3 +179,4 @@ layout: page
 [fasttext_subword]: {{ site.baseurl }}{% link _posts/2018-10-22-fasttext_subword.md %}
 [hmm_based_tagger_tag]: {{ site.baseurl }}{% link _posts/2018-10-23-hmm_based_tagger_tag.md %}
 [min_count_of_word2vec]: {{ site.baseurl }}{% link _posts/2018-12-05-min_count_of_word2vec.md %}
+[pytorch_l1_regularity]: {{ site.baseurl }}{% link _posts/2018-12-11-pytorch_l1_regularity.md %}
