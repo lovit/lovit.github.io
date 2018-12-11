@@ -316,8 +316,8 @@ nn.CrossEntropyLoss(weight=None, size_average=True)
 
 이 포스트의 내용을 정리하면 아래와 같습니다.
 
-1. PyTorch 에서 L1 regularity 를 부여하기 위해서는 model 의 parameter 로부터 L1 norm 을 계산하여 이를 cost 에 더하면 됩니다. 단, Parameters 가 아닌 Tensor 를 더하면 안됩니다.
-2. L1 regularity 를 부여해도 coefficient 가 0 이 되지 않을 수 있습니다. Coefficient 의 절대값이 매우 작아지면 이를 0 으로 취급해도 됩니다.
-3. L1 norm 의 크기가 유지되면서 L2 norm 의 크기가 증가한다면, elements 중 절대값이 0 에 가까워지는 elements 의 개수가 늘어나고 있음을 의미합니다.
+- PyTorch 에서 L1 regularity 를 부여하기 위해서는 model 의 parameter 로부터 L1 norm 을 계산하여 이를 cost 에 더하면 됩니다. 단, Parameters 가 아닌 Tensor 를 더하면 안됩니다.
+- L1 regularity 를 부여해도 coefficient 가 0 이 되지 않을 수 있습니다. Coefficient 의 절대값이 매우 작아지면 이를 0 으로 취급해도 됩니다.
+- L1 norm 의 크기가 유지되면서 L2 norm 의 크기가 증가한다면, elements 중 절대값이 0 에 가까워지는 elements 의 개수가 늘어나고 있음을 의미합니다.
 
 [lasso_keyword]: {{ site.baseurl }}{% link _posts/2018-03-24-lasso_keyword.md %}
