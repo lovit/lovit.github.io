@@ -116,6 +116,7 @@ layout: page
 - [soydata. 복잡한 인공 데이터 생성을 위한 함수들][synthetic_dataset]
 - [Cherry picking 의 위험성과 testing 설계의 중요성][cherry_picking]
 - [Github 으로 텍스트 문서 버전 관리하기][latex_with_github]
+- [Github 으로 데이터 공유 API 만들기][git_data]
 
 
 [kmeans_initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
@@ -180,3 +181,4 @@ layout: page
 [hmm_based_tagger_tag]: {{ site.baseurl }}{% link _posts/2018-10-23-hmm_based_tagger_tag.md %}
 [min_count_of_word2vec]: {{ site.baseurl }}{% link _posts/2018-12-05-min_count_of_word2vec.md %}
 [pytorch_l1_regularity]: {{ site.baseurl }}{% link _posts/2018-12-11-pytorch_l1_regularity.md %}
+[git_data]: {{ site.baseurl }}{% link _posts/2019-01-12-git_data.md %}
