@@ -118,6 +118,7 @@ layout: page
 - [Github 으로 텍스트 문서 버전 관리하기][latex_with_github]
 - [Github 으로 데이터 공유 API 만들기][git_data]
 - [Python dill 로 class definition 까지 binary 로 저장하기][python_dill]
+- [praw 를 이용한 Reddit scrapping 과 아카이빙이 된 이전 Reddit 가져오기][get_reddit]
 
 
 [kmeans_initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
@@ -184,3 +185,4 @@ layout: page
 [pytorch_l1_regularity]: {{ site.baseurl }}{% link _posts/2018-12-11-pytorch_l1_regularity.md %}
 [git_data]: {{ site.baseurl }}{% link _posts/2019-01-12-git_data.md %}
 [python_dill]: {{ site.baseurl }}{% link _posts/2019-01-15-python_dill.md %}
+[get_reddit]: {{ site.baseurl }}{% link _posts/2019-01-16-get_reddit.md %}
