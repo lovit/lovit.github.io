@@ -21,7 +21,7 @@ Reddit 을 쓰신 분들이라면 잘 아실테지만, 저는 몇 번 보기만 
 
 ## robots.txt
 
-먼저 Reddit 의 robots.txt 를 확인했습니다. 사용자들도 많고 게시물의 개수도 많기 때문에 지킬 건 지켜야 겠다는 생각을 했습니다.
+먼저 Reddit 의 robots.txt 를 확인했습니다. disallow 가 많습니다. 공식 API 가 제공된다면 이를 이용합니다.
 
 ```
 # 80legs
