@@ -117,7 +117,7 @@ layout: page
 - [Cherry picking 의 위험성과 testing 설계의 중요성][cherry_picking]
 - [Github 으로 텍스트 문서 버전 관리하기][latex_with_github]
 - [Github 으로 데이터 공유 API 만들기][git_data]
-- [Python dill 로 class definition 까지 pickling 하기][python_dill]
+- [Python dill 로 class definition 까지 binary 로 저장하기][python_dill]
 
 
 [kmeans_initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}

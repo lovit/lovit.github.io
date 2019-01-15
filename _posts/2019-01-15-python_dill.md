@@ -1,5 +1,5 @@
 ---
-title: Python dill 로 class definition 까지 pickling 하기
+title: Python dill 로 class definition 까지 binary 로 저장하기
 date: 2019-01-15 09:00:00
 categories:
 - analytics
