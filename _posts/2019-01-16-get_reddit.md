@@ -7,6 +7,8 @@ tags:
 - dataset
 ---
 
+최근에 이 Reddit 의 자료들을 수집할 일이 있었습니다. Reddit 은 praw 라는 파이썬 API 를 제공하지만, 이를 통하여 수집할 수 있는 submissions (posts) 의 개수는 제한적입니다. 대신 데이터를 아카이빙하여 제공합니다. 이들에 대한 간단한 설명입니다. 같은 작업을 하실 다른 분들이 헤매지 않고 작업하시길 바랍니다.
+
 ## Reddit
 
 Reddit 은 일종의 social news platform 으로, 사용자들이 한 주제에 대한 글을 쓰고 다른 사용자들이 댓글을 달며 토론을 하는 서비스 입니다. 각 글마다 추천과 비추천을 voting 할 수 있기 때문에, 이에 따라 중요한 글들이 상위권으로 배치됩니다. Sung Kim 교수님이 TensorFlow-KR 에 머신러닝에 관련된 최근 reddit posts 를 정리해 주시기도 했습니다. 바로 그 Reddit 입니다.
