@@ -80,11 +80,11 @@ ModuleNotFoundError                       Traceback (most recent call last)
 ModuleNotFoundError: No module named 'data'
 ```
 
-이처럼 serializable 하지 않은 변수들을 binary 로 저장하는 방법을 살펴봅니다.
+이처럼 serializable 하지 않은 변수들을 binary 로 저장하기 위해서는 dill 을 이용해야 합니다.
 
 ## Python dill
 
-일단 dill 이라는 파이썬 패키지를 이용하면 serializable 하지 않은 값들도 손쉽게 binary 로 저장이 가능합니다. 인터페이스는 pickle 과 동일합니다.
+`dill` 파이썬 패키지를 이용하면 serializable 하지 않은 값들도 손쉽게 binary 로 저장이 가능합니다. 인터페이스는 pickle 과 동일합니다.
 
 ```python
 from collections import namedtuple
