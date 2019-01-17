@@ -117,3 +117,7 @@ pip install dill
 ```
 
 그러나 source code 를 본다던지 같은 클래스의 더 많은 인스턴스를 만드는 것은 어려워 보입니다. dill 의 본래 목적이 네트워크 상에서 불특정 사용자에게 파이썬 변수의 값을 전달하는게 목적이었다 하니 그 용도로는 충분하다 생각됩니다.
+
+## 내장 함수 구현으로 class instance 를 serializable 하게 만들기
+
+[Python pickling documentation](https://docs.python.org/3.4/library/pickle.html#pickling-class-instances) 에서는 클래스 인스턴스를 serializable 하게 만드는 방법을 소개하고 있습니다. 이 부분은 좀 더 공부하여 정리하도록 하겠습니다.
