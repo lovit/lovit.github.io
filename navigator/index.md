@@ -60,6 +60,7 @@ layout: page
 - [명사 추출기 (3) Noun extraction and noun tokenization][noun_extractor_and_tokenizer]
 - [한국어 용언의 원형 복원 (Korean lemmatization)][lemmatizer]
 - [한국어 용언의 활용 함수 (Korean conjugation)][conjugation]
+- [말뭉치를 이용한 한국어 용언 분석기 (Korean Lemmatizer)][trained_kor_lemmatizer]
 - [Hidden Markov Model (HMM) 기반 품사 판별기의 원리와 문제점][hmm_based_tagger]
 - [Hidden Markov Model 기반 품사 판별기의 decode 함수][hmm_based_tagger_tag]
 - [Conditional Random Field (CRF) 기반 품사 판별기의 원리와 HMM 기반 품사 판별기와의 차이점][crf_based_tagger]
@@ -186,3 +187,4 @@ layout: page
 [git_data]: {{ site.baseurl }}{% link _posts/2019-01-12-git_data.md %}
 [python_dill]: {{ site.baseurl }}{% link _posts/2019-01-15-python_dill.md %}
 [get_reddit]: {{ site.baseurl }}{% link _posts/2019-01-16-get_reddit.md %}
+[trained_kor_lemmatizer]: {{ site.baseurl }}{% link _posts/2019-01-22-trained_kor_lemmatizer.md %}
