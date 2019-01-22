@@ -44,6 +44,10 @@ tags:
 표현형 : 하/Verb + 았다/Eomi -> 했다
 ```
 
+반대로 표현형이 기본형으로 변화하는 것을 lemmatization 이라 합니다. Conjugation 과 역관계 입니다.
+
+### KoNLPy.Komoran 을 이용한 Lemmatization
+
 KoNLPy (>= 0.5.0) 의 Komoran 을 이용하면 다음과 같은 결과가 나옵니다.
 
 ```python
@@ -61,16 +65,44 @@ def lemmatize(word):
         return morphtags[0][0] + '다'
 ```
 
-하지만 Open Korean Text 는 품사 판별기이기 때문에 용언에 대하여 형태소 분석을 하지 않습니다. 그렇기 때문에 원형 복원은 어렵습니다. Lemmatization 은 용언의 형태소인 어간과 어미를 인식해야 할 수 있습니다.
+### KoNLPy.Twitter (0.4.x) vs KoNLPy.Okt (0.5.x)
+
+이전의 KoNLPy 0.4.x 버전에서는 Twitter 한국어 분석기라는 패키지가 Open Korean Text 로 이전하였습니다. 그리고 0.5.x 와 그 결과가 다릅니다. Lemmatization 관점에서 변화가 있기에 이를 기술합니다.
+
+현재 0.5.x 의 Open Korean Text 는 품사 판별기이기 때문에 용언에 대하여 형태소 분석을 하지 않습니다. 그렇기 때문에 원형 복원은 어렵습니다. Lemmatization 은 용언의 형태소인 어간과 어미를 인식해야 할 수 있습니다.
 
 ```
+import konlpy
+print(konlpy.__version__) # 0.5.1
+
 from konlpy.tag import Okt
 
 Okt().pos('했다') # [('했다', 'Verb')]
 Okt().pos('했더라도') # [('했더라도', 'Verb')]
 ```
 
-반대로 표현형이 기본형으로 변화하는 것을 lemmatization 이라 합니다. Conjugation 과 역관계 입니다.
+그러나 이전의 0.4.x 에서는 형태소 분석을 하고 있었습니다.
+
+```python
+import konlpy
+print(konlpy.__version__) # 0.4.4
+
+from konlpy.tag import Twitter
+
+for word in ['했다', '했지만', '하면서도', '했던', '하니까']:
+    print(twitter.pos(word))
+```
+
+`했지만`과 `하면서도`는 아마도 어미가 없어서 형태소 분석에 실패한 것으로 예상되며, `했다`, `했던` 의 경우는 어간과 어미가 분리됨을 볼 수 있습니다. `하니까`는 사전이 잘못된 것으로 예상됩니다.
+
+```
+[('했', 'Verb'), ('다', 'Eomi')]
+[('했지만', 'Josa')]
+[('하면', 'Verb'), ('서도', 'Noun')]
+[('했', 'Verb'), ('던', 'Eomi')]
+[('하니', 'Verb'), ('까', 'Eomi')]
+```
+
 
 ## 용언의 규칙 활용과 불규칙 활용
 
