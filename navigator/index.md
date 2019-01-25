@@ -118,6 +118,7 @@ layout: page
 - [Cherry picking 의 위험성과 testing 설계의 중요성][cherry_picking]
 - [Github 으로 텍스트 문서 버전 관리하기][latex_with_github]
 - [Github 으로 데이터 공유 API 만들기][git_data]
+- [AWS S3 에 데이터셋 공유하기 (Bucket 만들고 파일 업로드 하기)][aws_s3_release_files]
 - [Python dill 로 class definition 까지 binary 로 저장하기][python_dill]
 - [praw 를 이용한 Reddit scrapping 과 아카이빙이 된 이전 Reddit 가져오기][get_reddit]
 
@@ -188,3 +189,4 @@ layout: page
 [python_dill]: {{ site.baseurl }}{% link _posts/2019-01-15-python_dill.md %}
 [get_reddit]: {{ site.baseurl }}{% link _posts/2019-01-16-get_reddit.md %}
 [trained_kor_lemmatizer]: {{ site.baseurl }}{% link _posts/2019-01-22-trained_kor_lemmatizer.md %}
+[aws_s3_release_files]: {{ site.baseurl }}{% link _posts/2019-01-25-aws_s3_release_files.md %}
