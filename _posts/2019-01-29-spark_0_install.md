@@ -86,6 +86,8 @@ pyspark 도 가동해봅니다. 이 역시 Web UI 의 주소를 보여주며, �
 iam@spark/spark-2.4.0-bin-hadoop2.7$ bin/pyspark
 ```
 
+![]({{ "/assets/figures/spark-4040.png" | absolute_url }}){: width="70%" height="70%"}
+
 ## PySpark 설치 및 IPython Notebook 에서 사용하기
 
 PySpark 는 Scala 로 작성된 Spark 를 Python 환경에서 이용할 수 있도록 도와줍니다. 찾아보니 Py4J 라는 라이브러리를 이용하여 Java 와 Python 간에 연결을 시켜둔 것 같습니다.
