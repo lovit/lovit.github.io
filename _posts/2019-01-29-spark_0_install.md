@@ -1,5 +1,5 @@
 ---
-title: [Spark] 0. Ubuntu 에 Spark 설치, IPython Notebook 의 외부접속 설정, PySpark 와 Notebook 연동
+title: (Spark) 0. Ubuntu 에 Spark 설치, IPython Notebook 의 외부접속 설정, PySpark 와 Notebook 연동
 date: 2019-01-29 04:00:00
 categories:
 - spark
