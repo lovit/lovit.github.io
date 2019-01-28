@@ -122,6 +122,8 @@ layout: page
 - [Python dill 로 class definition 까지 binary 로 저장하기][python_dill]
 - [praw 를 이용한 Reddit scrapping 과 아카이빙이 된 이전 Reddit 가져오기][get_reddit]
 
+<font color="#2851a4"><h2>Spark</h2></font>
+- [0. Ubuntu 에 Spark 설치, IPython Notebook 의 외부접속 설정, PySpark 와 Notebook 연동][spark_0_install]
 
 [kmeans_initializer]: {{ site.baseurl }}{% link _posts/2018-03-19-kmeans_initializer.md %}
 [carblog_description]: {{ site.baseurl }}{% link _posts/2018-03-20-carblog_description.md %}
@@ -190,3 +192,4 @@ layout: page
 [get_reddit]: {{ site.baseurl }}{% link _posts/2019-01-16-get_reddit.md %}
 [trained_kor_lemmatizer]: {{ site.baseurl }}{% link _posts/2019-01-22-trained_kor_lemmatizer.md %}
 [aws_s3_release_files]: {{ site.baseurl }}{% link _posts/2019-01-25-aws_s3_release_files.md %}
+[spark_0_install]: {{ site.baseurl }}{% link _posts/2019-01-29-spark_0_install.md %}
