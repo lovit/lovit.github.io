@@ -1,4 +1,21 @@
+---
+title: [Spark] 0. Ubuntu 에 Spark 설치, IPython Notebook 의 외부접속 설정, PySpark 와 Notebook 연동
+date: 2019-01-29 04:00:00
+categories:
+- spark
+tags:
+- spark
+---
 
+이번 포스터에서는 Ubuntu 에 Spark 를 설치하는 과정, 그리고 IPython Notebook 에서 Spark 를 이용하기 위하여 PySpark 를 설치하는 과정, 외부에서 IPython Notebook 을 이용할 수 있도록 설정을 하는 과정을 정리하였습니다.
+
+## Introduction
+
+제가 주로 하는 데이터 분석에는 dense matrix multiplication 과 같은 작업 보다는 텍스트 데이터를 카운팅 하거나 특정 정보를 탐색하는 일이 많습니다. 그리고 작업 시 효율적인 메모리 사용이나 알고리즘의 scalability 에 신경을 쓰는 편입니다. 그런 관점에서 Spark 는 도움이 되는 라이브러리이기 때문에 최근에 Spark 를 공부하기 시작했습니다. 이 포스트는 그 과정의 정리입니다.
+
+이번 포스터에서는 Ubuntu 에 Spark 를 설치하는 과정, 그리고 IPython Notebook 에서 Spark 를 이용하기 위하여 PySpark 를 설치하는 과정, 외부에서 IPython Notebook 을 이용할 수 있도록 설정을 하는 과정을 정리하였습니다.
+
+이전에는 PySpark 를 따로 설치하고 Spark 환경 변수를 설정하여 IPython Notebook 과 연결을 시켰던 것 같은데, 최근에는 PyPi 에 PySpark 가 등록되어 pip install 만으로 설치가 가능합니다.
 
 ## Ubuntu 에 Java 설치하기
 
