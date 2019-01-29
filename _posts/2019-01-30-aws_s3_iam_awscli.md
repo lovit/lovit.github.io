@@ -103,5 +103,11 @@ aws s3 sync SOURCE_DIR s3://DEST_BUCKET/
 aws s3 sync SOURCE s3://DESTINATION --acl public-read
 ```
 
+데이터 백업을 위해서라면 Storage class 를 Standard 로 할 필요는 없습니다. Standard IA 는 자주 접속하지는 않지만, 중요한 데이터를 저장하는 storage class 입니다. 이를 이용하려면 다음처럼 --storage-class 옵션을 부여합니다. 더 많은 cp 관련 옵션은 [여기](https://docs.aws.amazon.com/cli/latest/reference/s3/cp.html)에 있습니다.
+
+```
+aws s3 sync SOURCE_DIR s3://DEST_BUCKET/ --storage-class STANDARD_IA
+```
+
 [aws_s3_release_files]: {{ site.baseurl }}{% link _posts/2019-01-25-aws_s3_release_files.md %}
 [aws_documentation]: https://aws.amazon.com/ko/getting-started/tutorials/backup-to-s3-cli/
