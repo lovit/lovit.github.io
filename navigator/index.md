@@ -120,6 +120,7 @@ layout: page
 - [Github 으로 데이터 공유 API 만들기][git_data]
 - [AWS S3 에 데이터셋 공유하기 (Bucket 만들고 파일 업로드 하기)][aws_s3_release_files]
 - [AWS CLI (Command Line Interface) 를 이용하여 S3 버킷 다루기 (파일 업로드, 폴더 동기화) 및 AWS IAM 등록][aws_s3_iam_awscli]
+- [Bokeh 와 Flask 를 이용한 AWS S3 access log 모니터링 앱 만들기][flask_bokeh_aws_log]
 - [Python dill 로 class definition 까지 binary 로 저장하기][python_dill]
 - [praw 를 이용한 Reddit scrapping 과 아카이빙이 된 이전 Reddit 가져오기][get_reddit]
 
@@ -195,4 +196,5 @@ layout: page
 [aws_s3_release_files]: {{ site.baseurl }}{% link _posts/2019-01-25-aws_s3_release_files.md %}
 [spark_0_install]: {{ site.baseurl }}{% link _posts/2019-01-29-spark_0_install.md %}
 [aws_s3_iam_awscli]: {{ site.baseurl }}{% link _posts/2019-01-30-aws_s3_iam_awscli.md %}
+[flask_bokeh_aws_log]: {{ site.baseurl }}{% link _posts/2019-02-08-flask_bokeh_aws_log.md %}
 
