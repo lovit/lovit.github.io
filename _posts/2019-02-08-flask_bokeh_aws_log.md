@@ -126,9 +126,10 @@ def test():
     return 'Test'
 ```
 
-argparse 를 이용하여 host 와 port 를 argument 로 입력받을 수 있도록 만듭니다. Flask 의 기본 host 는 localhost 이며, 이 앱이 돌아갈 컴퓨터는 고정 아이피를 가지고 있기 때문에 이를 이용할 것입니다. 그리고 main 함수는 log 를 정렬하는 listup 함수의 return 값을 return 합니다. 이제 이 listup 함수만 구현하면 됩니다.
+위 세가지 내용에 argument parser 까지 추가하여 server.py 파일을 만듭니다. argparse 를 이용하여 host 와 port 를 argument 로 입력받을 수 있도록 만듭니다. Flask 의 기본 host 는 localhost 이며, 이 앱이 돌아갈 컴퓨터는 고정 아이피를 가지고 있기 때문에 이를 이용할 것입니다. 그리고 main 함수는 log 를 정렬하는 listup 함수의 return 값을 return 합니다. 이제 이 listup 함수만 구현하면 됩니다.
 
 ```python
+# server.py 
 import argparse
 from analyzer import listup
 from config import directory
@@ -267,6 +268,8 @@ def log_to_bokeh_widget(logs):
 
 ## Demo
 
+위 내용들을 github [(링크)][monitor_github]에 정리해 두었습니다.
+
 필요한 항목들을 만들었으니 IP 와 port 를 입력하여 server.py 파일을 실행시킵니다. 
 
 ```
@@ -285,3 +288,4 @@ python server.py --host IP --port PORT
 [textmining-tutorial]: https://github.com/lovit/python_ml4nlp
 [logformat]: https://docs.aws.amazon.com/AmazonS3/latest/dev/LogFormat.html
 [datatable]: https://bokeh.pydata.org/en/latest/docs/user_guide/examples/interaction_data_table.html
+[monitor_github]: https://github.com/lovit/s3log_monitor
