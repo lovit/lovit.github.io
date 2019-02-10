@@ -22,6 +22,7 @@ layout: page
 - [k-means initial points 선택 방법][kmeans_initializer]
 - [Cluster labeling for text data][kmeans_cluster_labeling]
 - [Spherical k-means for document clustering][spherical_kmeans]
+- [k-means Ensemble 구현과 학습 시 주의할 점][kmeans_ensemble]
 
 ### Nearest neighbor search
 - [Random Projection and Locality Sensitive Hashing][lsh]
@@ -197,4 +198,4 @@ layout: page
 [spark_0_install]: {{ site.baseurl }}{% link _posts/2019-01-29-spark_0_install.md %}
 [aws_s3_iam_awscli]: {{ site.baseurl }}{% link _posts/2019-01-30-aws_s3_iam_awscli.md %}
 [flask_bokeh_aws_log]: {{ site.baseurl }}{% link _posts/2019-02-08-flask_bokeh_aws_log.md %}
-
+[kmeans_ensemble]: {{ site.baseurl }}{% link _posts/2019-02-11-kmeans_ensemble.md %}

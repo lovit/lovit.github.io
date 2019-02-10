@@ -1,5 +1,5 @@
 ---
-title: k-means Ensemble
+title: k-means Ensemble 구현과 학습 시 주의할 점
 date: 2019-02-11 04:00:00
 categories:
 - machine learning
