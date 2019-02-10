@@ -316,7 +316,7 @@ $$\lambda \cdot P(w \vert t) + (1 - \lambda) \cdot \frac{P(w \vert t)}{P(w)}$$
 - Sievert, C., & Shirley, K. (2014). [LDAvis: A method for visualizing and interpreting topics.][ldavis_paper] In Proceedings of the workshop on interactive language learning, visualization, and interfaces (pp. 63-70).
 
 ## Notes
-- [^1] 실제로 이를 dump term 이라하여, 토픽 모델링의 품질을 저하하는 요인이기도 합니다. 이에 대한 내용은 다른 포스트에서 다루도록 합니다
+- [^1] 실제로 이를 junk term 이라하여, 토픽 모델링의 품질을 저하하는 요인이기도 합니다. 이에 대한 내용은 다른 포스트에서 다루도록 합니다
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
