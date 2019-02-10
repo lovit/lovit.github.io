@@ -76,7 +76,7 @@ export_png(p, 'kmeans_ensemble_scresult.png')
 
 이러한 문제의 해법으로 제안된 것 중 하나는 clustering ensemble 입니다. 군집화 알고리즘은 어떤 것을 이용하여도 관계 없습니다. k-means 가 학습 속도가 빠르기 때문에 이를 이용하여 앙상블을 할 수 있습니다.
 
-k-means ensemble 은 간단합니다. 우리가 알고 있는 k-means 알고리즘을 여러 번 반복학습합니다. 한 번의 k-means 의 학습 결과 각 점들의 군집 아이디 (labels) 를 얻을 수 있습니다. 이 정보로부터 같은 군집에 속한 점들 간에 co-occurrence 를 1 씩 더합니다. 예를 들어 point 1, point 2 가 같은 군집에 속하였다면 아래처럼 co-occurrence 를 더합니다. 다음 번 k-means 의 학습 결과에서도 point 1, point 2 가 같은 군집에 속하였다면 (그 군집의 label 이 무엇인지는 관계없이) co-occurrence 값을 1 추가합니다.
+k-means ensemble 은 간단합니다. 우리가 알고 있는 k-means 알고리즘을 여러 번 반복하여 학습합니다. 한 번의 k-means 의 학습 결과 각 점들의 군집 아이디 (labels) 를 얻을 수 있습니다. 이 정보로부터 같은 군집에 속한 점들 간에 co-occurrence 를 1 씩 더합니다. 예를 들어 point 1, point 2 가 같은 군집에 속하였다면 아래처럼 co-occurrence 를 더합니다. 다음 번 k-means 의 학습 결과에서도 point 1, point 2 가 같은 군집에 속하였다면 (그 군집의 label 이 무엇인지는 관계없이) co-occurrence 값을 1 추가합니다.
 
 ```python
 from collections import defaultdict
@@ -87,7 +87,7 @@ cooccurrence[(1, 2)] += 1
 
 k-means 를 100 번 학습하면 어떤 두 점은 최대 100 번의 co-occurrence 를 얻을 수 있고, 어떤 점은 한 번도 같은 군집에 속한 적이 없을 수도 있습니다. 이 co-occurrence 값을 점간의 affinity 로 이용합니다. 아래의 코드에서 X 는 scipy.sparse.matrix 나 numpy.ndarray 와 같은 행렬로 표현된 데이터 입니다. `n_ensembles` 는 k-means 의 반복 횟수입니다. `n_ensemble_units` 은 기본 k-means 를 학습할 때의 clusters 의 개수입니다.
 
-Scikit-learn 의 k-means 는 `n_init` 번의 k-means 를 실행하고 silhouette score 기준으로 가장 좋은 결과를 return 합니다. 그리고 매 실행마다 max_iter (기본값 300) 의 반복 계산을 합니다. k-means 는 이렇게 계산할 필요가 전혀 없습니다. 수렴이 빠르고 군집의 개수가 많으면 대체로 안정적인 학습 결과를 보이기 떄문에 `n_init = 1`, `max_iter = 20` 으로 설정합니다. Co-occurrence 가 계산되면 이를 sparse matrix 로 만듭니다.
+Scikit-learn 의 k-means 는 `n_init` 번의 k-means 를 실행하고 silhouette score 기준으로 가장 좋은 결과를 return 합니다. 그리고 매 실행마다 max_iter (기본값 300) 의 반복 계산을 합니다. k-means 는 이렇게 계산할 필요가 전혀 없습니다. 수렴이 빠르고 군집의 개수가 많으면 대체로 안정적인 학습 결과를 보이기 때문에 `n_init = 1`, `max_iter = 20` 으로 설정합니다. Co-occurrence 가 계산되면 이를 sparse matrix 로 만듭니다.
 
 ```python
 from collections import defaultdict
@@ -121,7 +121,7 @@ affinity = cooccurrence_as_csr_matrix(cooccurrence, n_rows)
 
 파이썬의 dict 형식인 cooccurrence 의 key 는 두 점이며, value 는 co-occurrence 입니다. 두 점을 각각 rows, columns 로 만들어 csr sparse matrix 를 만듭니다. Sparse matrix 의 종류에 대한 설명은 [이 포스트][sparsematrix]를 참고하세요. 
 
-Sparse matrix 를 만들 때 마지막 index 의 점들 간에 co-occurrence 가 없을 수도 있습니다. shape 을 (n_rows, n_rows) 처럼 설정하지 않으면 rows, cols 의 최대값을 shape 으로 이용합니다. 모든 점이 포함되지 않은 affinity matrix 가 만들어지지 않을수도 있으니 반드시 shape 을 아래처럼 강제로 설정합니다.
+Sparse matrix 를 만들 때 마지막 index 의 점들 간에 co-occurrence 가 없을 수도 있습니다. shape 을 (n_rows, n_rows) 처럼 설정하지 않으면 rows, cols 의 최대값을 shape 으로 이용합니다. 모든 점이 포함되지 않은 affinity matrix 가 만들어질 수도 있으니 반드시 shape 을 아래처럼 강제로 설정합니다.
 
 ```python
 from scipy.sparse import csr_matrix
@@ -170,7 +170,7 @@ def single_linkage(affinity, n_clusters=2):
     sorted_affinity = sorted(most_similars, key=lambda x:x[2], reverse=True)
 ```
 
-`idx_to_c` 는 각 점이 어떤 군집에 속했는지에 대한 map 이며, `c_to_idxs` 는 각 군집에 속한 점들입니다. 초기화에서는 모든 점들이 각자의 군집을 만듭니다. 군집들이 병합되는 과정을 기록할 history 를 만들어둡니다. 그리고 다음 번 병합 (merging) 이 되는 군집의 idx 는 `new_c` 입니다. n 개의 점이 0 부터 n-1 까지의 cluster id 를 지녔으므로 n 으로 초기화 합니다.
+`idx_to_c` 는 각 점이 어떤 군집에 속했는지에 대한 map 이며, `c_to_idxs` 는 각 군집에 속한 점들의 map 입니다. 초기화에서는 모든 점들이 각자의 군집을 만듭니다. 군집들이 병합되는 과정을 기록할 history 를 만들어둡니다. 그리고 다음 번 병합 (merging) 이 되는 군집의 idx 는 `new_c` 입니다. n 개의 점이 0 부터 n-1 까지의 cluster id 를 지녔으므로 n 으로 초기화 합니다.
 
 ```python
 def single_linkage(affinity, n_clusters=2):
@@ -210,7 +210,7 @@ def single_linkage(affinity, n_clusters=2):
         del c_to_idxs[cj]
 ```
 
-군집이 합쳐지는 과정을 기록할 수도 있습니다. Merge 라는 namedtuple 을 만듭니다. child0, child1 이 ci, cj 입니다. 그리고 두 군집이 합쳐져 새로 부여받은 new_c 를 parent 에 저장합니다.
+군집이 합쳐지는 과정을 기록할 수도 있습니다. Merge 라는 namedtuple 을 만듭니다. `child0`, `child1` 이 `ci`, `cj` 입니다. 그리고 두 군집이 합쳐져 새로 부여받은 `new_c` 를 `parent` 에 저장합니다.
 
 그 다음으로는 (row, column, value) 의 row 와 column 이 모두 `union` 에 속한 경우를 sorted_affinity 에서 제거합니다. 두 점이 하나의 군집으로 묶일 일은 이후로 없기 때문입니다 (이미 하나의 군집입니다).
 
@@ -239,7 +239,7 @@ def single_linkage(affinity, n_clusters=2):
         n_iters += 1
 ```
 
-학습이 종료되면 idx_to_c 에는 각 점들이 속한 군집의 cluster id 가 저장되어 있습니다. 하지만 이 값은 0 부터 시작하는 값이 아닙니다. numpy.unique 함수를 이용하여 unique cluster id 를 확인한 뒤, 이들을 0 부터 n_clusters - 1 로 re-numbering 합니다.
+학습이 종료되면 idx_to_c 에는 각 점들이 속한 군집의 cluster id 가 저장되어 있습니다. 하지만 이 값은 0 부터 시작하는 값이 아닙니다. Merging 을 하면서 cluster id 를 계속 증가하였으니까요. numpy.unique 함수를 이용하여 unique cluster id 를 확인한 뒤, 이들을 0 부터 n_clusters - 1 로 re-numbering 합니다.
 
 ```python
 import numpy as np
@@ -267,7 +267,7 @@ def kmeans_ensemble(X, n_ensembles, n_ensemble_units, n_clusters):
 
 ## k-means Ensemble 구현체
 
-정리하면 k-means ensemble 은 여러 번의 k-means 학습 결과를 통하여 점들 간의 co-occurrence 를 학습하고, 이를 affinity matrix 로 이용하여 agglomerative clustering 을 수행합니다. 이 방법이 생각보다 잘 작동합니다. 또한 parameter setting 에 대한 기준도 어느 정도 명확합니다. 단, 계산 비용이 싸지는 않습니다. 대체로 ensemble 을 위해 학습하는 k-means 의 반복 횟수가 많기 때문입니다.
+정리하면 k-means ensemble 은 여러 번의 k-means 학습 결과를 통하여 점들 간의 co-occurrence 를 학습하고, 이를 affinity matrix 로 이용하여 agglomerative clustering 을 수행합니다. 이 간단한 방법이 꾀 잘 작동합니다. 또한 parameter setting 에 대한 기준도 어느 정도 명확합니다. 단, 계산 비용이 싸지는 않습니다. 대체로 ensemble 을 위해 학습하는 k-means 의 반복 횟수가 많기 때문입니다.
 
 여하튼 이 과정을 KMeansEnsemble 에 구현하였습니다. 구현체는 [여기 github repository][git] 에 올려두었습니다. Parameter 는 다음과 같습니다.
 
@@ -278,8 +278,6 @@ n_ensemble_units (n_units) : 기본 k-means 학습 시의 k 값
 ```
 
 ```python
-import sys
-sys.path.append('../')
 from kmeans_ensemble import KMeansEnsemble
 
 n_clusters = 2
@@ -387,7 +385,7 @@ nnz = kmeans_ensemble.affinity.nnz
 sparsity = 1 - ((n_data + nnz) / (n_data ** 2)) # 0.7958
 ```
 
-Units 의 개수를 좀 더 줄이면 affinity matrix 에 노이즈가 더 추가됩니다. 이미 ensemble 의 결과는 좋지 않기 때문에 굳이 비교하지는 않습니다.
+Units 의 개수를 좀 더 줄이면 affinity matrix 에 노이즈가 더 추가됩니다. 이미 ensemble 의 결과는 좋지 않기 때문에 굳이 비교하지는 않습니다. 아주 좁은 한 지역만 파란색 군집으로, 그 외의 거의 모든 점들이 노란색 군집으로 할당되었습니다.
 
 ![]({{ "/assets/figures/kmeans_ensemble_dataset_units20.png" | absolute_url }})
 
@@ -416,15 +414,15 @@ sparsity = 1 - ((n_data + nnz) / (n_data ** 2)) # 0.2301
 
 ## k-means Ensemble as metric learning
 
-Metric learning 은 k-nearest neighbor classifiers 와 같은 작업을 할 때 이용할 점들 간의 거리를 학습하는 machine learning 의 한 방법입니다. Word2Vec 과 같은 word representation learning 도 단어 간의 거리 정보를 학습하기 때문에 metric learning 으로 생각할 수도 있습니다. 차이점은 metric learning 은 두 점 간의 거리를 정의하는 함수를 학습하는 것이며, representation learning 은 두 점 간의 거리 함수가 아닌, 각 점들의 vector representation 을 학습하는 것입니다.
+Metric learning 은 k-nearest neighbor classifiers 와 같은 작업을 할 때 이용할 점들 간의 거리를 학습하는 machine learning 의 한 분야입니다. Word2Vec 과 같은 word representation learning 도 단어 간의 거리 정보를 학습하기 때문에 metric learning 으로 생각할 수도 있습니다. 차이점은 metric learning 은 두 점 간의 거리를 정의하는 함수를 학습하는 것이며, representation learning 은 두 점 간의 거리 함수가 아닌, 각 점들의 vector representation 을 학습하는 것입니다.
 
 하지만 metric learning 은 주로 supervised learning 에서 이야기하는 방법입니다. 어떤 점이 가까워야 classification 이나 regression 이 더 잘 된다라는 점을 학습하려면 (X, y) 의 정보가 필요하기 때문입니다. 하지만 similarity matrix 자체가 두 점 간의 거리 함수이기 때문에 metric learning 으로 해석하여도 큰 무리는 없어 보입니다. 물론 unsupervised learning 이지만요.
 
-그리고 두 점이 유사하다는 정보는 군집의 크기가 매우 작은 (군집의 개수가 많은) k-means 를 여러 번 학습하였더니 두 점이 자주 같은 군집으로 할당된다는 점에서 얻습니다. 두 점이 같은 군집에 자주 할당되려면 서로 근처에 있어야 합니다. 그리고 데이터의 형태가 고차원 공간이던지 sparse vector 이던지 혹은 metric 이 Manhattan, Euclidean, Cosine, Jaccard 이던지간에 가까운 점들 간의 거리는 0 에 가깝습니다. 군집의 크기를 매우 작게 설정했기 때문에 각 군집은 매우 작은 ball 을 이룹니다. 데이터 공간의 크기나 점들 간 distance metric 이 달라도 매우 가까이 있는 점들 (작은 ball 안에 함께 있는 점들)은 같은 군집에 속할 가능성이 높습니다. 즉 **k-means ensemble 의 affinity matrix 는 nearest neighbor graph** 의 similarity weight 입니다. 단 k-nearest neighbor graph 처럼 두 점이 가깝다, 아니다를 정확하게 나누지 않고 co-occurrence probability 로 표현한 것입니다.
+두 점이 유사하다는 정보는 군집의 크기가 매우 작은 (군집의 개수가 많은) k-means 를 여러 번 학습하였더니 두 점이 자주 같은 군집으로 할당된다는 점에서 얻습니다. 두 점이 같은 군집에 자주 할당되려면 서로 근처에 있어야 합니다. 그리고 데이터의 형태가 고차원 공간이던지 sparse vector 이던지 혹은 metric 이 Manhattan, Euclidean, Cosine, Jaccard 이던지간에 가까운 점들 간의 거리는 0 에 가깝습니다. 군집의 크기를 매우 작게 설정했기 때문에 각 군집은 매우 작은 ball 을 이룹니다. 데이터 공간의 크기나 점들 간 distance metric 이 달라도 매우 가까이 있는 점들 (작은 ball 안에 함께 있는 점들)은 같은 군집에 속할 가능성이 높습니다. 즉 **k-means ensemble 의 affinity matrix 는 nearest neighbor graph** 의 similarity weight 입니다. 단 k-nearest neighbor graph 처럼 두 점이 가깝다, 아니다를 정확하게 나누지 않고 co-occurrence probability 로 표현한 것입니다.
 
-이 거리는 데이터 분포에 큰 영향을 받지 않습니다. 복잡한 분포를 지니는 데이터라 하더라도 아주 작은 부분을 확대하면 단순하기 때문입니다. 마치 manifold 와 같습니다. 즉 k-means ensemble 은 metric learning 처럼 질좋은 pairwise similaries 를 학습하여 이를 최종 군집화에 이용하는 것입니다.
+이 거리는 데이터 분포에 큰 영향을 받지 않습니다. 복잡한 분포를 지니는 데이터라 하더라도 아주 작은 부분을 확대하면 단순하기 때문입니다. 마치 manifold 와 같습니다. 즉 k-means ensemble 은 metric learning 처럼 질좋은 pairwise similaries 를 학습하여 이를 최종 agglomerative clustering 에 이용하는 것입니다.
 
-이는 kernel k-means 로 해석할 수도 있습니다. 반복 학습에 이용한 k-means 가 Euclidean distance 를 이용하도록 하였으므로, 이는 euclidean distance 에 기반하여 affinity 를 계산하는 RBF kernel k-means 의 근사 계산과 같습니다. 단 이를 위하여 (n, n) 크기의 kernel matrix 를 계산하지 않아도 되는 장점이 있습니다.
+이는 kernel k-means 로 해석할 수도 있습니다. 반복 학습에 이용한 k-means 가 Euclidean distance 를 이용하였으므로, 이는 euclidean distance 에 기반하여 affinity 를 계산하는 RBF kernel k-means 의 근사 계산과 같습니다. 단 이를 위하여 (n, n) 크기의 kernel matrix 를 계산하지 않아도 되는 장점이 있습니다.
 
 ## k-means Ensemble 에서의 주의점
 
