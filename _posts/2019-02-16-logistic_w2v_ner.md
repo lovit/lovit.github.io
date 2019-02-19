@@ -76,7 +76,7 @@ Comments 의 세 문장의 예시입니다.
 ['티아라', '사랑', '해', 'ㅜ']
 ```
 
-[dataset]: {{ site.baseurl }}{% link _posts/2018-06-22-textmining_dataset.md %}
+[dataset]: {{ site.baseurl }}{% link _posts/2019-02-16-textmining_dataset.md %}
 
 ## Vocabulary scan
 
