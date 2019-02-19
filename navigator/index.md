@@ -75,6 +75,7 @@ layout: page
 
 ### Named Entity Recognition
 - [Conditional Random Field based Named Entity Recognition][crf_ner]
+- [Word2Vec 과 Logistic Regression 을 이용한 (Semi-supervised) Named Entity Recognition][logistic_w2v_ner]
 
 ### Word Representation
 - [Word / Document embedding (Word2Vec / Doc2Vec)][word_doc_embedding]
@@ -124,6 +125,7 @@ layout: page
 - [Bokeh 와 Flask 를 이용한 AWS S3 access log 모니터링 앱 만들기][flask_bokeh_aws_log]
 - [Python dill 로 class definition 까지 binary 로 저장하기][python_dill]
 - [praw 를 이용한 Reddit scrapping 과 아카이빙이 된 이전 Reddit 가져오기][get_reddit]
+- [한국어 텍스트마이닝 실습용 데이터셋 (lovit textmining dataset) 과 실습 코드 (python ml4nlp)][textmining_dataset]
 
 <font color="#2851a4"><h2>Spark</h2></font>
 - [0. Ubuntu 에 Spark 설치, IPython Notebook 의 외부접속 설정, PySpark 와 Notebook 연동][spark_0_install]
@@ -199,3 +201,5 @@ layout: page
 [aws_s3_iam_awscli]: {{ site.baseurl }}{% link _posts/2019-01-30-aws_s3_iam_awscli.md %}
 [flask_bokeh_aws_log]: {{ site.baseurl }}{% link _posts/2019-02-08-flask_bokeh_aws_log.md %}
 [kmeans_ensemble]: {{ site.baseurl }}{% link _posts/2019-02-11-kmeans_ensemble.md %}
+[textmining_dataset]: {{ site.baseurl }}{% link _posts/2019-02-16-textmining_dataset.md %}
+[logistic_w2v_ner]: {{ site.baseurl }}{% link _posts/2019-02-16-logistic_w2v_ner.md %}
