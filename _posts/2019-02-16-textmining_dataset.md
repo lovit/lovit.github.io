@@ -1,6 +1,6 @@
 ---
 title: 한국어 텍스트마이닝 실습용 데이터셋 (lovit textmining dataset) 과 실습 코드 (python ml4nlp)
-date: 2019-06-22 15:00:00
+date: 2019-02-16 15:00:00
 categories:
 - dataset
 tags:
