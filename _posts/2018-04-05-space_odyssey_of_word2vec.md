@@ -170,7 +170,7 @@ Common components 는 존재합니다. 각 components 별 variance ratio 는 분
 
 ![]({{ "/assets/figures/word2vec_odyssey_naver_axis_variance.png" | absolute_url }}){: width="70%" height="70%"}
 
-그 common components 는 frequency 정보가 함께 녹아있긴 합니다. 하지만 requent words 가 원점에 몰려있는 것은, 그 components 가 주로 학습하는 것은 빈도수가 아닌 semantics 라고 짐작할 수 있습니다.
+학습된 principal common components 에는 단어의 semantics 뿐만 아니라 frequency 에 대한 정보도 어느 정도 포함되어 있습니다. 그리고 principal components 의 semantics 은 infrequent words 을 설명하는 정보는 아닐 가능성이 높습니다. 그래야 infrequent words 들이 원점에 몰려 있을 수 있기 때문입니다.
 
 논문이 재현이 안되는 정도가 아니라, 패턴이 반대로 나와서 당황하였습니다. 저는 Gensim version 3.1 의 Word2Vec 을 이용하였습니다. Pre-trained 벡터를 가져와서 다시 확인해야 할 상황입니다. 일단은 그 벡터들을 가져와서 직접 PCA plot 을 그리는게 가장 먼저 할 일이겠네요. 
 
