@@ -82,7 +82,7 @@ Sitemap: https://www.reddit.com/sitemaps/comment-page-sitemaps.xml
 
 ## praw, Python API
 
-Reddit 은 praw 라는 API 를 제공합니다. praw 를 이용하려면 OAuth2 등록 ([링크]((https://www.reddit.com/prefs/apps)))을 해야 합니다. 이에 대한 설명은 [Reddit wiki](https://github.com/reddit-archive/reddit/wiki/oauth2) 에 설명되어 있습니다.
+Reddit 은 praw 라는 API 를 제공합니다. praw 를 이용하려면 OAuth2 등록 ([링크](https://www.reddit.com/prefs/apps))을 해야 합니다. 이에 대한 설명은 [Reddit wiki](https://github.com/reddit-archive/reddit/wiki/oauth2) 에 설명되어 있습니다.
 
 praw 는 pip install 로 설치합니다.
 
