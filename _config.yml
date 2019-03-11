@@ -379,7 +379,7 @@ han: false
 
 # Disqus
 disqus:
-  enable: true
+  enable: false
   shortname: lovit-x-datascience
   count: true
   # hide comments (visitors need to click to load the comments)
