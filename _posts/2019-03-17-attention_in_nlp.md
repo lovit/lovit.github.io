@@ -158,12 +158,14 @@ Yang et al., (2016) 은 Lin et al., (2017) 보다 먼저 문서 분류를 위한
 그래서 논문은 다섯 개의 sub network (word encoder, word attention, sentence encoder, sentence attention, classifier) 로 구성된 구조를 제안합니다. 한 문장 $$s_i$$ 의 representation 을 학습하기 위하여 word-level BiGRU 가 이용되었습니다. 그리고 이로부터 학습된 hidden state vectors $$h_{it}$$ 를 이용하는 word attention network 는 아래와 같이 구성됩니다. Hyper tangent actvation 을 이용하는 1 layer feed forward neural network 입니다.
 
 $$u_{it} = tanh(W_w h_{it} + b_w)$$ {: .text-center }
-$$a_{it} = \frac{exp(u_{it}^Tu_w)}{\sum_t exp(u_{it}^Tu_w)}$$, $$s_i = \sum_t a_{it} h_{it}$${: .text-center }
+
+$$a_{it} = \frac{exp(u_{it}^Tu_w)}{\sum_t exp(u_{it}^Tu_w)}, s_i = \sum_t a_{it} h_{it}$${: .text-center }
 
 그 결과 한 문장에 대한 sentence vector $$s_i$$ 를 얻을 수 있습니다. 그리고 한 문서의 문장들도 흐름이 있습니다. 이러한 흐름을 학습하기 위하여 sentence-level BiGRU 를 학습합니다. 여기에서 document representation $$v$$ 의 벡터는 sentences 에 대한 weighted average vectors 로 계산됩니다.
 
 $$u_i = tanh(W_s h_i + b_s)$$ {: .text-center }
-$$a_i = \frac{exp(u_i^Tu_s)}{\sum_t exp(u_i^Tu_s)}$$, $$v = \sum_i a_i h_i$${: .text-center }
+
+$$a_i = \frac{exp(u_i^Tu_s)}{\sum_t exp(u_i^Tu_s)}, v = \sum_i a_i h_i$${: .text-center }
 
 ![]({{ "/assets/figures/attention_han_structure.png" | absolute_url }}){: width="70%" height="70%"}
 
@@ -175,7 +177,7 @@ HAN 의 학습 결과 문서 분류에 중요한 문장과 각 문장의 단어�
 
 또 한 가지 놀라운 점은 'good' 과 'bad' 가 각 점수대 별로 다르게 활용되었다는 점입니다. 아래의 그림에서 각각 (a) 는 문서 전체에서 'good' 과 'bad' 의 attention weight 의 평균입니다. 그리고 (b) - (f) 는 각각 1 - 5 점 사이에서 'good' 과 'bad' 에 적용된 attention weight 의 평균입니다. 'good' 은 긍정적인 4, 5 점에서는 자주 이용되지만 1, 2 점에서는 거의 이용되지 않았습니다. 아마도 이는 'not good' 과 같은 negation 의 과정에서 등장한 'good' 일 것입니다. 'bad' 역시 1, 2 점에서는 어느 정도 높은 attention weight 를 받지만, 3, 4, 5 점 에서는 거의 이용되지 않습니다.
 
-![]({{ "/assets/figures/attention_han_attention_debugging.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_han_attention_debugging.png" | absolute_url }}){: width="90%" height="90%"}
 
 단어를 문맥에 맞게 선택하여 features 로 이용한다는 점은 사람의 문서 분류 과정과도 매우 흡사합니다. 그리고 그 결과 1 점에서의 'good' 과 같이 문맥에 필요한 정보만을 선택하여 노이즈를 줄일 수 있습니다. 그 결과 문서 분류의 성능이 기존 모델들과 비교하여 확실히 상승했습니다.
 
@@ -192,17 +194,81 @@ HAN 의 학습 결과 문서 분류에 중요한 문장과 각 문장의 단어�
 
 ## Transformer (self-attention)
 
-![]({{ "/assets/figures/attention_transformer_components.png" | absolute_url }})
-![]({{ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url }})
-![]({{ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url }})
-![]({{ "/assets/figures/attention_transformer_block_residual.png" | absolute_url }})
-![]({{ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url }})
-![]({{ "/assets/figures/attention_transformer_encoder_decoder_attention.png" | absolute_url }})
-![]({{ "/assets/figures/attention_transformer_components2.png" | absolute_url }})
+그런데 HAN 까지도 word, sentence encoder 를 RNN 계열의 모델들을 이용하였습니다. 하지만 RNN 은 몇 가지 본질적인 문제점들을 가지고 있습니다. 첫째로 모델의 크기가 큽니다. LSTM 과 같은 모델은 hidden to hidden, cell to cell 연산을 위하여 매우 큰 행렬들을 지닙니다. 그리고 RNN 은 반드시 sequence 의 마지막 부분까지 계산이 완료되어야 학습을 할 수 있습니다. Back-propagation through time (BPTT) 를 생각해보면 반드시 그래야 합니다. 그 결과 하나의 sequence 에 대한 작업을 병렬적으로 진행할 수가 없습니다. 마지막으로 RNN 이 오로직 local context 만을 저장하는 문제를 완화해보자 LSTM 이나 GRU 와 같은 모델이 제안되었지만, 이들도 long dependency 를 잘 학습하지는 못했습니다. 또한 멀리 떨어진 두 단어의 정보가 하나의 context vector 에 포함되기 위해서는 여러 번의 행렬 곱셈을 해야만 합니다.
 
-![]({{ "/assets/figures/attention_transformer_block_selfattention_5_to_6_end_to_french.png" | absolute_url }})
+Self-attention 은 이를 해결하기 위한 방법입니다. Transformer 는 오로직 feed-forward neural network 를 이용하여 encoder, decoder, attention network 를 모두 구축한 encoder - decoder system 입니다. 이는 처음 번역을 위하여 제안되었습니다.
+
+아래 그림은 Transformer 논문에 나온 세 개의 그림입니다. 오른쪽이 왼쪽 네모를 확대한 부분입니다. 이들에 대하여 하나씩 알아봅니다.
+
+일단 Transformer 는 6 개 층의 transformer block 으로 이뤄진 encoder, decoder 와 encoder - decoder 를 연결하는 attention 으로 이뤄져 있습니다. 이는 마치 sequence to sequence + attention 과 비슷한 형태입니다. 단, encoder 와 decoder 가 깊이가 6 층인 모델입니다. 그리고 각 transformer block 은 길이가 $$n$$ 인 input sequence 를 입력받아서 길이가 똑같은 output sequence 를 출력합니다. 그리고 각 sequence item 의 차원도 모두 $$d_{model}$$ 로 동일합니다. 논문에서는 $$d_{model}=512$$ 를 이용하였습니다. 즉, 5 개의 단어로 이뤄진 문장은 처음 embedding lookup 을 통하여 $$(5, 512)$$ 의 sequence 로 입력됩니다. 그리고 매 block 을 통과할 때마다 똑같은 $$(5, 512)$$ 크기의 sequence 로 출력됩니다.
+
+![]({{ "/assets/figures/attention_transformer_components.png" | absolute_url }}){: width="95%" height="95%"}
+
+처음 살펴볼 부분은 scaled dot product attention 부분입니다. 위 그림의 가장 오른쪽에 위치한 부분입니다. 아래 그림은 $$l$$ 번째 block 에 길이가 $$n$$ 인 input sequence 가 입력된 경우입니다. 만약 첫번째 transformer block 이라면 word embedding sequence 에 positional encoding 이 더해진 값이 input sequence 로 입력됩니다. 그 이후에는 이전 layer 의 output sequence 가 그대로 input 으로 입력됩니다.
+
+Transformer 가 input sequence 를 입력받아 처음 하는 작업은 각 sequence item 을 세 종류의 차원으로 변화하는 것입니다. $$W_l^Q, W_l^K, W_l^V$$ 는 각각 sequence item $$x_i$$ 를 $$q_i, k_i, v_i$$ 로 변환합니다. 각각은 query, key, value 로 불립니다. key - value 는 이름 그대로 {key:value} 입니다. key 에 해당하는 결과값이 value 에 저장됩니다. Query $$q_i$ 와 key $$k_j$$ 는 $$x_i, x_j$$ 의 상관성을 측정하기 위한 정보입니다. Attention weight $$a_{ij}$$ 는 $$f(q_i, k_j)$$ 에 의하여 계산됩니다. 이는 sequence to sequence 에서도 살펴보았습니다. Seq2seq + attention 에서는 $$e_{ij} = f(s_{i-1}, h_j)$$ 로 정의되었고, 이 때 $$s_{i-1}$$ 이 query, $$h_j$$ 가 key 입니다. 새로운 representation 을 만들기 위한 위치에 해당하는 값을 query 라 하고, 이 query 와 얼마나 상관성이 있는지를 측정하는 값을 key 라 합니다. Query 와 key 에 의하여 상관성 (attention weight) 이 측정되면, 이 값과 value $$v_j$$ 의 가중평균으로 최종 representation 을 학습합니다.
+
+Seq2seq + attention 에서는 key 와 value 모두 $$h_j$$ 였습니다. 그런데 key 와 value 의 정보를 나눠서 서로 다른 패러매터로 학습하면 그 결과가 더 좋습니다. 그렇기 때문에 Transformer 에서는 query, key, value 라는 세 개의 정보를 이용하여 attention 을 계산합니다. 그리고 $$W_l^Q, W_l^K, W_l^V$$ 는 각 layer $$l$$ 에서 input item 의 공간을 변환하는 역할을 합니다.
+
+Transformer 는 sequence to sequence 에서와는 다른 형식의 attention function 을 이용합니다. Sequence to sequence 처럼 $$f_1(q) + f_2(k)$$ 와 같이 input key, query pair 의 정보가 더해지는 경우를 additive attention 이라 합니다. 이와 다르게 $$f_1(q) \times f_2(k)$$ 처럼 query, key pair 의 정보의 내적을 이용하는 경우를 multiplicative attention 이라 합니다. Transformer 는 후자를 이용합니다.
+
+$$a_{ij}$$ 를 계산하기 위한 $$attention(x_iW_l^Q, x_jW_l^K, x_jW_l^V)$$ 을 간단히 $$attention(q_i, k_j, v_j)$$ 라 합니다. Position $$i$$ 와 $$j$$ 의 상관성은 $$q_i$$ 와 $$k_j$$ 벡터의 내적을 key vector 의 dimension 의 root 값으로 나눠서 정의합니다. $$\sqrt{d_k}$$ 로 나눈 이유는 벡터의 차원이 커질수록 내적값이 커질 가능성이 높고, 여기에 exponential 을 씌워 Softmax 를 만들면 극단적인 값들이 만들어지기 때문입니다. 일종의 scaling 입니다.
+
+$$e_{ij}=\frac{q_i \cdot k_j}{\sqrt{d_k}}$${: .text-center }
+
+그리고 모든 $$k_j$$ 에 대하여 $$e_{ij}$$ 를 계산한 뒤, 이에 대한 Softmax 를 계산합니다. 그 결과 각 position $$1 to n$$ 까지의 $$a_{ij}$$ 가 계산되고 $$j$$ 에 해당하는 $$v_j$$ 를 곱하여 position $$i$$ 에 대한 새로운 representation 을 만듭니다. 이는 마치 멀리 떨어진 두 단어의 정보를 합쳐 새로운 단어의 representation 을 표현한 것과 같습니다. 뒤쪽의 그림에서 살펴볼텐데, 'it' 이라는 단어의 representation 을 표현하기 위하여 문장의 다른 단어들, 'the, animal' 등의 정보가 이용됩니다. 뒤에서 다시 설명하겠습니다.
+
+$$softmax(\frac{q_i \cdot K}{\sqrt{d_k}})V$${: .text-center }
+
+그래서 scaled dot product attention 이라는 이름이 붙었습니다. 단, 아직 우리는 위 그림의 Mask (Opt.) 는 설명하지 않았습니다. 이 부분은 decoder 의 self-attention 에만 존재합니다.
+
+![]({{ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url }}){: width="70%" height="70%"}
+
+그런데 한 개의 $$attention(q_i, k_j, v_j)$$ 에 의한 output 의 크기를 $$d_{model}=512$$ 로 만들지 않습니다. 64 차원의 벡터로 작게 만드는 대신, 서로 다른 $$W_l^{K,1}, W_l^{K,2}, \dots$$ 을 $$h=8$$ 개 만들어 8 번의 attention 과정을 거칩니다. 그리고 그 결과를 concatenation 합니다. 이를 multi-head attention 이라 합니다. 하나의 attention 은 하나의 관점으로의 해석 역할을 합니다. 여러 개의 attention 을 나눠 작업하면 더 다양한 정보가 모델에 저장된다고 합니다. 이는 마치 여러 관점으로 input sequence 를 해석하는 것과 같습니다.
+
+이 때 두 input sequence item $$x_i$$ 와 $$x_j$$ 가 얼마나 멀리 떨어져 있던지 상관없이 attention 에 의하여 곧바로 연결이 됩니다. 하지만 RNN 에서는 떨어진 거리만큼의 path 가 필요합니다. RNN 은 두 정보를 연결하기 위하여 실제 문장에서의 거리만큼의 연산을 해야하고, 그 과정에서 정보가 손실되거나 노이즈들이 포함될 가능성이 높습니다. 하지만 attention 은 이 과정이 직접 일어납니다.
+
+그리고 그 결과를 ReLU 가 포함된 2 layer feed forward network 에 입력합니다. Multi-head attention 과정만으로는 정리되지 않은 정보를 재정리 하는 역할을 합니다.
+
+$$FFN(x_i) = max(0, x_iW_1 + b_1)W_2 + b_2)$${: .text-center }
+
+![]({{ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url }}){: width="70%" height="70%"}
+
+지금까지와 과정은 각 시점별로 문장 전체의 정보들을 종합하여 새로운 문맥적인 정보를 만드는 것입니다. 이 값을 input item 에 더합니다. 이는 input sequence 에 포함되지 않은 문맥적인 정보를 input sequence 로부터 가공하여 여기에 더한다는 의미입니다. 이를 residual connection 이라 합니다.
+
+![]({{ "/assets/figures/attention_transformer_block_residual.png" | absolute_url }}){: width="70%" height="70%"}
+
+이 과정까지 거치면 encoder 에서의 한 번의 transformer block 을 통과한 것입니다. 이 과정을 6 번 거칩니다. Layer 의 높이가 올라갈수록 문맥적인 의미들이 추가됩니다.
+
+Encoder 는 주어진 문장 전체를 살펴보며 각 시점의 정보들을 더 좋은 representation 으로 encoding 하는 역할을 합니다. Decoder 는 현재까지 알려진 정보를 바탕으로 새로운 문장을 생성하는 역할을 합니다. 그렇기 때문에 attention 을 이용할 때 지금 이후의 시점에 대한 정보를 사용할 수는 없습니다. 즉 $$x_i$$ 와 연결될 수 있는 position 은 $$1, 2, \dots, i-1$$ 입니다. 이처럼 attention 에 제약을 거는 과정을 masking 이라 합니다. Decoder 의 scaled dot-product attention 에는 이 과정이 포함되어 있습니다.
+
+![]({{ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url }}){: width="70%" height="70%"}
+
+Decoder 가 단어를 생성할 때에는 encoder 의 정보도 필요합니다. Sequence to sequence 에서 source sequence $$h_j$$ 를 이용한 것처럼 Transformer 에서도 이를 이용합니다. Encoder 의 마지막 layer 의 output sequence 의 값을 key, value 로 이용합니다. 이를 encoder - decoder attention 이라 합니다. 이처럼 query 와 key, value 의 출처가 서로 다른 경우를 주로 attention 이라 합니다. 하지만 앞서 설명한 encoder, decoder 에서의 attention 은 query, key, value 의 출처가 각각 encoder 혹은 decoder 였습니다. 이처럼 query 와 key, value 의 출처가 같은 경우를 self-attention 이라 합니다.
+
+Encoder - decoder attention 은 decoder 가 $$x_i$$ 의 정보를 표현하기 위하여 input sequence 의 item $$j$$ 의 정보를 얼마나 이용할지 결정하는 역할을 합니다.
+
+![]({{ "/assets/figures/attention_transformer_encoder_decoder_attention.png" | absolute_url }}){: width="80%" height="80%"}
+
+그리고 decoder 의 transformer block 에는 decoder self-attention 의 결과에 encoder - decoder attention 의 결과가 더해져서 feed-forward neural network 에 입력됩니다.
+
+![]({{ "/assets/figures/attention_transformer_components2.png" | absolute_url }}){: width="80%" height="80%"}
+
+Transformer 는 매 block 마다 문맥적인 의미를 생성하여 sequence 에 더하는 방식으로 sequence representation 을 업데이트합니다. 그렇게하여 encoder 는 input sequence 의 의미를 잘 표현하는 sequence representation 을 만들고, decoder 는 이 정보를 이용하며 질 좋은 output sequence representation 을 만듭니다. Update 라는 표현을 쓴 이유는 새롭게 만든 정보를 residual connection 을 통하여 block 의 input 에 그대로 더해주기 때문입니다. 의미를 보강하는 역할을 합니다.
+
+Attention weight matrix 에 의하여 그 결과도 확인할 수 있습니다. 아래 그림은 영어를 프랑스어로 번역하는 과정에서의 encoder layer 5 번에서 6 번으로의 attention 입니다. 대명사 위치에 대한 정보가 그 대명사가 설명하는 단어들의 정보로부터 만들어집니다.
+
+![]({{ "/assets/figures/attention_transformer_block_selfattention_5_to_6_end_to_french.png" | absolute_url }}){: width="80%" height="80%"}
+
+이러한 과정은 더 이상 encoder 의 역할이 단어를 표현하는 것이 아니란 점을 의미합니다. 한 단어 'bank' 는 문맥에 따라서 은행 혹은 강둑으로 해석될 수 있지만, word embedding vector 는 우리가 word sence disambiguation 을 하기 전까지는 고정이 되어 있습니다. 만약 문장에 'road' 라는 단어가 있었다면 이 정보를 반영하여 은행이라는 의미에 가까운 representation 으로, 'river' 가 있었다면 강둑에 가까운 의미로 'bank' 의 representation 을 변화할 수 있습니다.
+
+*After starting with representations of individual words or even pieces of words, they aggregate information from surrounding words to determine the meaning of a given bit of language in context. For example, deciding on the most likely meaning and appropriate representation of the word “bank” in the sentence “I arrived at the bank after crossing the…” requires knowing if the sentence ends in “... road.” or “... river.”* {: .text-center }
+
+Transformer 는 다른 모델들보다 parameters 의 숫자가 적고, feed-forward 를 이용하기 때문에 병렬화가 쉬움에도 불구하고, 멀리 떨어진 단어 간의 정보가 곧바로 연결되기 때문에 정확한 모델링도 가능합니다.
 
 ## BERT (language model using transformer)
+
+BERT 는 Transformer 를 이용하여 학습한 language model 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다.
 
 ![]({{ "/assets/figures/attention_bert_input.png" | absolute_url }})
 ![]({{ "/assets/figures/attention_bert_usage.png" | absolute_url }})
