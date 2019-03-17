@@ -38,6 +38,9 @@ layout: page
 - [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
 - [Embedding for Word Visualization (LLE, ISOMAP, MDS, t-SNE)][mds_isomap_lle]
 
+### Attention mechanism
+- [Attention mechanism in NLP. From seq2seq + attention to BERT][attention_in_nlp]
+
 <font color="#2851a4"><h2>Natural Language Processing</h2></font>
 
 ### Text data preprocessing
@@ -203,3 +206,4 @@ layout: page
 [kmeans_ensemble]: {{ site.baseurl }}{% link _posts/2019-02-11-kmeans_ensemble.md %}
 [textmining_dataset]: {{ site.baseurl }}{% link _posts/2019-02-16-textmining_dataset.md %}
 [logistic_w2v_ner]: {{ site.baseurl }}{% link _posts/2019-02-16-logistic_w2v_ner.md %}
+[attention_in_nlp]: {{ site.baseurl }}{% link _posts/2019-03-17-attention_in_nlp.md %}
