@@ -100,7 +100,7 @@ Recurrent Neural Network (RNN) 은 sentence representation 을 학습하는데�
 
 또한 RNN 은 word embedding sequence 와 달리, 한 단어의 앞/뒤 단어들을 고려하여 문맥적인 정보를 hidden state vectors 에 저장합니다. 즉, RNN 을 이용하여 문맥적인 정보를 처리하고, attention network 와 classifier networks 가 tasks 에 관련된 정보를 처리하도록 만들 수 있습니다.
 
-![]({{ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url }}){: width="70%" height="70%"}
 
 Lin et al., (2017) 은 2 layer feed-forward newral networks 를 이용하는 attention network 를 제안했습니다. Input sequence $$x_{1:n}$$ 에 대하여 hidden state sequence $$h_{1:n}$$ 이 학습되었을 때, 문장의 representation 은 weighted average of hidden state vectors 로 이뤄집니다.
 
@@ -116,20 +116,20 @@ $$H$$ 의 크기가 $$(n, h)$$ 라 할 때, $$W_{s1}$$ 의 크기는 $$(d_a, h)$
 
 그리고 여기에 hyper tangent 가 적용됩니다. 이는 벡터의 각 차원의 값을 [-1, 1] 로 scaling 합니다. 그렇기 때문에 $$tanh(W_{s1}h_i)$$ 는 반지름이 1 인 공간 안에 골고루 분포한 벡터들이 됩니다.
 
-![]({{ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url }}){: width="70%" height="70%"}
 
 여기에 $$d_a=350$$ 차원의 $$w_{s2}$$ 가 내적되어 attention weight 가 계산됩니다. 이는 마치 softmax regression 에서의 coefficient vectors (대표벡터) 의 역할을 합니다. $$w_{s2}$$ 와 비슷한 방향에 있을수록 문장 분류에 중요한 문맥이라는 의미입니다.
 
 즉 $$W_{s1}$$ 에 의하여 문맥 공간을 중요도 공간으로 변환하였고, $$w_{s2}$$ 에 의하여 실제로 중요한 문맥들을 선택합니다. 그리고 softmax 를 취하기 때문에 확률의 형태로 attention weight 가 표현됩니다.
 
-![]({{ "/assets/figures/attention_structured_attention_fig2.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig2.png" | absolute_url }}){: width="70%" height="70%"}
 
 그런데 어떤 문맥들이 중요한지는 관점에 따라 다를 수 있습니다. $$w_{s2}$$ 는 한 관점에서의 문맥들의 중요도를 표현합니다. 관점이 여러개일 수도 있습니다. 이를 위하여 $$(1, d_a)$$ 차원의 column vector $$w_{s2}$$ 가 아닌, $$(r, d_a)$$ 차원의 $$W_{s2}$$ 를 이용합니다. 논문에서는 $$r=30$$ 로 실험하였습니다. 30 개의 관점으로 hidden state vectors 를 조합합니다. Attention 을 계산할 때의 softmax 역시 각 row 별로 이뤄집니다. 그리고 여기서 만들어진 $$(r, h)$$ 크기의 sentence representation matrix 를 $$(1, r \times h)$$ 의 flatten vector 로 만들어 classifier 에 입력합니다.
 
 $$A = softmax\left(W_{s2} \cdot tanh(W_{s1}H^T) \right)$$
 {: .text-center }
 
-![]({{ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url }}){: width="70%" height="70%"}
 
 그런데 한 가지 문제가 더 남았습니다. Attention matrix $$A$$ 의 각 row 가 서로 비슷한 벡터를 가질 수도 있습니다. 관점이 모두 달라야한다는 보장을 하지 않았기 때문입니다. $$W_{s2}$$ 에 다양한 관점이 잘 학습되도록 유도하기 위하여 다음과 같은 regularization term 을 추가합니다. 이는 attention matrix 의 각 row 들, 즉 $$r$$ 개의 관점들이 서로 독립에 가까워지도록 유도하는 것입니다.
 
@@ -138,7 +138,7 @@ $$\vert AA^T -I\vert^2_F$$
 
 Attention 을 이용한 결과 문장 분류에 이용한 중요한 맥락들이 어디인지 표시도 할 수 있습니다. 아래는 Yelp review 에서 긍정적인 평점으로 분류하는데 이용된 맥락들입니다. 빨간색일수록 높은 attention weight 를 받은 부분들입니다. 그리고 이때에는 문서의 모든 문장들을 하나의 문장으로 합쳐서 분류에 이용하였습니다.
 
-![]({{ "/assets/figures/attention_structured_attention_positive_example.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_positive_example.png" | absolute_url }}){: width="90%" height="90%"}
 
 ## Attention in Document classification
 
@@ -165,21 +165,21 @@ $$a_{it} = \frac{exp(u_{it}^Tu_w)}{\sum_t exp(u_{it}^Tu_w)}$$, $$s_i = \sum_t a_
 $$u_i = tanh(W_s h_i + b_s)$$ {: .text-center }
 $$a_i = \frac{exp(u_i^Tu_s)}{\sum_t exp(u_i^Tu_s)}$$, $$v = \sum_i a_i h_i$${: .text-center }
 
-![]({{ "/assets/figures/attention_han_structure.png" | absolute_url }})
+![]({{ "/assets/figures/attention_han_structure.png" | absolute_url }}){: width="70%" height="70%"}
 
 HAN 의 학습 결과 문서 분류에 중요한 문장과 각 문장의 단어들을 시각적으로 확인할 수 있습니다. Figure 5 는 Yelp data 에 대한 시각화 입니다. 빨간색일수록 중요한 문장이며, 파랑색일수록 중요한 단어입니다. 긍정을 판단하는데 delicious, amazing 과 같은 단어가, 부정을 판단하는데 terrible, not 과 같은 단어들이 큰 영향을 주었음을 확인할 수 있습니다.
 
 또한 topic / category classification 에도 유용합니다. 특히나 category classification 에서는 특정 클래스의 문서들에서만 등장하는 단어들이 있습니다. 예를 들어 'zebra, wild life, camoflage' 라는 단어만 들어도 짐작되는 주제들이 몇 개가 있습니다. 이처럼 topical information 만 주목해도 문서의 category classification 은 쉽게 풀립니다. 아래 그림은 실제로 HAN 역시 그 과정으로 문서를 분류했음을 보여줍니다.
 
-![]({{ "/assets/figures/attention_han_example.png" | absolute_url }})
+![]({{ "/assets/figures/attention_han_example.png" | absolute_url }}){: width="90%" height="90%"}
 
 또 한 가지 놀라운 점은 'good' 과 'bad' 가 각 점수대 별로 다르게 활용되었다는 점입니다. 아래의 그림에서 각각 (a) 는 문서 전체에서 'good' 과 'bad' 의 attention weight 의 평균입니다. 그리고 (b) - (f) 는 각각 1 - 5 점 사이에서 'good' 과 'bad' 에 적용된 attention weight 의 평균입니다. 'good' 은 긍정적인 4, 5 점에서는 자주 이용되지만 1, 2 점에서는 거의 이용되지 않았습니다. 아마도 이는 'not good' 과 같은 negation 의 과정에서 등장한 'good' 일 것입니다. 'bad' 역시 1, 2 점에서는 어느 정도 높은 attention weight 를 받지만, 3, 4, 5 점 에서는 거의 이용되지 않습니다.
 
-![]({{ "/assets/figures/attention_han_attention_debugging.png" | absolute_url }})
+![]({{ "/assets/figures/attention_han_attention_debugging.png" | absolute_url }}){: width="70%" height="70%"}
 
 단어를 문맥에 맞게 선택하여 features 로 이용한다는 점은 사람의 문서 분류 과정과도 매우 흡사합니다. 그리고 그 결과 1 점에서의 'good' 과 같이 문맥에 필요한 정보만을 선택하여 노이즈를 줄일 수 있습니다. 그 결과 문서 분류의 성능이 기존 모델들과 비교하여 확실히 상승했습니다.
 
-![]({{ "/assets/figures/attention_han_performance.png" | absolute_url }})
+![]({{ "/assets/figures/attention_han_performance.png" | absolute_url }}){: width="80%" height="80%"}
 
 이전에 Mikolov 는 document classification 에서는 어자피 특정 단어가 등장하였는지에 대한 정보가 중요하기 때문에 사실상 word embedding 의 정보가 잘 이용되지 않는다고 말하였습니다. 그리고 그 결과 복잡한 구조의 deep neural network document classifier 를 만든다고하여, 기존의 bigram + naive bayes classifier 등보다 아주 높은 성능의 향상이 이뤄지지는 않는다고 주장하였습니다. 실제로 그의 실험에서도 bigram bag-of-words model 들이 매우 좋은 성능을 보여줬습니다.
 
