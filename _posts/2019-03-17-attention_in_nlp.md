@@ -206,7 +206,7 @@ Self-attention 은 이를 해결하기 위한 방법입니다. Transformer 는 �
 
 처음 살펴볼 부분은 scaled dot product attention 부분입니다. 위 그림의 가장 오른쪽에 위치한 부분입니다. 아래 그림은 $$l$$ 번째 block 에 길이가 $$n$$ 인 input sequence 가 입력된 경우입니다. 만약 첫번째 transformer block 이라면 word embedding sequence 에 positional encoding 이 더해진 값이 input sequence 로 입력됩니다. 그 이후에는 이전 layer 의 output sequence 가 그대로 input 으로 입력됩니다.
 
-Transformer 가 input sequence 를 입력받아 처음 하는 작업은 각 sequence item 을 세 종류의 차원으로 변화하는 것입니다. $$W_l^Q, W_l^K, W_l^V$$ 는 각각 sequence item $$x_i$$ 를 $$q_i, k_i, v_i$$ 로 변환합니다. 각각은 query, key, value 로 불립니다. key - value 는 이름 그대로 {key:value} 입니다. key 에 해당하는 결과값이 value 에 저장됩니다. Query $$q_i$ 와 key $$k_j$$ 는 $$x_i, x_j$$ 의 상관성을 측정하기 위한 정보입니다. Attention weight $$a_{ij}$$ 는 $$f(q_i, k_j)$$ 에 의하여 계산됩니다. 이는 sequence to sequence 에서도 살펴보았습니다. Seq2seq + attention 에서는 $$e_{ij} = f(s_{i-1}, h_j)$$ 로 정의되었고, 이 때 $$s_{i-1}$$ 이 query, $$h_j$$ 가 key 입니다. 새로운 representation 을 만들기 위한 위치에 해당하는 값을 query 라 하고, 이 query 와 얼마나 상관성이 있는지를 측정하는 값을 key 라 합니다. Query 와 key 에 의하여 상관성 (attention weight) 이 측정되면, 이 값과 value $$v_j$$ 의 가중평균으로 최종 representation 을 학습합니다.
+Transformer 가 input sequence 를 입력받아 처음 하는 작업은 각 sequence item 을 세 종류의 차원으로 변화하는 것입니다. $$W_l^Q, W_l^K, W_l^V$$ 는 각각 sequence item $$x_i$$ 를 $$q_i, k_i, v_i$$ 로 변환합니다. 각각은 query, key, value 로 불립니다. key - value 는 이름 그대로 {key:value} 입니다. key 에 해당하는 결과값이 value 에 저장됩니다. Query $$q_i$$ 와 key $$k_j$$ 는 $$x_i, x_j$$ 의 상관성을 측정하기 위한 정보입니다. Attention weight $$a_{ij}$$ 는 $$f(q_i, k_j)$$ 에 의하여 계산됩니다. 이는 sequence to sequence 에서도 살펴보았습니다. Seq2seq + attention 에서는 $$e_{ij} = f(s_{i-1}, h_j)$$ 로 정의되었고, 이 때 $$s_{i-1}$$ 이 query, $$h_j$$ 가 key 입니다. 새로운 representation 을 만들기 위한 위치에 해당하는 값을 query 라 하고, 이 query 와 얼마나 상관성이 있는지를 측정하는 값을 key 라 합니다. Query 와 key 에 의하여 상관성 (attention weight) 이 측정되면, 이 값과 value $$v_j$$ 의 가중평균으로 최종 representation 을 학습합니다.
 
 Seq2seq + attention 에서는 key 와 value 모두 $$h_j$$ 였습니다. 그런데 key 와 value 의 정보를 나눠서 서로 다른 패러매터로 학습하면 그 결과가 더 좋습니다. 그렇기 때문에 Transformer 에서는 query, key, value 라는 세 개의 정보를 이용하여 attention 을 계산합니다. 그리고 $$W_l^Q, W_l^K, W_l^V$$ 는 각 layer $$l$$ 에서 input item 의 공간을 변환하는 역할을 합니다.
 
@@ -262,16 +262,19 @@ Attention weight matrix 에 의하여 그 결과도 확인할 수 있습니다. 
 
 이러한 과정은 더 이상 encoder 의 역할이 단어를 표현하는 것이 아니란 점을 의미합니다. 한 단어 'bank' 는 문맥에 따라서 은행 혹은 강둑으로 해석될 수 있지만, word embedding vector 는 우리가 word sence disambiguation 을 하기 전까지는 고정이 되어 있습니다. 만약 문장에 'road' 라는 단어가 있었다면 이 정보를 반영하여 은행이라는 의미에 가까운 representation 으로, 'river' 가 있었다면 강둑에 가까운 의미로 'bank' 의 representation 을 변화할 수 있습니다.
 
-*After starting with representations of individual words or even pieces of words, they aggregate information from surrounding words to determine the meaning of a given bit of language in context. For example, deciding on the most likely meaning and appropriate representation of the word “bank” in the sentence “I arrived at the bank after crossing the…” requires knowing if the sentence ends in “... road.” or “... river.”* {: .text-center }
+*After starting with representations of individual words or even pieces of words, they aggregate information from surrounding words to determine the meaning of a given bit of language in context. For example, deciding on the most likely meaning and appropriate representation of the word “bank” in the sentence “I arrived at the bank after crossing the…” requires knowing if the sentence ends in “... road.” or “... river.”*
+{: .text-center }
 
 Transformer 는 다른 모델들보다 parameters 의 숫자가 적고, feed-forward 를 이용하기 때문에 병렬화가 쉬움에도 불구하고, 멀리 떨어진 단어 간의 정보가 곧바로 연결되기 때문에 정확한 모델링도 가능합니다.
 
 ## BERT (language model using transformer)
 
-BERT 는 Transformer 를 이용하여 학습한 language model 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다.
+BERT 는 Transformer 를 이용하여 학습한 language model 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다. 
 
-![]({{ "/assets/figures/attention_bert_input.png" | absolute_url }})
-![]({{ "/assets/figures/attention_bert_usage.png" | absolute_url }})
+![]({{ "/assets/figures/attention_bert_input.png" | absolute_url }}){: width="95%" height="95%"}
+
+
+![]({{ "/assets/figures/attention_bert_usage.png" | absolute_url }}){: width="95%" height="95%"}
 
 
 ## References
