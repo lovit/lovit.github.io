@@ -1,6 +1,6 @@
 ---
 title: Attention mechanism in NLP. From seq2seq + attention to BERT
-date: 2017-03-17 23:00:00
+date: 2019-03-17 23:00:00
 categories:
 - machine learning
 tags:
@@ -56,7 +56,7 @@ Weight 는 decoder 의 이전 hidden state $$s_{i-1}$$ 와 encoder 의 hidden st
 $$a_{ij} = \frac{exp(e_{ij})}{\sum_j exp(e_{ij})}$$, $$e_{ij} = f(s_{i-1}, h_j)$$
 {: .text-center }
 
-![]({{ "/assets/figures/seq2seq_attention_input.png" | absolute_url }}){: width="60%" height="60%"}
+![]({{ "/assets/figures/seq2seq_attention_input.png" | absolute_url }}){: width="40%" height="40%"}
 
 Attention 을 계산하는 feed-forward network 는 간단한 구조입니다. 이는 $$[s_{i-1}; h_j]$$ 라는 input vector 에 대한 1 layer feed forward neural network 입니다.
 
@@ -65,15 +65,15 @@ $$e_{ij} = f(W^1 s_{i-1} + W^2 h_j)$$
 
 즉 이전에는 아래의 그림처럼 'this is example sentence' 를 '이것은 예문이다'로 번역하기 위하여 매번 같은 context vector 를 이용했지만,
 
-![]({{ "/assets/figures/seq2seq_structure.png" | absolute_url }}){: width="60%" height="60%"}
+![]({{ "/assets/figures/seq2seq_structure.png" | absolute_url }}){: width="50%" height="50%"}
 
 attention 이 이용되면서 '이것' 이라는 단어를 선택하기 위하여 'this is' 라는 부분에 주목할 수 있게 되었습니다.
 
-![]({{ "/assets/figures/seq2seq_attention_structure.png" | absolute_url }}){: width="60%" height="60%"}
+![]({{ "/assets/figures/seq2seq_attention_structure.png" | absolute_url }}){: width="50%" height="50%"}
 
 그리고 그 결과물로 attention weight matrix 를 얻을 수 있습니다. 아래는 영어와 프랑스어 간에 번역을 위하여 각각 어떤 단어끼리 높은 attention weight 가 부여됬는지를 표현한 그림입니다. 검정색일수록 낮은 weight 를 의미합니다. 관사 끼리는 서로 연결이 되어 있으며, 의미가 비슷한 단어들이 실제로 높은 attention weight 를 얻습니다. 그리고 하나의 단어가 두 개 이상의 단어의 정보를 조합하여 이용하기도 합니다.
 
-![]({{ "/assets/figures/seq2seq_attention_visualize.png" | absolute_url }}){: width="60%" height="90%"}
+![]({{ "/assets/figures/seq2seq_attention_visualize.png" | absolute_url }}){: width="50%" height="50%"}
 
 하지만 대체로 한 단어 $$y_i$$ 를 만들기 위하여 이용되는 $$h_j$$ 의 개수는 그리 많지 않습니다. 필요한 정보는 매우 sparse 하며, 이는 decoder 가 context 를 선택적으로 이용하고 있다는 의미입니다. 그럼에도 불구하고 기존의 sequence to sequence 에서는 하나의 벡터에 이 모든 정보를 표현하려 했으니, RNN 의 모델의 크기는 커야했고 성능도 낮을 수 밖에 없었습니다. Attention mechanism 이 성능 향상이 큰 도움을 주었습니다.
 
@@ -100,7 +100,7 @@ Recurrent Neural Network (RNN) 은 sentence representation 을 학습하는데�
 
 또한 RNN 은 word embedding sequence 와 달리, 한 단어의 앞/뒤 단어들을 고려하여 문맥적인 정보를 hidden state vectors 에 저장합니다. 즉, RNN 을 이용하여 문맥적인 정보를 처리하고, attention network 와 classifier networks 가 tasks 에 관련된 정보를 처리하도록 만들 수 있습니다.
 
-![]({{ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url }}){: width="60%" height="60%"}
 
 Lin et al., (2017) 은 2 layer feed-forward newral networks 를 이용하는 attention network 를 제안했습니다. Input sequence $$x_{1:n}$$ 에 대하여 hidden state sequence $$h_{1:n}$$ 이 학습되었을 때, 문장의 representation 은 weighted average of hidden state vectors 로 이뤄집니다.
 
@@ -116,20 +116,20 @@ $$H$$ 의 크기가 $$(n, h)$$ 라 할 때, $$W_{s1}$$ 의 크기는 $$(d_a, h)$
 
 그리고 여기에 hyper tangent 가 적용됩니다. 이는 벡터의 각 차원의 값을 [-1, 1] 로 scaling 합니다. 그렇기 때문에 $$tanh(W_{s1}h_i)$$ 는 반지름이 1 인 공간 안에 골고루 분포한 벡터들이 됩니다.
 
-![]({{ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url }}){: width="60%" height="60%"}
 
 여기에 $$d_a=350$$ 차원의 $$w_{s2}$$ 가 내적되어 attention weight 가 계산됩니다. 이는 마치 softmax regression 에서의 coefficient vectors (대표벡터) 의 역할을 합니다. $$w_{s2}$$ 와 비슷한 방향에 있을수록 문장 분류에 중요한 문맥이라는 의미입니다.
 
 즉 $$W_{s1}$$ 에 의하여 문맥 공간을 중요도 공간으로 변환하였고, $$w_{s2}$$ 에 의하여 실제로 중요한 문맥들을 선택합니다. 그리고 softmax 를 취하기 때문에 확률의 형태로 attention weight 가 표현됩니다.
 
-![]({{ "/assets/figures/attention_structured_attention_fig2.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_structured_attention_fig2.png" | absolute_url }}){: width="60%" height="60%"}
 
 그런데 어떤 문맥들이 중요한지는 관점에 따라 다를 수 있습니다. $$w_{s2}$$ 는 한 관점에서의 문맥들의 중요도를 표현합니다. 관점이 여러개일 수도 있습니다. 이를 위하여 $$(1, d_a)$$ 차원의 column vector $$w_{s2}$$ 가 아닌, $$(r, d_a)$$ 차원의 $$W_{s2}$$ 를 이용합니다. 논문에서는 $$r=30$$ 로 실험하였습니다. 30 개의 관점으로 hidden state vectors 를 조합합니다. Attention 을 계산할 때의 softmax 역시 각 row 별로 이뤄집니다. 그리고 여기서 만들어진 $$(r, h)$$ 크기의 sentence representation matrix 를 $$(1, r \times h)$$ 의 flatten vector 로 만들어 classifier 에 입력합니다.
 
 $$A = softmax\left(W_{s2} \cdot tanh(W_{s1}H^T) \right)$$
 {: .text-center }
 
-![]({{ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url }}){: width="60%" height="60%"}
 
 그런데 한 가지 문제가 더 남았습니다. Attention matrix $$A$$ 의 각 row 가 서로 비슷한 벡터를 가질 수도 있습니다. 관점이 모두 달라야한다는 보장을 하지 않았기 때문입니다. $$W_{s2}$$ 에 다양한 관점이 잘 학습되도록 유도하기 위하여 다음과 같은 regularization term 을 추가합니다. 이는 attention matrix 의 각 row 들, 즉 $$r$$ 개의 관점들이 서로 독립에 가까워지도록 유도하는 것입니다.
 
@@ -167,7 +167,7 @@ $$u_i = tanh(W_s h_i + b_s)$$ {: .text-center }
 
 $$a_i = \frac{exp(u_i^Tu_s)}{\sum_t exp(u_i^Tu_s)}, v = \sum_i a_i h_i$${: .text-center }
 
-![]({{ "/assets/figures/attention_han_structure.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_han_structure.png" | absolute_url }}){: width="65%" height="65%"}
 
 HAN 의 학습 결과 문서 분류에 중요한 문장과 각 문장의 단어들을 시각적으로 확인할 수 있습니다. Figure 5 는 Yelp data 에 대한 시각화 입니다. 빨간색일수록 중요한 문장이며, 파랑색일수록 중요한 단어입니다. 긍정을 판단하는데 delicious, amazing 과 같은 단어가, 부정을 판단하는데 terrible, not 과 같은 단어들이 큰 영향을 주었음을 확인할 수 있습니다.
 
@@ -222,7 +222,7 @@ $$softmax(\frac{q_i \cdot K}{\sqrt{d_k}})V$${: .text-center }
 
 그래서 scaled dot product attention 이라는 이름이 붙었습니다. 단, 아직 우리는 위 그림의 Mask (Opt.) 는 설명하지 않았습니다. 이 부분은 decoder 의 self-attention 에만 존재합니다.
 
-![]({{ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url }}){: width="60%" height="60%"}
 
 그런데 한 개의 $$attention(q_i, k_j, v_j)$$ 에 의한 output 의 크기를 $$d_{model}=512$$ 로 만들지 않습니다. 64 차원의 벡터로 작게 만드는 대신, 서로 다른 $$W_l^{K,1}, W_l^{K,2}, \dots$$ 을 $$h=8$$ 개 만들어 8 번의 attention 과정을 거칩니다. 그리고 그 결과를 concatenation 합니다. 이를 multi-head attention 이라 합니다. 하나의 attention 은 하나의 관점으로의 해석 역할을 합니다. 여러 개의 attention 을 나눠 작업하면 더 다양한 정보가 모델에 저장된다고 합니다. 이는 마치 여러 관점으로 input sequence 를 해석하는 것과 같습니다.
 
@@ -232,17 +232,17 @@ $$softmax(\frac{q_i \cdot K}{\sqrt{d_k}})V$${: .text-center }
 
 $$FFN(x_i) = max(0, x_iW_1 + b_1)W_2 + b_2)$${: .text-center }
 
-![]({{ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url }}){: width="60%" height="60%"}
 
 지금까지와 과정은 각 시점별로 문장 전체의 정보들을 종합하여 새로운 문맥적인 정보를 만드는 것입니다. 이 값을 input item 에 더합니다. 이는 input sequence 에 포함되지 않은 문맥적인 정보를 input sequence 로부터 가공하여 여기에 더한다는 의미입니다. 이를 residual connection 이라 합니다.
 
-![]({{ "/assets/figures/attention_transformer_block_residual.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_transformer_block_residual.png" | absolute_url }}){: width="60%" height="60%"}
 
 이 과정까지 거치면 encoder 에서의 한 번의 transformer block 을 통과한 것입니다. 이 과정을 6 번 거칩니다. Layer 의 높이가 올라갈수록 문맥적인 의미들이 추가됩니다.
 
 Encoder 는 주어진 문장 전체를 살펴보며 각 시점의 정보들을 더 좋은 representation 으로 encoding 하는 역할을 합니다. Decoder 는 현재까지 알려진 정보를 바탕으로 새로운 문장을 생성하는 역할을 합니다. 그렇기 때문에 attention 을 이용할 때 지금 이후의 시점에 대한 정보를 사용할 수는 없습니다. 즉 $$x_i$$ 와 연결될 수 있는 position 은 $$1, 2, \dots, i-1$$ 입니다. 이처럼 attention 에 제약을 거는 과정을 masking 이라 합니다. Decoder 의 scaled dot-product attention 에는 이 과정이 포함되어 있습니다.
 
-![]({{ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url }}){: width="70%" height="70%"}
+![]({{ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url }}){: width="60%" height="60%"}
 
 Decoder 가 단어를 생성할 때에는 encoder 의 정보도 필요합니다. Sequence to sequence 에서 source sequence $$h_j$$ 를 이용한 것처럼 Transformer 에서도 이를 이용합니다. Encoder 의 마지막 layer 의 output sequence 의 값을 key, value 로 이용합니다. 이를 encoder - decoder attention 이라 합니다. 이처럼 query 와 key, value 의 출처가 서로 다른 경우를 주로 attention 이라 합니다. 하지만 앞서 설명한 encoder, decoder 에서의 attention 은 query, key, value 의 출처가 각각 encoder 혹은 decoder 였습니다. 이처럼 query 와 key, value 의 출처가 같은 경우를 self-attention 이라 합니다.
 
@@ -269,12 +269,32 @@ Transformer 는 다른 모델들보다 parameters 의 숫자가 적고, feed-for
 
 ## BERT (language model using transformer)
 
-BERT 는 Transformer 를 이용하여 학습한 language model 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다. 
+BERT 는 Transformer 를 이용하여 학습한 language model 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다. BERT 는 Transformer 의 구조를 이해하면 구조적으로는 특별한 점은 없습니다. 단 pre-training task 의 방식이 특이합니다.
 
-![]({{ "/assets/figures/attention_bert_input.png" | absolute_url }}){: width="95%" height="95%"}
+Pre-training task 는 이 모델의 목적과 상관없이 학습하는 task 입니다. 모델은 학습해야 하는 방향을 설정해줘야 loss 를 정의할 수 있습니다. 예를 들어 분류 문제의 경우에는 분류 정확도가 될 수 있습니다. 그런데 어떤 목적에 이용될지 모르니, 왠만한 tasks 에 도움이 될법한 다른 tasks 로 모델의 학습 방향을 설정하는 것을 pre-training task 라 합니다. BERT 는 language model 을 학습합니다. Language model 은 앞에 등장한 단어 $$x_1, x_2, \dots, x_{i-1}$$ 을 이용하여 $$x_i$$ 를 예측하는 문제입니다. 그런데 BERT 는 조금 다르게 문장의 임의의 단어를 맞추는 방식의 masked language model 이라는 pre-training task 를 이용합니다.
 
+BERT 의 input 구조도 다른 language model 과 다릅니다. 데이터에서 연속된 두 개의 문장을 붙여 하나의 input 에 입력합니다. 앞 문장의 맨 앞에는 [CLS] 를, 각 문장의 끝 부분에는 [SEP] 이라는 special token 을 입력합니다. 그리고 이들에 대한 token embeddings 을 lookup 합니다. Special tokens 도 각각 token embedding vectors 가 하나씩 존재합니다.
 
-![]({{ "/assets/figures/attention_bert_usage.png" | absolute_url }}){: width="95%" height="95%"}
+거기에 segment embeddings 도 lookup 합니다. 앞 문장은 $$E_A$$, 뒷 문장은 $$E_B$$ 를 lookup 하여 더해줍니다. 이는 각 단어가 소속된 문장에 대한 정보를 간접적으로 표현하는 정보입니다. 그리고 token 위치에 따른 position embedding vectors 도 더해줍니다. 즉 각 token 별로 세 개의 embedding vectors 가 lookup 되어 더해집니다.
+
+![]({{ "/assets/figures/attention_bert_input.png" | absolute_url }}){: width="85%" height="85%"}
+
+Masked Language Model 은 문장 내 단어의 일부를 [mask] 라는 special token 으로 치환한 뒤, 이 단어가 원래 무엇이었는지를 맞추는 문제입니다. Word2Vec 이 앞/뒤의 $$w$$ 개의 단어를 이용하여 가운데 단어를 맞추는 것과 비슷합니다. 각 문장마다 15 % 의 단어를 임의로 맞출 것입니다. 그런데 그 15 % 의 단어를 모두 [mask] 로 치환하지는 않습니다. 15 % 중 80 % 는 실제로 [mask] 로 치환하고, 10 % 는 상관없는 임의의 단어, 나머지 10 % 는 단어를 그대로 유지합니다. 그리고 모두 다 원래 무슨 단어였는지를 맞춥니다. 이는 모든 단어를 [mask] 로 변환하면 그 과정에서도 bias 가 생기기 때문입니다.
+
+논문의 예시에서는 "my dog is hairy" 라는 문장에서 "hairy" 를 맞추는 것으로 formulation 이 되었습니다. 그리고 각각 아래의 확률로 문장이 치환됩니다.
+- "my dog is [mask]" (80%)
+- "my dog is apple" (10%)
+- "my dog is hairy" (10%)
+
+이 말고도 한 가지 pre-training task 를 동시에 풉니다. 두 개의 문장이 연속되기 때문에 앞의 문장을 input 으로, 뒤의 문장이 실로 뒤에 위치하는지 판별하는 문제를 풉니다. 이를 위하여 50 % 는 실제 문장으로, 나머지 50 % 는 데이터에서 임의로 선택한 문장을 가지고 옵니다. 이는 Q&A 와 같이 두 개의 문장을 동시에 이용하는 tasks 를 위하여 문장 내 상관성을 BERT 모델에 학습하기 위해서 입니다.
+
+학습된 BERT 는 그 목적에 따라 서로 다른 output 을 이용합니다. 예를 들어 sentence similarity 와 같이 두 개의 문장이 입력되어야 하는 경우에는 [CLS] 의 output vector 가 이용됩니다. Sentence classification 과 같은 작업에서도 [CLS] 의 output vector 를 이용합니다. Sequential labeing 에서는 각 단어에 해당하는 output 을 이용합니다.
+
+각 목적에 맞는 모델 (classifier, sequential labeler) 의 input 으로 이들을 입력한 뒤, task model 의 loss 를 이용하여 fine-tuning 을 하여 최종 모델을 만듭니다.
+
+![]({{ "/assets/figures/attention_bert_usage.png" | absolute_url }}){: width="85%" height="85%"}
+
+BERT 의 놀라운 점은 Wikipedia 나 BookCorpus 와 같은 일반적인 corpus 를 이용하여 학습한 단일 모델을 이용하여 11 개의 NLP tasks 에서 모두 state of the art 를 기록한 것입니다. 이는 그만큼 질 좋은 language model 이 학습되었다는 것을 의미합니다. 두번째 놀라운 점은 resource 입니다. 크기가 서로 다른 모델 두 가지를 언급했는데, 작은 모델도 4 개의 TPU 를 이용하여 4 일간 학습하였다고 합니다. TPU 는 Google 이 딥러닝과 같은 계산을 위하여 만든 하드웨어입니다. 개인이 시도하기에는 불가능한 수준의 스케일로 모델을 학습시키고, 그 결과로 여러 tasks 의 성능을 향상시켰습니다. Google 은 가끔씩 Google 만이 할 수 있는 연구들을 선보입니다. 모든 문제가 대량의 리소스를 이용한 방식으로 계산되어야 하는 것은 아니겠지만, 적어도 language model 에서는 이러한 방식이 효과가 있어 보입니다.
 
 
 ## References
