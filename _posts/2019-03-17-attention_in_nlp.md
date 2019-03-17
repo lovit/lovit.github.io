@@ -37,7 +37,7 @@ Sequence to sequence 가 학습하는 기준은 $$maximize \sum P_{\theta} \left
 
 $$P(y_{1:m} \vert x_{1:n}) = \prod_i P(y_i \vert y_{1:i-1}), c)$$ 물론 이 구조만으로도 번역의 성능은 향상되었습니다. Mikolov 의 언급처럼 word embedding 정보를 이용하였기 때문입니다. Classic n-grams 을 이용하는 기존의 statistical machine translation 보다 작은 크기의 모델 안에 단어 간의 semantic 정보까지 잘 포함되었기 때문입니다.
 
-![]({{ "/assets/figures/seq2seq_fixed_context.png" | absolute_url }}){: width="60%" height="60%"}
+![]({{ "/assets/figures/seq2seq_fixed_context.png" | absolute_url }}){: width="40%" height="40%"}
 
 그런데, Bahdanau et al., (2014) 에서 하나의 문장에 대한 정보를 하나의 context vector $$c$$ 로 표현하는 것이 충분하지 않다고 문제를 제기합니다. Decoder RNN 이 문장을 만들 때 각 단어가 필요한 정보가 다를텐데, sequence to sequence 는 매 시점에 동일한 context $$c$$ 를 이용하기 때문입니다. 대신에 $$x_1, x_2, \dots, x_n$$ 에 해당하는 encoder RNN 의 hidden state vectors $$h_1, h_2, \dots, h_n$$ 의 조합으로 $$y_i$$ 마다 다르게 조합하여 이용하는 방법을 제안합니다. 표현이 너무 좋아서 논문의 구절을 그대로 인용하였습니다.
 
@@ -47,19 +47,21 @@ $$P(y_{1:m} \vert x_{1:n}) = \prod_i P(y_i \vert y_{1:i-1}), c)$$ 물론 이 구
 *Instead, it encodes the input sentence into a sequence of vectors and chooses a subset of these vectors adaptively while decoding the translation. This frees a neural translation model from having to squash all the information of a source sentence, regardless of its length, into a fixed-length vector.*
 {: .text-center }
 
-아래의 그림처럼 decoder RNN 이 $$y_i$$ 를 선택할 때 encoder RNN 의 $$h_j$$ 를 얼만큼 이용할지를 $$a_{ij}$$ 로 정의합니다. $$y_i$$ 의 context vector $$c_i$$ 는 $$\sum_j a_{ij} \cdot h_j$$ 로 정의되며, $$\sum_j a_{ij} == 1, a_{ij} \ge 0$ 입니다. $$a_{ij}$$ 를 attention weight 라 하며, 이 역시 neural network 에 의하여 학습됩니다.
+아래의 그림처럼 decoder RNN 이 $$y_i$$ 를 선택할 때 encoder RNN 의 $$h_j$$ 를 얼만큼 이용할지를 $$a_{ij}$$ 로 정의합니다. $$y_i$$ 의 context vector $$c_i$$ 는 $$\sum_j a_{ij} \cdot h_j$$ 로 정의되며, $$\sum_j a_{ij} = 1, a_{ij} \ge 0$$ 입니다. $$a_{ij}$$ 를 attention weight 라 하며, 이 역시 neural network 에 의하여 학습됩니다.
 
-![]({{ "/assets/figures/seq2seq_with_attention.png" | absolute_url }}){: width="60%" height="60%"}
+![]({{ "/assets/figures/seq2seq_with_attention.png" | absolute_url }}){: width="40%" height="40%"}
 
 Weight 는 decoder 의 이전 hidden state $$s_{i-1}$$ 와 encoder 의 hidden state $$h_j$$ 가 input 으로 입력되는 feed-forward neural network 입니다. 출력값 $$e_{ij}$$ 는 하나의 숫자이며, 이들을 softmax 로 변환하여 확률 형식으로 표현합니다. 그리고 이 확률을 이용하여 encoder hidden vectors 의 weighted average vector 를 만들어 context vector $$c_i$$ 로 이용합니다.
 
 $$a_{ij} = \frac{exp(e_{ij})}{\sum_j exp(e_{ij})}$$, $$e_{ij} = f(s_{i-1}, h_j)$$
+{: .text-center }
 
 ![]({{ "/assets/figures/seq2seq_attention_input.png" | absolute_url }}){: width="60%" height="60%"}
 
 Attention 을 계산하는 feed-forward network 는 간단한 구조입니다. 이는 $$[s_{i-1}; h_j]$$ 라는 input vector 에 대한 1 layer feed forward neural network 입니다.
 
-$$e_{ij} = f(W^1 s_{i-1} + W^2 h_j)$$ 
+$$e_{ij} = f(W^1 s_{i-1} + W^2 h_j)$$
+{: .text-center }
 
 즉 이전에는 아래의 그림처럼 'this is example sentence' 를 '이것은 예문이다'로 번역하기 위하여 매번 같은 context vector 를 이용했지만,
 
@@ -71,7 +73,7 @@ attention 이 이용되면서 '이것' 이라는 단어를 선택하기 위하�
 
 그리고 그 결과물로 attention weight matrix 를 얻을 수 있습니다. 아래는 영어와 프랑스어 간에 번역을 위하여 각각 어떤 단어끼리 높은 attention weight 가 부여됬는지를 표현한 그림입니다. 검정색일수록 낮은 weight 를 의미합니다. 관사 끼리는 서로 연결이 되어 있으며, 의미가 비슷한 단어들이 실제로 높은 attention weight 를 얻습니다. 그리고 하나의 단어가 두 개 이상의 단어의 정보를 조합하여 이용하기도 합니다.
 
-![]({{ "/assets/figures/seq2seq_attention_visualize.png" | absolute_url }})
+![]({{ "/assets/figures/seq2seq_attention_visualize.png" | absolute_url }}){: width="60%" height="90%"}
 
 하지만 대체로 한 단어 $$y_i$$ 를 만들기 위하여 이용되는 $$h_j$$ 의 개수는 그리 많지 않습니다. 필요한 정보는 매우 sparse 하며, 이는 decoder 가 context 를 선택적으로 이용하고 있다는 의미입니다. 그럼에도 불구하고 기존의 sequence to sequence 에서는 하나의 벡터에 이 모든 정보를 표현하려 했으니, RNN 의 모델의 크기는 커야했고 성능도 낮을 수 밖에 없었습니다. Attention mechanism 이 성능 향상이 큰 도움을 주었습니다.
 
@@ -79,15 +81,15 @@ attention 이 이용되면서 '이것' 이라는 단어를 선택하기 위하�
 
 얼마 지나지 않아서 attention mechanism 은 다른 encoder - decoder system 에도 이용되기 시작합니다. Xu et al., (2015) 에서는 이미지 파일을 읽어서 문장을 만드는 image captioning 에 attention mechanism 을 이용합니다. 일반적으로 image classification 을 할 때에는 CNN model 의 마지막 layer 의 concatenation 시킨 1 by k 크기의 flatten vector 를 이용하는데, 이 논문에서는 마지막 activation map 을 그대로 input 으로 이용합니다. activation map 역시 일종의 이미지입니다. Activation map 의 한 점은 이미지에서의 어떤 부분의 정보가 요약된 것입니다. 여전히 locality 가 보존되어 있는 tensor 입니다. 그리고 sequence to sequence 처럼 RNN 계열 모델을 이용한 language model 로 decoder 를 만듭니다. 이 때 attention weight 를 이용하여 마지막 activation map 의 어떤 부분을 봐야 하는지 결정합니다. 이는 실제 이미지의 특정 부분을 살펴보고서 단어를 선택한다는 의미입니다.
 
-![]({{ "/assets/figures/attention_imagecaptioning_cnn_rnn_attention.png" | absolute_url }})
+![]({{ "/assets/figures/attention_imagecaptioning_cnn_rnn_attention.png" | absolute_url }}){: width="90%" height="90%"}
 
 그 결과 생성된 문장의 단어들이 높은 weight 로 이용한 이미지의 부분들을 시각적으로 확인할 수 있게 되었습니다. 실제로 이미지의 일부 정보를 이용하여 문장을 만들었습니다.
 
-![]({{ "/assets/figures/attention_imagecaptioning_example_success.png" | absolute_url }})
+![]({{ "/assets/figures/attention_imagecaptioning_example_success.png" | absolute_url }}){: width="90%" height="90%"}
 
 또한 모델이 엉뚱한 문장을 출력하였을 때, 그 부분에 대한 디버깅도 가능하게 되었습니다. 그리고 아래의 예시들은 실제로 사람도 햇갈릴법한 형상들입니다. 모델이 잘못된 문장을 생성하는게 오히려 이해가 되기 시작합니다.
 
-![]({{ "/assets/figures/attention_imagecaptioning_example_fail.png" | absolute_url }})
+![]({{ "/assets/figures/attention_imagecaptioning_example_fail.png" | absolute_url }}){: width="90%" height="90%"}
 
 이처럼 encoder - decoder system 에서 decoder 가 특정 정보를 선택적으로 이용해야 하는 문제에서 attention mechanism 이 이용될 수 있습니다.
 
