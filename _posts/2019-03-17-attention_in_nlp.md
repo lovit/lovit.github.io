@@ -27,51 +27,65 @@ Word2Vec 을 제안한 Mikolov 는 "Deep learning NLP 의 발전은 word embeddi
 
 ## Attention in sequence to sequence
 
+Sequence to sequence 는 Sutskever et al., (2014) 에 의하여 번역과 같이 하나의 input sequence 에 대한 output sequence 를 출력하기 위하여 제안되었습니다. 이는 part of speech tagging 과 같은 sequential labeing 과 다른데, sequential labeling 은 input sequence $$[x_1, x_2, \dots, x_n]$$ 의 각 $$x_i$$ 에 해당하는 $$[y_1, y_2, \dots, y_n]$$ 을 출력합니다. Input 과 output sequence 의 길이가 같습니다. 하지만 처음 sequence to sequence 가 풀고자 했던 문제는 번역입니다. 번역은 input sequence $$x_{1:n}$$ 의 의미와 같은 의미를 지니는 output sequence $$y_{1:m}$$ 을 출력하는 것이며, $$x_i$$, $$y_i$$ 간의 관계를 학습하는 것이 아닙니다. 그리고 각 sequence 의 길이도 서로 다를 수 있습니다.
+
+아래 그림은 input sequence [A, B, C] 에 대하여 output sequence [W, X, Y, Z] 를 출력하는 sequence to sequence model 입니다. 서로 언어가 다르기 때문에 sequence to sequence 는 input (source) sentence 의 언어적 지식을 학습하는 encoder RNN 과 output (target) sentence 의 언어적 지식을 학습하는 decoder RNN 을 따로 두었습니다. 그리고 이 두 개의 RNN 으로 구성된 encoder - decoder 를 한 번에 학습합니다.
+
 ![]({{ "/assets/figures/seq2seq.png" | absolute_url }})
 
+Sequence to sequence 가 학습하는 기준은 $$maximize \Sum P_{\theta} \left( y_{1:m} \vert x_{1:n} \right)$$ 입니다. Input sequence $$x_{1:n}$$ 과 output sequence $$y_{1:m}$$ 의 상관성을 최대화 하는 것입니다. 이때 sequence to sequence 는 input sequence 의 정보를 하나의 context vector $$c$$ 에 저장합니다. Encoder RNN 의 마지막 hidden state vector 를 $$c$$ 로 이용하였습니다. Decoder RNN 은 고정된 context vector $$c$$ 와 현재까지 생성된 단어열 $$y_{1:i-1}$$ 을 이용하는 language model (sentence generator) 입니다.
+
+$$P(y_{1:m} \vert x_{1:n}) = \prod_i P(y_i \vert y_{1:i-1}), c)$$ 물론 이 구조만으로도 번역의 성능은 향상되었습니다. Mikolov 의 언급처럼 word embedding 정보를 이용하였기 때문입니다. 기존의 statistical machine translation (classic n-grams 을 이용하는 방식) 보다 작은 크기의 모델 안에 단어 간의 semantic 정보까지 잘 포함되었기 때문입니다.
 
 ![]({{ "/assets/figures/seq2seq_fixed_context.png" | absolute_url }})
 
+그런데, Bahdanau et al., (2014) 에서 하나의 문장에 대한 정보를 하나의 context vector $$c$$ 로 표현하는 것이 충분하지 않다고 문제를 제기합니다.
+
+*A potential issue with this encoder–decoder approach is that a neural network needs to be able to compress all the necessary information of a source sentence into a fixed-length vector.*
+{: .text-center }
+
+*Instead, it encodes the input sentence into a sequence of vectors and chooses a subset of these vectors adaptively while decoding the translation. This frees a neural translation model from having to squash all the information of a source sentence, regardless of its length, into a fixed-length vector.*
+{: .text-center }
 
 ![]({{ "/assets/figures/seq2seq_with_attention.png" | absolute_url }})
 
-![]({ "/assets/figures/seq2seq_structure.png" | absolute_url })
+![]({{ "/assets/figures/seq2seq_structure.png" | absolute_url }})
 
-![]({ "/assets/figures/seq2seq_attention_structure.png" | absolute_url })
+![]({{ "/assets/figures/seq2seq_attention_structure.png" | absolute_url }})
 
-![]({ "/assets/figures/seq2seq_attention_input.png" | absolute_url })
+![]({{ "/assets/figures/seq2seq_attention_input.png" | absolute_url }})
 
 ![]({{ "/assets/figures/seq2seq_attention_visualize.png" | absolute_url }})
 
 
-![]({ "/assets/figures/attention_imagecaptioning_cnn_rnn_attention.png" | absolute_url })
-![]({ "/assets/figures/attention_imagecaptioning_example_success.png" | absolute_url })
-![]({ "/assets/figures/attention_imagecaptioning_example_fail.png" | absolute_url })
+![]({{ "/assets/figures/attention_imagecaptioning_cnn_rnn_attention.png" | absolute_url }})
+![]({{ "/assets/figures/attention_imagecaptioning_example_success.png" | absolute_url }})
+![]({{ "/assets/figures/attention_imagecaptioning_example_fail.png" | absolute_url }})
 
 
-![]({ "/assets/figures/attention_han_example.png" | absolute_url })
+![]({{ "/assets/figures/attention_han_example.png" | absolute_url }})
 
-![]({ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url })
-![]({ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url })
-![]({ "/assets/figures/attention_structured_attention_fig2.png" | absolute_url })
-![]({ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url })
-![]({ "/assets/figures/attention_structured_attention_positive_example.png" | absolute_url })
+![]({{ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig2.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url }})
+![]({{ "/assets/figures/attention_structured_attention_positive_example.png" | absolute_url }})
 
-![]({ "/assets/figures/attention_han_structure.png" | absolute_url })
-![]({ "/assets/figures/attention_han_attention_debugging.png" | absolute_url })
+![]({{ "/assets/figures/attention_han_structure.png" | absolute_url }})
+![]({{ "/assets/figures/attention_han_attention_debugging.png" | absolute_url }})
 
-![]({ "/assets/figures/attention_transformer_components.png" | absolute_url })
-![]({ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url })
-![]({ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url })
-![]({ "/assets/figures/attention_transformer_block_residual.png" | absolute_url })
-![]({ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url })
-![]({ "/assets/figures/attention_transformer_encoder_decoder_attention.png" | absolute_url })
-![]({ "/assets/figures/attention_transformer_components2.png" | absolute_url })
+![]({{ "/assets/figures/attention_transformer_components.png" | absolute_url }})
+![]({{ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url }})
+![]({{ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url }})
+![]({{ "/assets/figures/attention_transformer_block_residual.png" | absolute_url }})
+![]({{ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url }})
+![]({{ "/assets/figures/attention_transformer_encoder_decoder_attention.png" | absolute_url }})
+![]({{ "/assets/figures/attention_transformer_components2.png" | absolute_url }})
 
-![]({ "/assets/figures/attention_transformer_block_selfattention_5_to_6_end_to_french.png" | absolute_url })
+![]({{ "/assets/figures/attention_transformer_block_selfattention_5_to_6_end_to_french.png" | absolute_url }})
 
-![]({ "/assets/figures/attention_bert_input.png" | absolute_url })
-![]({ "/assets/figures/attention_bert_usage.png" | absolute_url })
+![]({{ "/assets/figures/attention_bert_input.png" | absolute_url }})
+![]({{ "/assets/figures/attention_bert_usage.png" | absolute_url }})
 
 
 ## References
