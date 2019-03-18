@@ -23,7 +23,7 @@ Word2Vec 을 제안한 Mikolov 는 "딥러닝을 이용한 자연어처리의 �
 
 그리고 최근에는 self-attention 을 이용하는 Transformer 가 번역의 성능을 향상시켜주었고, 이를 이용하는 BERT 는 왠만한 자연어처리 과업들의 기록을 단 하나의 단일 모델로 갈아치웠습니다.
 
-이번 포스트에서는 attention mechanism 의 시작인 sequence to sequence 부터 BERT 까지, attention mechanism 을 이용하는 모델들에 대하여 정리합니다.
+이번 포스트에서는 attention mechanism 의 시작인 sequence to sequence 부터 BERT 까지, attention mechanism 을 이용하는 모델들에 대하여 정리합니다. 이 포스트의 목적은 attention mechanism 의 원리와 활용 방법에 대해 알아보는 것입니다. 몇 개 모델들의 디테일한 내용은 다루지 않습니다. 이 포스트는 (1) sequence to sequence with attention, (2) CNN encoder - RNN decoder with attention for image captioning, (3) structured self-attentive sentence embedding, (4) hierarchical attention network (HAN), (5) Transformer (attention is all you need), (6) BERT 에 대하여 리뷰합니다.
 
 ## Attention in sequence to sequence
 
@@ -224,7 +224,7 @@ $$softmax(\frac{q_i \cdot K}{\sqrt{d_k}})V$${: .text-center }
 
 ![]({{ "/assets/figures/attention_transformer_block_scaledot.png" | absolute_url }}){: width="60%" height="60%"}
 
-그런데 한 개의 $$attention(q_i, k_j, v_j)$$ 에 의한 output 의 크기를 $$d_{model}=512$$ 로 만들지 않습니다. 64 차원의 벡터로 작게 만드는 대신, 서로 다른 $$W_l^{K,1}, W_l^{K,2}, \dots$$ 을 $$h=8$$ 개 만들어 8 번의 attention 과정을 거칩니다. 그리고 그 결과를 concatenation 합니다. 이를 multi-head attention 이라 합니다. 하나의 attention 은 하나의 관점으로의 해석 역할을 합니다. 여러 개의 attention 을 나눠 작업하면 더 다양한 정보가 모델에 저장된다고 합니다. 이는 마치 여러 관점으로 input sequence 를 해석하는 것과 같습니다.
+그런데 한 개의 $$attention(q_i, k_j, v_j)$$ 에 의한 output 의 크기를 $$d_{model}=512$$ 로 만들지 않습니다. 64 차원의 벡터로 작게 만드는 대신, 서로 다른 $$W_l^{K,1}, W_l^{K,2}, \dots$$ 을 $$h=8$$ 개 만들어 8 번의 attention 과정을 거칩니다. 그리고 그 결과를 concatenation 합니다. 이를 multi-head attention 이라 합니다. 하나의 attention 은 하나의 관점으로의 해석 역할을 합니다. 여러 개의 attention 을 나눠 작업하면 더 다양한 정보가 모델에 저장된다고 합니다. 이는 마치 여러 관점으로 input sequence 를 해석하는 것과 같습니다. 이는 마치 VGG network 에서 5x5 convolution filter 하나 보다 3x3 convolution filter 두 개를 중첩하여 학습하면 패러매터의 숫자도 줄어들면서 더 좋은 성능을 보여준다는 맥락으로도 해석할 수 있을 것 같습니다.
 
 이 때 두 input sequence item $$x_i$$ 와 $$x_j$$ 가 얼마나 멀리 떨어져 있던지 상관없이 attention 에 의하여 곧바로 연결이 됩니다. 하지만 RNN 에서는 떨어진 거리만큼의 path 가 필요합니다. RNN 은 두 정보를 연결하기 위하여 실제 문장에서의 거리만큼의 연산을 해야하고, 그 과정에서 정보가 손실되거나 노이즈들이 포함될 가능성이 높습니다. 그러나 attention 에서는 이 과정이 직접적으로 일어납니다.
 
