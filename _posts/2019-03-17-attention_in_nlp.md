@@ -8,26 +8,26 @@ tags:
 - attention mechanism
 ---
 
-Word2Vec 을 제안한 Mikolov 는 "Deep learning NLP 의 발전은 word embedding 때문이다"라는 말을 했습니다. 단어 간의 유사성을 표현할 수 있고, 단어를 continuous vector space 에서 표현하여 (embedding vector 만 잘 학습된다면) 작은 크기의 모델에 복잡한 지식들을 저장할 수 있게 되었습니다. 2013 년에 sequence to sequence 의 context vector 를 개선하기 위하여 attention mechanism 이 제안되었습니다. 이는 모델이 필요한 정보를 선택하여 이용할 수 있는 능력을 주었고, 자연어처리 외에도 다양한 문제에서 성능을 향상하였습니다. 그리고 부산물로 모델의 작동방식을 시각적으로 확인할 수 있도록 도와주고 있습니다. 이번 포스트에서는 sequence to sequence 에서 제안된 attention 부터, self-attention 을 이용하는 language model 인 BERT 까지 살펴봅니다.
+Word2Vec 을 제안한 Mikolov 는 "딥러닝을 이용한 자연어처리의 발전은 단어 임베딩 (word embedding) 때문이다"라는 말을 했습니다. 단어 간의 유사성을 표현할 수 있고, 단어를 연속적인 벡터 공간 (continuous vector space) 에서 표현하여 (embedding vector 만 잘 학습된다면) 작은 크기의 모델에 복잡한 지식들을 저장할 수 있게 되었습니다. Attention mechanism 도 단어 임베딩 만큼 중요한 발전이라 생각합니다. 2013 년에 sequence to sequence 의 문맥 벡터 (context vector) 를 개선하기 위하여 attention mechanism 이 제안되었습니다. 이는 모델이 필요한 정보를 선택하여 이용할 수 있는 능력을 주었고, 자연어처리 외에도 다양한 문제에서 성능을 향상하였습니다. 그리고 부산물로 모델의 작동방식을 시각적으로 확인할 수 있도록 도와주고 있습니다. 이번 포스트에서는 sequence to sequence 에서 제안된 attention 부터, self-attention 을 이용하는 언어 모델인 BERT 까지 살펴봅니다.
 
 ## Why attention ?
 
-Word2Vec 을 제안한 Mikolov 는 "Deep learning NLP 의 발전은 word embedding 때문이다"라는 말을 했습니다 (Joulin et al., 2016).
+Word2Vec 을 제안한 Mikolov 는 "딥러닝을 이용한 자연어처리의 발전은 단어 임베딩 (word embedding) 때문이다"라는 말을 했습니다 (Joulin et al., 2016).
 
 *One of the main successes of deep learning is due to the effectiveness of recurrent networks for **language modeling** and their application to speech recognition and machine translation.*
 {: .text-center }
 
-자연어처리는 word embedding 을 이용하기 전과 후가 명확히 다릅니다. n-gram 을 이용하는 전통적인 statistical language model 은 단어의 종류가 조금만 늘어나도 여러 종류의 n-grams 을 기억해야 했기 때문에 모델의 크기도 컸으며, 단어 간의 semantic 을 쉽게 표현하기 어려웠기 때문에 WordNet 과 같은 외부 지식을 쌓아야만 했습니다. Bengio et al., (2003) 는 neural network 를 이용한 language model 을 제안하였고, 그 부산물로 word embedding vectors 를 얻을 수 있었습니다. 그리고 Mikolov et al., (2013) 에 의하여 제안된 Word2Vec 은 Bengio 의 neural language model 의 성능은 유지하면서 학습 속도는 비약적으로 빠르게 만들었고, 모두가 손쉽게 word embedding 을 이용할 수 있도록 도와줬습니다. 물론 Python package [Gensim](https://radimrehurek.com/gensim/) 도 큰 역할을 했다고 생각합니다. Gensim 덕분에 파이썬을 이용하는 분석가들이 손쉽게 LDA 와 Word2Vec 을 이용할 수 있게 되었으니까요.
+자연어처리는 단어 임베딩을 이용하기 전과 후가 명확히 다릅니다. n-gram 을 이용하는 전통적인 통계 기반 언어 모델 (statistical language model) 은 단어의 종류가 조금만 늘어나도 여러 종류의 n-grams 을 기억해야 했기 때문에 모델의 크기도 컸으며, 단어의 의미정보를 쉽게 표현하기 어려웠기 때문에 워드넷 (WordNet) 과 같은 외부 지식을 쌓아야만 했습니다. Bengio et al., (2003) 는 뉴럴 네트워크를 이용한 언어모델을 제안하였고, 그 부산물로 단어 임베딩 벡터를 얻을 수 있었습니다. 그리고 Mikolov et al., (2013) 에 의하여 제안된 Word2Vec 은 Bengio 의 neural language model 의 성능은 유지하면서 학습 속도는 비약적으로 빠르게 만들었고, 모두가 손쉽게 단어 임베딩을 이용할 수 있도록 도와줬습니다. 물론 파이썬 패키지인 [Gensim](https://radimrehurek.com/gensim/) 도 큰 역할을 했다고 생각합니다. Gensim 덕분에 파이썬을 이용하는 분석가들이 손쉽게 LDA 와 Word2Vec 을 이용할 수 있게 되었으니까요.
 
-사견이지만, attention 도 word embedding 만큼이나 자연어처리에 중요한 역할을 한다고 생각합니다. 처음에는 sequence to sequence 의 context vector 를 개선하기 위하여 제안되었지만, 이제는 다양한 딥러닝 모델링에 하나의 기술로 이용되고 있습니다. 물론 모델의 성능을 향상 시킨 점도 큽니다. 하지만 부산물로 얻을 수 있는 attention weight matrix 를 이용한 모델의 작동 방식에 대한 시각화는 모델의 안정성을 점검하고, 모델이 의도와 다르게 작동할 때 그 원인을 찾는데 이용될 수 있습니다. 이전보다 쉽게 복잡한 모델들을 해석할 수 있게 된 것입니다.
+사견이지만, attention 도 단어 임베딩 만큼이나 자연어처리에 중요한 역할을 한다고 생각합니다. 처음에는 sequence to sequence context vector 를 개선하기 위하여 제안되었지만, 이제는 다양한 딥러닝 모델링에 하나의 기술로 이용되고 있습니다. 물론 모델의 성능을 향상 시킨 점도 큽니다. 하지만 부산물로 얻을 수 있는 attention weight matrix 를 이용한 모델의 작동 방식에 대한 시각화는 모델의 안정성을 점검하고, 모델이 의도와 다르게 작동할 때 그 원인을 찾는데 이용될 수 있습니다. 이전보다 쉽게 복잡한 모델들을 해석할 수 있게 된 것입니다.
 
-그리고 최근에는 self-attention 을 이용하는 Transformer 가 번역의 성능을 향상시켜주었고, 이를 이용하는 BERT language model 은 왠만한 NLP tasks 의 기록들을 단 하나의 단일 모델로 갈아치웠습니다.
+그리고 최근에는 self-attention 을 이용하는 Transformer 가 번역의 성능을 향상시켜주었고, 이를 이용하는 BERT 는 왠만한 자연어처리 과업들의 기록을 단 하나의 단일 모델로 갈아치웠습니다.
 
 이번 포스트에서는 attention mechanism 의 시작인 sequence to sequence 부터 BERT 까지, attention mechanism 을 이용하는 모델들에 대하여 정리합니다.
 
 ## Attention in sequence to sequence
 
-Sequence to sequence 는 Sutskever et al., (2014) 에 의하여 번역과 같이 하나의 input sequence 에 대한 output sequence 를 출력하기 위하여 제안되었습니다. 이는 part of speech tagging 과 같은 sequential labeing 과 다른데, sequential labeling 은 input sequence $$[x_1, x_2, \dots, x_n]$$ 의 각 $$x_i$$ 에 해당하는 $$[y_1, y_2, \dots, y_n]$$ 을 출력합니다. Input 과 output sequence 의 길이가 같습니다. 하지만 처음 sequence to sequence 가 풀고자 했던 문제는 번역입니다. 번역은 input sequence $$x_{1:n}$$ 의 의미와 같은 의미를 지니는 output sequence $$y_{1:m}$$ 을 출력하는 것이며, $$x_i$$, $$y_i$$ 간의 관계를 학습하는 것이 아닙니다. 그리고 각 sequence 의 길이도 서로 다를 수 있습니다.
+Sequence to sequence 는 Sutskever et al., (2014) 에 의하여 번역과 같이 하나의 입력 단어열 (input sequence) 에 대한 출력 단어열 (output sequence) 를 만들기 위하여 제안되었습니다. 이는 품사 판별과 같은 sequential labeing 과 다른데, sequential labeling 은 입력 단어열 $$[x_1, x_2, \dots, x_n]$$ 의 각 $$x_i$$ 에 해당하는 $$[y_1, y_2, \dots, y_n]$$ 을 출력합니다. 입력되는 단어열과 출력되는 품사열의 길이가 같습니다. 하지만 처음 sequence to sequence 가 풀고자 했던 문제는 번역입니다. 번역은 입력 단어열의 $$x_{1:n}$$ 의 의미와 같은 의미를 지니는 출력 단어열 $$y_{1:m}$$ 을 만드는 것이며, $$x_i$$, $$y_i$$ 간의 관계를 학습하는 것이 아닙니다. 그리고 각 sequence 의 길이도 서로 다를 수 있습니다.
 
 아래 그림은 input sequence [A, B, C] 에 대하여 output sequence [W, X, Y, Z] 를 출력하는 sequence to sequence model 입니다. 서로 언어가 다르기 때문에 sequence to sequence 는 input (source) sentence 의 언어적 지식을 학습하는 encoder RNN 과 output (target) sentence 의 언어적 지식을 학습하는 decoder RNN 을 따로 두었습니다. 그리고 이 두 개의 RNN 으로 구성된 encoder - decoder 를 한 번에 학습합니다.
 
@@ -35,7 +35,7 @@ Sequence to sequence 는 Sutskever et al., (2014) 에 의하여 번역과 같이
 
 Sequence to sequence 가 학습하는 기준은 $$maximize \sum P_{\theta} \left( y_{1:m} \vert x_{1:n} \right)$$ 입니다. $$x_{1:n}$$ 과 $$y_{1:m}$$ 의 상관성을 최대화 하는 것입니다. 이때 sequence to sequence 는 input sequence 의 정보를 하나의 context vector $$c$$ 에 저장합니다. Encoder RNN 의 마지막 hidden state vector 를 $$c$$ 로 이용하였습니다. Decoder RNN 은 고정된 context vector $$c$$ 와 현재까지 생성된 단어열 $$y_{1:i-1}$$ 을 이용하는 language model (sentence generator) 입니다.
 
-$$P(y_{1:m} \vert x_{1:n}) = \prod_i P(y_i \vert y_{1:i-1}), c)$$ 물론 이 구조만으로도 번역의 성능은 향상되었습니다. Mikolov 의 언급처럼 word embedding 정보를 이용하였기 때문입니다. Classic n-grams 을 이용하는 기존의 statistical machine translation 보다 작은 크기의 모델 안에 단어 간의 semantic 정보까지 잘 포함되었기 때문입니다.
+$$P(y_{1:m} \vert x_{1:n}) = \prod_i P(y_i \vert y_{1:i-1}, c)$$ 물론 이 구조만으로도 번역의 성능은 향상되었습니다. Mikolov 의 언급처럼 word embedding 정보를 이용하였기 때문입니다. Classic n-grams 을 이용하는 기존의 statistical machine translation 보다 작은 크기의 모델 안에 단어 간의 semantic 정보까지 잘 포함되어 번역의 품질이 좋아졌습니다.
 
 ![]({{ "/assets/figures/seq2seq_fixed_context.png" | absolute_url }}){: width="40%" height="40%"}
 
@@ -75,7 +75,7 @@ attention 이 이용되면서 '이것' 이라는 단어를 선택하기 위하�
 
 ![]({{ "/assets/figures/seq2seq_attention_visualize.png" | absolute_url }}){: width="50%" height="50%"}
 
-하지만 대체로 한 단어 $$y_i$$ 를 만들기 위하여 이용되는 $$h_j$$ 의 개수는 그리 많지 않습니다. 필요한 정보는 매우 sparse 하며, 이는 decoder 가 context 를 선택적으로 이용하고 있다는 의미입니다. 그럼에도 불구하고 기존의 sequence to sequence 에서는 하나의 벡터에 이 모든 정보를 표현하려 했으니, RNN 의 모델의 크기는 커야했고 성능도 낮을 수 밖에 없었습니다. Attention mechanism 이 성능 향상이 큰 도움을 주었습니다.
+하지만 대체로 한 단어 $$y_i$$ 를 만들기 위하여 이용되는 $$h_j$$ 의 개수는 그리 많지 않습니다. 필요한 정보는 매우 sparse 하며, 이는 decoder 가 context 를 선택적으로 이용하고 있다는 의미입니다. 그럼에도 불구하고 기존의 sequence to sequence 에서는 하나의 벡터에 이 모든 정보를 표현하려 했으니, RNN 의 모델의 크기는 커야했고 성능도 낮을 수 밖에 없었습니다. Attention mechanism 은 같은 크기의 공간을 이용하는 RNN 이라면 더 좋은 성능을 보이도록 도와주었습니다. RNN 은 sequence encoding 을, attention 은 context vector 를 만드는 일을 서로 나눴습니다. 하나의 네트워크에 하나의 일만 맏기는 것은 네트워크에 부하를 줄여주는 것입니다.
 
 ## Attention in Encoder - Decoder
 
@@ -87,7 +87,7 @@ attention 이 이용되면서 '이것' 이라는 단어를 선택하기 위하�
 
 ![]({{ "/assets/figures/attention_imagecaptioning_example_success.png" | absolute_url }}){: width="90%" height="90%"}
 
-또한 모델이 엉뚱한 문장을 출력하였을 때, 그 부분에 대한 디버깅도 가능하게 되었습니다. 그리고 아래의 예시들은 실제로 사람도 햇갈릴법한 형상들입니다. 모델이 잘못된 문장을 생성하는게 오히려 이해가 되기 시작합니다.
+또한 모델이 엉뚱한 문장을 출력하였을 때, 그 부분에 대한 디버깅도 가능하게 되었습니다. 그리고 아래의 예시들은 실제로 사람도 햇갈릴법한 형상들입니다. 모델이 잘못된 문장을 생성했던 이유가 납득 되기도 합니다.
 
 ![]({{ "/assets/figures/attention_imagecaptioning_example_fail.png" | absolute_url }}){: width="90%" height="90%"}
 
@@ -102,7 +102,7 @@ Recurrent Neural Network (RNN) 은 sentence representation 을 학습하는데�
 
 ![]({{ "/assets/figures/attention_structured_attention_fig0.png" | absolute_url }}){: width="60%" height="60%"}
 
-Lin et al., (2017) 은 2 layer feed-forward newral networks 를 이용하는 attention network 를 제안했습니다. Input sequence $$x_{1:n}$$ 에 대하여 hidden state sequence $$h_{1:n}$$ 이 학습되었을 때, 문장의 representation 은 weighted average of hidden state vectors 로 이뤄집니다.
+Lin et al., (2017) 은 2 layers feed-forward newral networks 를 이용하는 attention network 를 제안했습니다. Input sequence $$x_{1:n}$$ 에 대하여 hidden state sequence $$h_{1:n}$$ 이 학습되었을 때, 문장의 representation 은 weighted average of hidden state vectors 로 이뤄집니다.
 
 $$sent = \sum_i a_i \times h_i$$
 {: .text-center }
@@ -114,7 +114,7 @@ $$a = softmax\left(w_{s2} \cdot tanh(W_{s1}H^T) \right)$$
 
 $$H$$ 의 크기가 $$(n, h)$$ 라 할 때, $$W_{s1}$$ 의 크기는 $$(d_a, h)$$ 입니다. $$W_{s1}H^T$$ 는 $$(d_a, n)$$ 입니다. Linear transform 은 공간을 회전변환하는 역할을 합니다. $$h_i$$ 는 문맥을 표현하는 $$h$$ 차원의 context space 에서의 벡터입니다. 그리고 $$W_{s1}$$ 에 의하여 $$d_a$$ 차원의 벡터로 변환됩니다. 논문에서는 $$h=600, d_a=350$$ 으로 차원의 크기가 줄어들었습니다. 이 350 차원 공간은 각 벡터의 중요도를 표현하는 공간입니다. 여기에서는 더 이상 문맥적인 정보는 필요없습니다. 단지 문장 분류에 도움이 되는 문맥들만을 선택하는 역할을 합니다. 그리고 ... in the ... 와 같은 구문들은 문장 분류에 도움이 되지 않습니다. $$W_{s1}$$ 은 이처럼 불필요한 문맥들을 한 곳에 모으는 역할을 하는 것과도 같습니다.
 
-그리고 여기에 hyper tangent 가 적용됩니다. 이는 벡터의 각 차원의 값을 [-1, 1] 로 scaling 합니다. 그렇기 때문에 $$tanh(W_{s1}h_i)$$ 는 반지름이 1 인 공간 안에 골고루 분포한 벡터들이 됩니다.
+그리고 여기에 hyper tangent 가 적용됩니다. 이는 벡터의 각 차원의 값을 [-1, 1] 로 scaling 합니다. 그렇기 때문에 $$tanh(W_{s1}h_i)$$ 는 반지름이 1 인 구 (sphere) 안에 골고루 분포한 벡터들이 됩니다.
 
 ![]({{ "/assets/figures/attention_structured_attention_fig1.png" | absolute_url }}){: width="60%" height="60%"}
 
@@ -131,7 +131,7 @@ $$A = softmax\left(W_{s2} \cdot tanh(W_{s1}H^T) \right)$$
 
 ![]({{ "/assets/figures/attention_structured_attention_fig3.png" | absolute_url }}){: width="60%" height="60%"}
 
-그런데 한 가지 문제가 더 남았습니다. Attention matrix $$A$$ 의 각 row 가 서로 비슷한 벡터를 가질 수도 있습니다. 관점이 모두 달라야한다는 보장을 하지 않았기 때문입니다. $$W_{s2}$$ 에 다양한 관점이 잘 학습되도록 유도하기 위하여 다음과 같은 regularization term 을 추가합니다. 이는 attention matrix 의 각 row 들, 즉 $$r$$ 개의 관점들이 서로 독립에 가까워지도록 유도하는 것입니다.
+그런데 한 가지 문제가 더 남았습니다. Attention matrix $$A$$ 의 각 관점들이 서로 비슷한 벡터를 가질 수도 있습니다. 관점이 모두 달라야한다는 보장을 하지 않았기 때문입니다. $$W_{s2}$$ 에 다양한 관점이 잘 학습되도록 유도하기 위하여 다음과 같은 regularization term 을 추가합니다. 이는 attention matrix 의 각 row 들, 즉 $$r$$ 개의 관점들이 서로 독립에 가까워지도록 유도하는 것입니다.
 
 $$\vert AA^T -I\vert^2_F$$
 {: .text-center }
@@ -216,7 +216,7 @@ $$a_{ij}$$ 를 계산하기 위한 $$attention(x_iW_l^Q, x_jW_l^K, x_jW_l^V)$$ �
 
 $$e_{ij}=\frac{q_i \cdot k_j}{\sqrt{d_k}}$${: .text-center }
 
-그리고 모든 $$k_j$$ 에 대하여 $$e_{ij}$$ 를 계산한 뒤, 이에 대한 Softmax 를 계산합니다. 그 결과 각 position $$1 to n$$ 까지의 $$a_{ij}$$ 가 계산되고 $$j$$ 에 해당하는 $$v_j$$ 를 곱하여 position $$i$$ 에 대한 새로운 representation 을 만듭니다. 이는 마치 멀리 떨어진 두 단어의 정보를 합쳐 새로운 단어의 representation 을 표현한 것과 같습니다. 뒤쪽의 그림에서 살펴볼텐데, 'it' 이라는 단어의 representation 을 표현하기 위하여 문장의 다른 단어들, 'the, animal' 등의 정보가 이용됩니다. 뒤에서 다시 설명하겠습니다.
+그리고 모든 $$k_j$$ 에 대하여 $$e_{ij}$$ 를 계산한 뒤, 이에 대한 Softmax 를 계산합니다. 그 결과 각 position $$1$$ 부터 $$n$$ 까지의 $$a_{ij}$$ 가 계산되고 $$j$$ 에 해당하는 $$v_j$$ 를 곱하여 position $$i$$ 에 대한 새로운 representation 을 만듭니다. 이는 마치 멀리 떨어진 두 단어의 정보를 합쳐 새로운 단어의 representation 을 표현한 것과 같습니다. 뒤쪽의 그림에서 살펴볼텐데, 'it' 이라는 단어의 representation 을 표현하기 위하여 문장의 다른 단어들, 'the, animal' 등의 정보가 이용됩니다. 뒤에서 다시 설명하겠습니다.
 
 $$softmax(\frac{q_i \cdot K}{\sqrt{d_k}})V$${: .text-center }
 
@@ -226,25 +226,25 @@ $$softmax(\frac{q_i \cdot K}{\sqrt{d_k}})V$${: .text-center }
 
 그런데 한 개의 $$attention(q_i, k_j, v_j)$$ 에 의한 output 의 크기를 $$d_{model}=512$$ 로 만들지 않습니다. 64 차원의 벡터로 작게 만드는 대신, 서로 다른 $$W_l^{K,1}, W_l^{K,2}, \dots$$ 을 $$h=8$$ 개 만들어 8 번의 attention 과정을 거칩니다. 그리고 그 결과를 concatenation 합니다. 이를 multi-head attention 이라 합니다. 하나의 attention 은 하나의 관점으로의 해석 역할을 합니다. 여러 개의 attention 을 나눠 작업하면 더 다양한 정보가 모델에 저장된다고 합니다. 이는 마치 여러 관점으로 input sequence 를 해석하는 것과 같습니다.
 
-이 때 두 input sequence item $$x_i$$ 와 $$x_j$$ 가 얼마나 멀리 떨어져 있던지 상관없이 attention 에 의하여 곧바로 연결이 됩니다. 하지만 RNN 에서는 떨어진 거리만큼의 path 가 필요합니다. RNN 은 두 정보를 연결하기 위하여 실제 문장에서의 거리만큼의 연산을 해야하고, 그 과정에서 정보가 손실되거나 노이즈들이 포함될 가능성이 높습니다. 하지만 attention 은 이 과정이 직접 일어납니다.
+이 때 두 input sequence item $$x_i$$ 와 $$x_j$$ 가 얼마나 멀리 떨어져 있던지 상관없이 attention 에 의하여 곧바로 연결이 됩니다. 하지만 RNN 에서는 떨어진 거리만큼의 path 가 필요합니다. RNN 은 두 정보를 연결하기 위하여 실제 문장에서의 거리만큼의 연산을 해야하고, 그 과정에서 정보가 손실되거나 노이즈들이 포함될 가능성이 높습니다. 그러나 attention 에서는 이 과정이 직접적으로 일어납니다.
 
-그리고 그 결과를 ReLU 가 포함된 2 layer feed forward network 에 입력합니다. Multi-head attention 과정만으로는 정리되지 않은 정보를 재정리 하는 역할을 합니다.
+그리고 그 결과를 ReLU 가 포함된 2 layers feed forward network 에 입력합니다. Multi-head attention 과정만으로는 정리되지 않은 정보를 재정리 하는 역할을 합니다.
 
 $$FFN(x_i) = max(0, x_iW_1 + b_1)W_2 + b_2)$${: .text-center }
 
 ![]({{ "/assets/figures/attention_transformer_block_feedforward.png" | absolute_url }}){: width="60%" height="60%"}
 
-지금까지와 과정은 각 시점별로 문장 전체의 정보들을 종합하여 새로운 문맥적인 정보를 만드는 것입니다. 이 값을 input item 에 더합니다. 이는 input sequence 에 포함되지 않은 문맥적인 정보를 input sequence 로부터 가공하여 여기에 더한다는 의미입니다. 이를 residual connection 이라 합니다.
+지금까지의 과정은 각 시점별로 문장 전체의 정보들을 종합하여 새로운 문맥적인 정보를 만드는 것입니다. 이 값을 input item 에 더합니다. 이는 input sequence 에 포함되지 않은 문맥적인 정보를 input sequence 로부터 가공하여 input sequence 에 더한다는 의미입니다. 이를 residual connection 이라 합니다.
 
 ![]({{ "/assets/figures/attention_transformer_block_residual.png" | absolute_url }}){: width="60%" height="60%"}
 
 이 과정까지 거치면 encoder 에서의 한 번의 transformer block 을 통과한 것입니다. 이 과정을 6 번 거칩니다. Layer 의 높이가 올라갈수록 문맥적인 의미들이 추가됩니다.
 
-Encoder 는 주어진 문장 전체를 살펴보며 각 시점의 정보들을 더 좋은 representation 으로 encoding 하는 역할을 합니다. Decoder 는 현재까지 알려진 정보를 바탕으로 새로운 문장을 생성하는 역할을 합니다. 그렇기 때문에 attention 을 이용할 때 지금 이후의 시점에 대한 정보를 사용할 수는 없습니다. 즉 $$x_i$$ 와 연결될 수 있는 position 은 $$1, 2, \dots, i-1$$ 입니다. 이처럼 attention 에 제약을 거는 과정을 masking 이라 합니다. Decoder 의 scaled dot-product attention 에는 이 과정이 포함되어 있습니다.
+Encoder 는 주어진 문장 전체를 살펴보며 각 시점의 정보들을 더 좋은 representation 으로 encoding 하는 역할을 합니다. Decoder 는 현재까지 알려진 정보를 바탕으로 새로운 문장을 생성하는 역할을 합니다. 그렇기 때문에 decoder 가 attention 을 이용할 때 지금 이후의 시점에 대한 정보를 사용할 수는 없습니다. 즉 $$x_i$$ 와 연결될 수 있는 position 은 $$1, 2, \dots, i-1$$ 입니다. 이처럼 attention 에 제약을 거는 과정을 masking 이라 합니다. Decoder 의 scaled dot-product attention 에는 이 과정이 포함되어 있습니다.
 
 ![]({{ "/assets/figures/attention_transformer_block_decoder.png" | absolute_url }}){: width="60%" height="60%"}
 
-Decoder 가 단어를 생성할 때에는 encoder 의 정보도 필요합니다. Sequence to sequence 에서 source sequence $$h_j$$ 를 이용한 것처럼 Transformer 에서도 이를 이용합니다. Encoder 의 마지막 layer 의 output sequence 의 값을 key, value 로 이용합니다. 이를 encoder - decoder attention 이라 합니다. 이처럼 query 와 key, value 의 출처가 서로 다른 경우를 주로 attention 이라 합니다. 하지만 앞서 설명한 encoder, decoder 에서의 attention 은 query, key, value 의 출처가 각각 encoder 혹은 decoder 였습니다. 이처럼 query 와 key, value 의 출처가 같은 경우를 self-attention 이라 합니다.
+Decoder 가 단어를 생성할 때에는 encoder 의 정보도 필요합니다. Sequence to sequence 에서 source sequence $$h_j$$ 를 이용한 것처럼 Transformer 에서도 encoder 의 마지막 layer 의 output sequence 의 값을 key, value 로 이용합니다. 이를 encoder - decoder attention 이라 합니다. 이처럼 query 와 key, value 의 출처가 서로 다른 경우를 주로 attention 이라 합니다. 하지만 앞서 설명한 encoder, decoder 에서의 attention 은 query, key, value 의 출처가 각각 encoder 혹은 decoder 였습니다. 이처럼 query 와 key, value 의 출처가 같은 경우를 self-attention 이라 합니다.
 
 Encoder - decoder attention 은 decoder 가 $$x_i$$ 의 정보를 표현하기 위하여 input sequence 의 item $$j$$ 의 정보를 얼마나 이용할지 결정하는 역할을 합니다.
 
@@ -256,7 +256,7 @@ Encoder - decoder attention 은 decoder 가 $$x_i$$ 의 정보를 표현하기 �
 
 Transformer 는 매 block 마다 문맥적인 의미를 생성하여 sequence 에 더하는 방식으로 sequence representation 을 업데이트합니다. 그렇게하여 encoder 는 input sequence 의 의미를 잘 표현하는 sequence representation 을 만들고, decoder 는 이 정보를 이용하며 질 좋은 output sequence representation 을 만듭니다. Update 라는 표현을 쓴 이유는 새롭게 만든 정보를 residual connection 을 통하여 block 의 input 에 그대로 더해주기 때문입니다. 의미를 보강하는 역할을 합니다.
 
-Attention weight matrix 에 의하여 그 결과도 확인할 수 있습니다. 아래 그림은 영어를 프랑스어로 번역하는 과정에서의 encoder layer 5 번에서 6 번으로의 attention 입니다. 대명사 위치에 대한 정보가 그 대명사가 설명하는 단어들의 정보로부터 만들어집니다.
+Attention weight matrix 에 의하여 그 결과도 확인할 수 있습니다. 아래 그림은 영어를 프랑스어로 번역하는 과정에서의 encoder layer 5 번에서 6 번으로의 attention 입니다. 대명사의 의미에 대한 정보가 그 대명사와 의미적으로 연결된 단어들의 정보로부터 만들어집니다.
 
 ![]({{ "/assets/figures/attention_transformer_block_selfattention_5_to_6_end_to_french.png" | absolute_url }}){: width="80%" height="80%"}
 
@@ -265,11 +265,11 @@ Attention weight matrix 에 의하여 그 결과도 확인할 수 있습니다. 
 *After starting with representations of individual words or even pieces of words, they aggregate information from surrounding words to determine the meaning of a given bit of language in context. For example, deciding on the most likely meaning and appropriate representation of the word “bank” in the sentence “I arrived at the bank after crossing the…” requires knowing if the sentence ends in “... road.” or “... river.”*
 {: .text-center }
 
-Transformer 는 다른 모델들보다 parameters 의 숫자가 적고, feed-forward 를 이용하기 때문에 병렬화가 쉬움에도 불구하고, 멀리 떨어진 단어 간의 정보가 곧바로 연결되기 때문에 정확한 모델링도 가능합니다.
+Transformer 는 다른 모델들보다 패러매터의 숫자가 적고, feed-forward 를 이용하기 때문에 병렬화가 쉽습니다. 빠른 연산이 가능합니다. 그럼에도 불구하고 멀리 떨어진 단어 간의 정보가 곧바로 연결되기 때문에 정확한 모델링도 가능합니다.
 
 ## BERT (language model using transformer)
 
-BERT 는 Transformer 를 이용하여 학습한 language model 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다. BERT 는 Transformer 의 구조를 이해하면 구조적으로는 특별한 점은 없습니다. 단 pre-training task 의 방식이 특이합니다.
+BERT 는 Transformer 를 이용하여 학습한 언어 모델 입니다. BERT 는 pre-trained model 로, 여기에 sentence classification 이나 sequential labeling 를 추가하여 fine-tuning 하여 이용합니다. BERT 는 Transformer 의 구조를 이해하면 구조적으로는 특별한 점은 없습니다. 단 pre-training task 의 방식이 특이합니다.
 
 Pre-training task 는 이 모델의 목적과 상관없이 학습하는 task 입니다. 모델은 학습해야 하는 방향을 설정해줘야 loss 를 정의할 수 있습니다. 예를 들어 분류 문제의 경우에는 분류 정확도가 될 수 있습니다. 그런데 어떤 목적에 이용될지 모르니, 왠만한 tasks 에 도움이 될법한 다른 tasks 로 모델의 학습 방향을 설정하는 것을 pre-training task 라 합니다. BERT 는 language model 을 학습합니다. Language model 은 앞에 등장한 단어 $$x_1, x_2, \dots, x_{i-1}$$ 을 이용하여 $$x_i$$ 를 예측하는 문제입니다. 그런데 BERT 는 조금 다르게 문장의 임의의 단어를 맞추는 방식의 masked language model 이라는 pre-training task 를 이용합니다.
 
