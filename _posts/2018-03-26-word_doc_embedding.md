@@ -75,7 +75,7 @@ Doc2Vec 은 재밌는 결과를 보여줍니다. (Dai et al., 2015) 에서는 Wi
 
 ## History: Feed-forward neural network language model
 
-$$P(cat \vert [a, little, sit, on])$$ 처럼 문장의 일부 단어를 이용하여 가운데, 혹은 그 다음에 등장할 단어를 예측하는 문제를 language model 이라 합니다. 서로 다른 단어는 완전히 다른 것으로 취급하는 language model 을 statistical langauge model 이라 불렀으며 n-gram 은 statistical language model 을 계산하기 위한 방법입니다. 그런데 세상에는 너무나 많은 단어가 있습니다. 2006년에 발표한 [Google n-gram corpus][[googlengram]] 의 크기만 보더라도 단어의 수가 ... 
+$$P(cat \vert [a, little, sit, on])$$ 처럼 문장의 일부 단어를 이용하여 가운데, 혹은 그 다음에 등장할 단어를 예측하는 문제를 language model 이라 합니다. 서로 다른 단어는 완전히 다른 것으로 취급하는 language model 을 statistical langauge model 이라 불렀으며 n-gram 은 statistical language model 을 계산하기 위한 방법입니다. 그런데 세상에는 너무나 많은 단어가 있습니다. 2006년에 발표한 [Google n-gram corpus][googlengram] 의 크기만 보더라도 단어의 수가 ... 
 
 	File sizes: approx. 24 GB compressed (gzip'ed) text files
 
