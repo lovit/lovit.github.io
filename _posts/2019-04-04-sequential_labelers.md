@@ -197,11 +197,29 @@ $$exp(\lambda^T h_j) = exp(\sum_p \mu_p f_p(x, i, y_i) + \sum_q \theta_q g_q(x, 
 
 ## Conditional Random Field (CRF)
 
-### Local normalization vs global normalization
+MEMM 의 저자들은 바로 1년 뒤인 2001 년에 동일한 학회인 ICML 에서 개선된 버전의 모델, CRF 를 제안합니다 (Lafferty et al., 2001) ^[5]. MEMM 도 HMM 의 특징을 일부 가지고 있습니다. 그 결과 local normalization 문제에서 자유로울 수 없습니다. 이는 결국 문장 전체를 보지 않고 단편적인 정보만 여러번 보기 때문에 편향성이 생긴다는 의미인데, 이를 해결하기 위하여 CRF 는 길이가 $$n$$ 인 $$y_{1:n}$$ 을 찾기 위하여 단 한번의 softmax regression 을 수행합니다. 이를 global normalization 이라 합니다. 
 
-SyntaxNet
+$$P(y \vert x) = \frac{exp(\sum_{j=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i, y_{i-1}))}{ \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`})) }$$
 
-MeCab
+식은 $$\prod$$ 가 $$\sum$$ 으로 바뀐 것 뿐입니다. 그리고 $$x_{1:n}$$ 로부터 만들 수 있는 $$y_{1:n}$$ 의 종류는 매우 많기 때문에 가능성이 높은 후보 몇 개만을 효율적으로 찾아야 합니다. 그렇기 때문에 MEMM 과 CRF 모두 최적의 $$y_{1:n}$$ 을 찾기 위하여 beam search 가 이용되었습니다.
+
+CRF 가 이용된 대표적인 한국어 형태소 분석기가 MeCab-ko 입니다. MeCab 은 일본어 분석을 위하여 제안된 형태소 분석기 입니다 (Kudo et al., 2004) ^[6]. 그리고 학습 데이터를 한국어로 변형한 버전이 MeCab-ko 입니다. 일본어 역시 word segmentation & labeling 을 동시에 해결해야 했으며, local normalization 의 문제가 해결된 방법이 필요했습니다. 그렇기 때문에 CRF 모델이 이용되었습니다.
+
+### CRF as log-linear model
+
+위 CRF 식을 변형할 수 있습니다. $$P(y \vert x)$$ 에 log 를 씌우면 exponental 이 사라져 다음처럼 기술할 수 있습니다.
+
+$$log P(y \vert x) = \sum_{j=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i, y_{i-1})) - \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`}))$$
+
+좀 더 간단히 기술하기 위하여 $$\sum_i sum_j f_j(x, i, y)$$ 를 $$F(x, y) 로, $$\lambda_j$$ 를 $$\lambda$$ 로 표현합니다.
+
+$$log P(y \vert x) = \lambda (F(x,y) - \sum_{y^'} F(x,y^{'})$$
+
+$$F(x,y)$$ 는 $$n \times m$$ 크기의 sparse input vector 이며, $$\lambda^T F(x,y)$$ 혹은 $$<\lambda, F(x,y)>$$ 는 linear score function 입니다. Softmax regression 에서의 coefficient $$lambda$$ 와 input vector $$x$$ 의 내적과 같은 형식입니다. $$F(x,y^')$$ 은 input sequence $$x$$ 로부터 만들 수 있는 output sequence $$y^'$$ 의 feature vector representation 입니다.
+
+CRF 는 학습데이터의 $$(x, y)$$ 를 이용하여 $$P(y \vert x)$$ 가 최대화 되도록 학습합니다. 이는 true output sequence 인 $$y$$ 의 $$F(x,y)$$ 에서 1 인 features 에 해당하는 $$\lambda$$ 의 크기는 크게, 가능한 모든 output sequence $$y^'$$ 의 $$F(x,y^')$$ 에서 1 인 features 에 해당하는 $$\lambda$$ 의 크기는 작게 학습하는 것입니다.
+
+## Transition based sequence labeling
 
 ## Structured Support Vector Machine (StructuredSVM)
 
@@ -227,8 +245,6 @@ $$f(x) = \arg \max_{y \in \mathcal{Y}} \left< w, \Phi(x, y) \right>$$
 
 ## Pegasos: Primal Estimation sub-GrAdient SOlver for SVM
 
-
-## Transition based sequence labeling
 
 
 ## Recurrent Neural Network
@@ -261,6 +277,10 @@ Label sequence 에 bigram 을. 이는 transition based labeler 형식
 - [2] 카카오 형태소 분석기 [github](https://github.com/kakao/khaiii), [blog](https://brunch.co.kr/@kakao-it/308)
 - [3] Brants, T. (2000, April). TnT: a statistical part-of-speech tagger. In Proceedings of the sixth conference on Applied natural language processing (pp. 224-231). Association for Computational Linguistics.
 - [4] McCallum, A., Freitag, D., and Pereira, F. C. (2000). Maximum entropy markov models for information extraction and segmentation. In Icml, volume 17, pages 591–598.
+- [5] Lafferty, J., McCallum, A., and Pereira, F. C. (2001). Conditional random fields: Probabilistic models for segmenting and labeling sequence data.
+- [6] Kudo, T., Yamamoto, K., & Matsumoto, Y. (2004). Applying conditional random fields to Japanese morphological analysis. In Proceedings of the 2004 EMNLP
+
+
 
 [hmmpost]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
 [memm_crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
