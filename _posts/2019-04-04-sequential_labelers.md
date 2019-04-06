@@ -213,13 +213,28 @@ $$log P(y \vert x) = \sum_{j=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i, y_{
 
 좀 더 간단히 기술하기 위하여 $$\sum_i sum_j f_j(x, i, y)$$ 를 $$F(x, y) 로, $$\lambda_j$$ 를 $$\lambda$$ 로 표현합니다.
 
-$$log P(y \vert x) = \lambda (F(x,y) - \sum_{y^'} F(x,y^{'})$$
+$$log P(y \vert x) = \lambda (F(x,y) - \sum_{y^'} F(x,y^{'}))$$
 
 $$F(x,y)$$ 는 $$n \times m$$ 크기의 sparse input vector 이며, $$\lambda^T F(x,y)$$ 혹은 $$<\lambda, F(x,y)>$$ 는 linear score function 입니다. Softmax regression 에서의 coefficient $$lambda$$ 와 input vector $$x$$ 의 내적과 같은 형식입니다. $$F(x,y^')$$ 은 input sequence $$x$$ 로부터 만들 수 있는 output sequence $$y^'$$ 의 feature vector representation 입니다.
 
 CRF 는 학습데이터의 $$(x, y)$$ 를 이용하여 $$P(y \vert x)$$ 가 최대화 되도록 학습합니다. 이는 true output sequence 인 $$y$$ 의 $$F(x,y)$$ 에서 1 인 features 에 해당하는 $$\lambda$$ 의 크기는 크게, 가능한 모든 output sequence $$y^'$$ 의 $$F(x,y^')$$ 에서 1 인 features 에 해당하는 $$\lambda$$ 의 크기는 작게 학습하는 것입니다.
 
 ## Transition based sequence labeling
+
+그런데 학습 목적식을 다르게 정의할 수도 있습니다. $$y^'$$ 은 현재의 모델로 만들 수 있는 best output sequence 입니다. 이제부터는 $$\lambda$$ 를 $$w$$ 로 기술하겠습니다. 주로 maximum entropy model 에서 coefficient 를 $$\lambda$$ 로 쓰며, transition based model 논문에서는 weight 라는 의미로 $$w$$ 로 자주 기술합니다.
+
+$$maximize w \cdot (F(x,y) - F(x,y^{'}))$$
+
+$$F$$ 가 $$(y_{i-1}, y_i)$$ 의 정보를 이용한다면 아래처럼 기술할 수도 있습니다. 이러한 방식으로 기술된 모델을 주로 traisiton based model 이라 합니다. 
+
+$$maximize w \cdot (\sum_i F(x,y_{i-1}, y_i) - F(x,y_{i-1}^{'}, y_{i}^{'}))$$
+
+Output sequence 의 bigram 이기 때문에 beam search 를 이용하기 매우 좋은 구조입니다. 학습이 완료된 뒤, 새로운 $$x$$ 가 주어지면 다음의 점수가 가장 높은 $$\hat{y}$$ 를 beam search 를 이용하여 탐색합니다.
+
+$$\hat{y} = argmax_{y \in G(x)} w \cdot \sum_{i}^{n} F(x, y_{i-1}, y_i)$$
+
+만약 $$y = y^'$$ 이라면 현재 모델이 $$x$$ 에 대하여 정답값인 $$y$$ 를 출력함으로, 학습을 따로 하지는 않습니다. $$y$$ 가 $$y^'$$ 이 아니라면, 이는 $$\lambda^T F(x, y^') > \lambda^T F(x, y)$$ 라는 의미이니, $$F(x,y)$$ 의 features 에 해당하는 $$\lambda$$ 를 크게, $$F(x,y^')$$ 에 해당하는 $$\lambda$$ 를 작게 조절합니다.
+
 
 ## Structured Support Vector Machine (StructuredSVM)
 
