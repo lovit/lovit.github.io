@@ -52,7 +52,7 @@ Segmentation 으로의 sequence labeling 은 다른 포스트에서 다뤄보고
 
 ## Hidden Markov Model (HMM)
 
-HMM ^[1] 을 이용한 품사 판별기에 대해서는 [이전의 포스트][hmmpost]에서 다룬 적이 있습니다. 이 포스트에서는 HMM 의 원리를 간단히 정리하고, 품사 판별과 같은 sequential labeling 관점에서의 HMM 의 문제점에 대하여 정리합니다. HMM 은 $$ P(y_{1:n} \vert x_{1:n})$$ 을 아래처럼 정의합니다. 여기서 $$x$$ 는 단어열, $$y$$ 는 품사열 입니다.
+HMM (Krogh, 1994)^[1] 을 이용한 품사 판별기에 대해서는 [이전의 포스트][hmmpost]에서 다룬 적이 있습니다. 이 포스트에서는 HMM 의 원리를 간단히 정리하고, 품사 판별과 같은 sequential labeling 관점에서의 HMM 의 문제점에 대하여 정리합니다. HMM 은 $$ P(y_{1:n} \vert x_{1:n})$$ 을 아래처럼 정의합니다. 여기서 $$x$$ 는 단어열, $$y$$ 는 품사열 입니다.
 
 $$P(y_{1:n} \vert x_{1:n}) := P(x_{1:n}, y_{1:n}) = \prod_i P(x_i \vert y_i) \times P(y_i \vert y_{i-1})$$
 
@@ -122,6 +122,78 @@ TnT 는 영어 단어의 품사를 추정하기 위한 모델입니다. 이 모�
 
 ## Maximum Entropy Markov Model (MEMM)
 
+2000 년에 ICML 에 Maximum Entropy Markov Model 이 제안됩니다 (McCallum et al., 2000) ^[4]. 이는 maximum entropy classifiers 에 속하는 모델로, maximum entropy classifier 는 쉽게 생각하여 softmax regression 형식의 classifier 를 의미한다고 생각해도 좋습니다. 물론 MEMM 이 이런 종류의 첫번째 모델은 아니지만, 분기점 같은 역할을 하는 알고리즘입니다.
+
+MEMM 과 CRF 에 대해서도 [이전의 포스트][memm_crf]에서 다뤘습니다. 그 중에서 중요을 집고 넘어갑니다.
+
+### Potential function
+
+그전에 MEMM 에 대하여 이야기하려면 단어와 같은 category sequence 를 벡터로 표현하는 방법부터 알아야 합니다. HMM 은 (단어, 품사) 의 확률만을 계산하였기 때문에 단어열을 벡터 형식으로 변환할 필요는 없었습니다. 하지만 softmax regression 을 이용하는 MEMM 은 단어열을 벡터로 표현해야 했습니다. 이를 위하여 potential function 이 이용됬습니다. 이는 categorical 뿐 아니라 numerical sequence 도 벡터로 표현할 수 있는 방법입니다.
+
+예를 들어 $$x = [3.2, 2.1, -0.5]$$ 라는 길이가 3 인 sequence 에 대하여 아래의 필터 $$F_1$$ 를 적용할 수 있습니다.
+
+- $$x = [3.2, 2.1, -0.5]$$ . 
+- $$F_1 = 1$$ if $$x_i > 0$$ else $$0$$
+- $$x_{vec} = [1, 1, 0]$$ .
+
+필터를 여러 개 이용할 수도 있습니다. 각 시점 $$i$$ 에 대한 벡터의 크기는 필터의 개수와 같습니다.
+
+- $$x = [3.2, 2.1, -0.5]$$ .
+- $$F_1 = 1$$ if $$x_i > 0$$ else $$0$$
+- $$F_2 = 1$$ if $$x_i > 3$$ else $$0$$
+- $$x_{vec} = [(1, 1), (1, 0), (0, 0)]$$ .
+
+이 필터가 potential function 입니다. Potential function 은 categorical variable 에 대해서도 적용이 가능합니다. 
+
+- $$x = [이것, 은, 예문, 이다]$$ .
+- $$F_1 = 1$$ if $$x_{i-1} =$$ '이것' & $$x_i =$$ '은' else $$0$$
+- $$F_2 = 1$$ if $$x_{i-1} =$$ '이것' & $$x_i =$$ '예문' else $$0$$
+- $$F_3 = 1$$ if $$x_{i-1} =$$ '은' & $$x_i =$$ '예문' else $$0$$
+- $$x_{vec} = [(0, 0, 0), (1, 0, 0), (0, 0, 1), (0, 0, 0)]$$ .
+
+앞서 달아둔 label $$y_{i-1}$$ 를 함께 이용하기 위한 potential function 도 만들 수 있습니다.
+
+- $$x = [이것, 은, 예문, 이다]$$ .
+- $$F_1 = 1$$ if $$x_{i-1} =$$ '이것' & $$x_i =$$ '은' else $$0$$
+- $$F_2 = 1$$ if $$x_{i-1} =$$ '이것' & $$x_i =$$ '예문' else $$0$$
+- $$F_3 = 1$$ if $$x_{i-1} =$$ '은' & $$x_i =$$ '예문' else $$0$$
+- $$F_4 = 1$$ if $$x_{i-1} =$$ '이것' & $$x_i =$$ '은' & $$y_{i-1} =$$ '명사' else $$0$$
+- $$F_5 = 1$$ if $$x_{i-1} =$$ '이것' & $$x_i =$$ '예문' & $$y_{i-1} =$$ '명사' else $$0$$
+- $$F_6 = 1$$ if $$x_{i-1} =$$ '은' & $$x_i =$$ '예문' & $$y_{i-1} =$$ '조사' else $$0$$
+
+Potential function 은 데이터를 암기하여 Boolean vector 로 표현하는 방법입니다. 단어열의 예시처럼 필터의 종류가 다양할 수 있기 때문에 주로 templates 으로 표현합니다. 예를 들어 $$(x_{-2}, x_{-1}, x_{0})$$ 은 앞의 두 단어와 현재의 단어를 모두 합하여 하나의 $$F_i$$ 로 이용한다는 의미입니다. 그렇기 때문에 품사 판별과 같은 NLP tasks 에서는 potential function 에 의하여 매우 큰 차원의 벡터 공간이 만들어집니다. $$(x_{-2}, x_{-1}, x_{0})$$ 은 trigram space 입니다.
+
+이 정보에 의하여 MEMM 은 단어열의 문맥을 features 로 이용할 수 있게 되었습니다. 이는 미등록단어에 대해서도 대처할 수 있도록 도와주는데, $$x_{0}$$ 을 모르더라도 $$(x_{-2}, x_{-1}, x_{1})$$ 을 이용하면 $$x_0$$ 을 짐작할 수 있습니다. 예를 들어 `(오늘, 의, A, 은)` 에서 A 는 명사일 것이라는 힌트를 앞, 뒤에 등장하는 단어만으로 짐작할 수 있게 된 것입니다. 단, 이때도 문장이 단어열로 제대로 분해되었다는 가정이 필요합니다.
+
+하지만 이 방법은 bag-of-words model 처럼 각 차원이 어떤 의미인지 해석할 수 있다는 장점이 있습니다. 단점은 (오늘, 의, 메뉴) 나 (오늘, 의, 식단) 처럼 두 features 가 비슷한 의미를 지니고 있다는 정보를 학습할 수가 없습니다.
+
+### MEMM as Logistic regression
+
+MEMM 은 potential function 을 이용하여 입력된 단어열 $$x_{1:n}$$ 을 Boolean vector sequence $$h_{1:n}$$ 으로 변환합니다. 그 뒤, 각 $$h_i$$ 에 대하여 $$y_i$$ 의 확률을 계산합니다.
+
+$$P(y_{1:n} \vert x_{1:n}} = \prod_i^n P(y_i \vert h_i)$$
+
+$$P(y_i \vert h_i)$$ 을 아래처럼 표현할 수 있습니다. $$h_i$$ 가 클래스 $$k$$ (품사 $$k$$) 가 될 확률을 계산하고, 각 $$i$$ 에 대하여 독립적인 $$n$$ 번의 softmax regression 을 수행한다는 의미입니다. 이 때 $$\lambda$$ 는 매 시점 $$i$$ 마다 공통으로 이용됩니다.
+
+$$P(y_{1:n} \vert x_{1:n}} = \prod_i^n \frac{exp(\lambda_{k}^T h_i)}{\sum_l exp(\lambda_{l}^T h_i)}$$
+
+이를 아래처럼 더 자세하게 기술할 수도 있습니다. $$f_j(x, i, y_i, y_{i-1})$$ 은 현재 시점 $$i$$ 의 앞의 품사가 $$y_{i-1}$$ 이고 지금 시점의 품사가 $$y_i$$ 라면 이라는 potential function 의 Boolean 값 입니다. 그리고 $$\lambda_j$$ 는 그럴 경우의 점수, 즉 logistic regression 의 coefficient 입니다.
+
+$$P(y \vert x) = \prod_{i=1}^{n} \frac{exp(\sum_{j=1}^{m} \lambda_j f_j (x, i, y_i, y_{i-1}))}{ \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`})) }$$
+
+마지막 수식은 복잡하긴 하지만, 결국 potential function 을 이용하여 $$x$$ 를 sparse vector $$h$$ 로 만든 뒤, softmax regression 을 수행한다는 의미입니다. 그렇기 때문에 **ME**MM 이라는 이름을 가졌습니다.
+
+MEMM 은 discriminative model 인 softmax regression 형식입니다. 확률 모델이 아니기 때문에 $$f_j$$ 의 빈도수의 영향을 덜받습니다. $$f_j$$ 가 학습데이터에 몇 번 등장하지 않은 변수라 하더라도 그 정보가 명확하다면 매우 큰 값의 $$\lambda_j$$ 가 학습될 것입니다. 하지만 이는 그렇게 잘 학습될 수 있다는 가정일 뿐, 현실은 softmax regression 을 근사학습하는 최적화 방법들에 의하여 약간의 frequency bias 가 있습니다.
+
+### MEMM as Markov Model
+
+또한 ME**MM** 은 Markov Model 의 성질을 가지고 있습니다. 이는 $$(y_{i-1}, y_i)$$ 의 정보가 학습된다는 의미입니다. 위의 마지막 식의 $$f_j$$ 는 아래처럼 두 종류의 성분으로 구분할 수 있습니다. $$f_p$$ 는 $$(x_i, y_i)$$ 의 성분에 대한 features 이며, $$g_q$$ 는 $$(y_{i-1}, y_i)$$ 성분에 대한 features 입니다. 두 종류의 features 는 구분될 수 있으며, MEMM 은 HMM 이 학습하는 정보를 모두 (이론적으로는) 학습할 수 있다는 의미입니다.
+
+$$exp(\lambda^T h_j) = exp(\sum_p \mu_p f_p(x, i, y_i) + \sum_q \theta_q g_q(x, i, y_i, y_{i-1}))$$
+
+이처럼 현재 값 $$y_i$$ 가 이전 값 $$y_{i-1}$$ 에만 영향을 받는 모델을 Markov model 이라 합니다. 그렇기 때문에 ME**MM** 이라는 이름을 가지게 되었습니다.
+
+그리고 $$P(y_{i-1}, y_i)$$ 은 HMM 에서 transition probability 라 부릅니다. 이후 transion based model 을 설명할텐데, 이 모델들은 output sequence 의 bigram (혹은 그 이상)의 정보를 이용한다는 의미입니다.
 
 ## Conditional Random Field (CRF)
 
@@ -188,5 +260,7 @@ Label sequence 에 bigram 을. 이는 transition based labeler 형식
 - [1] Krogh, A. (1994). Hidden markov models for labeled sequences. In Proceedings of the 12th IAPR International Conference on Pattern Recognition, Vol. 3-Conference C: Signal Processing (Cat. No. 94CH3440-5), volume 2, pages 140–144. IEEE
 - [2] 카카오 형태소 분석기 [github](https://github.com/kakao/khaiii), [blog](https://brunch.co.kr/@kakao-it/308)
 - [3] Brants, T. (2000, April). TnT: a statistical part-of-speech tagger. In Proceedings of the sixth conference on Applied natural language processing (pp. 224-231). Association for Computational Linguistics.
+- [4] McCallum, A., Freitag, D., and Pereira, F. C. (2000). Maximum entropy markov models for information extraction and segmentation. In Icml, volume 17, pages 591–598.
 
 [hmmpost]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
+[memm_crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
