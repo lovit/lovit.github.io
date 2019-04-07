@@ -235,32 +235,45 @@ $$\hat{y} = argmax_{y \in G(x)} w \cdot \sum_{i}^{n} F(x, y_{i-1}, y_i)$$
 
 만약 $$y = y^'$$ 이라면 현재 모델이 $$x$$ 에 대하여 정답값인 $$y$$ 를 출력함으로, 학습을 따로 하지는 않습니다. $$y$$ 가 $$y^'$$ 이 아니라면, 이는 $$\lambda^T F(x, y^') > \lambda^T F(x, y)$$ 라는 의미이니, $$F(x,y)$$ 의 features 에 해당하는 $$\lambda$$ 를 크게, $$F(x,y^')$$ 에 해당하는 $$\lambda$$ 를 작게 조절합니다.
 
-
 ## Structured Support Vector Machine (StructuredSVM)
 
-SVM
+위 transition based model 의 식은 $$\hat{y}$$ 가 $$y$$ 가 되도록 만드는데만 노력합니다. 여기에 한 가지 조건을 더 더하여 $$\hat{y}$$ 와 $$y$$ 가 다를 경우, 그 점수의 차이가 어느 정도 이상이 되도록 유도할 수도 있습니다.
 
-$$\min_w \frac{1}{2} \rVert w \rVert^2 + \frac{C}{n} \sum_{(x, y) \in S} max \left( 0, 1 - y \left<w, x \right> \right)$$
+$$\rVert w \rVert^2 = 1$$ 로 만든 뒤, 다음의 식을 학습합니다. $$\Delta(x,y,\hat{y})$$ 는 $$y$$ 와 $$\hat{y}$$ 가 얼마나 틀렸는지를 나타내는 loss function 입니다. 만약 best output sequence 가 true output sequence 라면 0 을, 그렇지 않다면 0 보다 큰 값을 return 하는 함수입니다. $$\rVert w \rVert^2 = 1$$ 로 고정되어있기 때문에 $$\gamma$$ 를 최대화 하라는 의미는 틀린 $$\hat{y}$$ 는 loss 가 크라는 의미입니다.
 
-Structured SVM
+$$maximize \gamma$$
 
-$$\min_w \frac{1}{2} \rVert w \rVert^2 + \frac{C}{n} \sum_{i}^{n} \max_{y \in \mathcal{Y}} \left(0, \Delta(y_i, y) - \left( \left<w, \Phi(x_i, y_i) \right> - \left<w, \Phi(x_i, y) \right> \right) \right) $$
+$$w^T(F(x,y) - F(x,\hat{y})) \ge \gamma \Delta(x,y,\hat{y})
 
-With slack variable,
+이는 Support Vcetor Machine 같은 max margin classifiers 의 개념입니다. $$y$$ 를 잘 맞추는 것도 좋지만, 잘못된 $$\hat{y}$$ 와 정답 $$y$$ 의 점수가 충분히 차이나도록 모델을 학습하는 것입니다. 이처럼 sequential labeling 에 max margin 개념을 도입한 모델을 structured SVM 이라 합니다 (Taskar et al., 2004; Tsochantaridis et al., 2005) ^[7,8]. 단순한 $$y$$ 값이 아닌 sequence 와 같은 구조체를 분별하는 classifiers 라는 의미입니다. 구문 구조를 판단하는 dependency parser 도 structured classifiers 의 하나입니다.
 
-$$\min_{w, \xi} \frac{1}{2} \rVert w \rVert^2 + \frac{C}{n} \sum_{i}^{n} \xi_i $$
+다시 돌아와서, transition based parser 의 식이 더 정교하게 정의되고 있습니다. 이 식을 hinge loss 형식으로 기술할 수도 있습니다. 이번에는 $$(x_i, y_i)$$ 는 학습 데이터, $$y$$ 는 $$x_i$$ 의 best output sequence 입니다.
 
-$$s.t. \left <w, \Phi(x_i, y_i) \right> - \left<w, \Phi(x_i, y) \right> + \xi_i \ge \Delta(y_i, y)$$
+$$\min_w \frac{1}{2} \rVert w \rVert^2 + \frac{C}{n} \sum_{i}^{n} \max_{y \in \mathcal{Y}} \left(0, \Delta(y_i, y) - \left( w \cdot F(x_i, y_i) - w \cdot F(x_i, y) \right) \right) $$
+
+위 식은 네 종류의 성분으로 구성되어 있습니다. \rVert w \rVert^2 은 L2 regularization 의 역할을 합니다. Weight vector $$w$$ 의 크기가 지나치게 커져 over fitting 이 일어나는 것을 방지합니다. \Delta(y_i, y) 는 margin, threshold 의 역할을 합니다. $$w \cdot F(x_i, y_i)$$ 는 true sequence 의 점수이고, $$w \cdot F(x_i, y)$$ 는 best sequence 의 점수입니다. Best sequence 가 true sequence 가 아니면 최소한 \Delta(y_i, y) 이상 점수 차이가 나도록 $$w$$ 를 유도합니다. 즉 structured SVM 은 margin 과 regularization 이 추가된 형태입니다.
 
 ## Average perceptron
 
-Inference
+위의 (쉬운 버전의) transition based model 의 식은 $$w$$ 에 대하여 1차 식이기 때문에 미분 가능합니다. 그러므로 gradient descent 계열의 방법을 이용하여 학습할 수 있습니다. 하지만 $$F(x,y)$$ 에 의하여 만들어지는 feature space 는 매우 큰 공간의 sparse vector 입니다. 벡터의 대부분의 값이 0 일 경우에는 gradient descent 보다 효율적인 학습 방법들이 많습니다. 그 중 하나로 (Collins, 2002) 에 제안된 average perceptron 이 있습니다 ^[9].
 
-$$f(x) = \arg \max_{y \in \mathcal{Y}} \left< w, \Phi(x, y) \right>$$
+이 방법은 perceptron 의 학습 방법을 거의 대부분 이용하지만, over fitting 의 방지를 위해서 average 개념을 도입합니다. 그 결과 sequential labeling 에서 CRF 나 structured SVM 과 비슷한 성능을 보이기도 했습니다. 또한 (Collins, 2002) 에서 이 방법은 gradient descent 을 이용하지 않음에도 몇 번의 반복안에 $$w$$ 가 수렴함을 증명하고 있습니다.
+
+Average perceptron 이 풀고 싶은 문제와 이를 위해 제안된 알고리즘입니다. $$w_k$$ 는 처음 zero vector 로 초기화합니다. 매 번 $$F(x,y)$$ 를 더하고 $$F(x, \hat{y})$$ 를 빼서 $$w_{k+1}$$ 로 이용합니다. 그리고 매 순간의 $$w_k$$ 를 $$v$$ 에 누적합니다. 만약 $$\hat{y}$$ 가 $$y$$ 라면 $$w$$ 는 변하지 않습니다. 만약 변한다면 그 변화량은 $$w$$ 와 $$v$$ 에 모두 저장됩니다. 그리고 학습이 끝나면 문장의 개수와 반복 횟수의 개수의 곱으로 $$v$$ 를 나눠 최종 $$w$$ 를 얻습니다.
+
+![]({{ "/assets/figures/sequential_labeling_average_perceptron.png" | absolute_url }}){: width="80%" height="80%"}
+
+이는 사실 반복 횟수를 증가하면서 learning rate 를 낮춰가는 방식과 같습니다. 학습의 후반부로 갈수록 $$w$$ 는 안정화 될 것이기 때문에 상대적으로 $$w_k$$ 가 바뀌는 경우가 줄어들기 때문입니다.
 
 ## Pegasos: Primal Estimation sub-GrAdient SOlver for SVM
 
+Structured SVM 역시 sparse vector 에서 효율적으로 작동하는 학습 방법이 제안되었습니다. Pegasos 라는 이름의 이 알고리즘이 풀고 싶은 문제와 이를 위해 제안된 방법은 아래와 같습니다. 식은 복잡하지만, 자세히 살펴보면 average perceptron 에서 learning rate 가 정교화된 것과 비슷합니다.
 
+![]({{ "/assets/figures/sequential_labeling_pegasos.png" | absolute_url }}){: width="80%" height="80%"}
+
+그리고 위의 식은 mini batch version 입니다. SVM 의 학습에 $$n \times n$$ 크기의 kernel matrix 가 계산되어야 하지만, 데이터가 클 경우에는 학습 불가능한 경우가 많습니다. 이를 해결하기 위하여 여러가지 근사 알고리즘들이 제안되었는데 Pegasos 도 그둘 중 한 가지 입니다. Mini-batch style 이기 때문에 메모리에는 $$w$$ 만 보관하면 됩니다.
+
+이 방법은 강원대학교의 이창기 교수님의 연구들에서 자주 등장하는 방법입니다. Structured SVM 을 자주 이용하셨는데, 그 때의 학습 방법으로 pegasos 를 사용하셨다고 여러 논문에 기술하셨습니다.
 
 ## Recurrent Neural Network
 
@@ -294,8 +307,9 @@ Label sequence 에 bigram 을. 이는 transition based labeler 형식
 - [4] McCallum, A., Freitag, D., and Pereira, F. C. (2000). Maximum entropy markov models for information extraction and segmentation. In Icml, volume 17, pages 591–598.
 - [5] Lafferty, J., McCallum, A., and Pereira, F. C. (2001). Conditional random fields: Probabilistic models for segmenting and labeling sequence data.
 - [6] Kudo, T., Yamamoto, K., & Matsumoto, Y. (2004). Applying conditional random fields to Japanese morphological analysis. In Proceedings of the 2004 EMNLP
-
-
+- [7] Taskar, B., Klein, D., Collins, M., Koller, D., & Manning, C. (2004). Max-margin parsing. In Proceedings of the 2004 Conference on Empirical Methods in Natural Language Processing.
+- [8] Tsochantaridis, I., Joachims, T., Hofmann, T., and Altun, Y. (2005). Large margin methods for structured and interdependent output variables. Journal of machine learning research
+- [9] Collins, M. (2002, July). Discriminative training methods for hidden markov models: Theory and experiments with perceptron algorithms. In Proceedings of the ACL-02 EMNLP 2002
 
 [hmmpost]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
 [memm_crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
