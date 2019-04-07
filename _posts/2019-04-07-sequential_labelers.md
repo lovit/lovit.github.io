@@ -8,7 +8,7 @@ tags:
 - sequential labeling
 ---
 
-머신 러닝의 분류기 (classifiers) 는 input vector $x$ 에 대하여 클래스를 분류합니다. 만약 입력값이 벡터가 아닌 $$x = [x_1, x_2 ,\ldots, x_n]$$ 시퀀스일 경우, 각 시퀀스에 적절한 클래스 시퀀스 $$y = [y_1, y_2, \ldots, y_n]$$ 들을 분류하는 문제를 sequential labeling 이라 합니다. 이를 위해 처음에는 Hidden Markov Model (HMM) 도 이용되었습니다만, 구조적인 단점이 존재하였습니다. 이후 Conditional Random Field (CRF) 와 같은 maximum entropy classifiers 들이 제안되었고, Word2Vec 이후 단어 임베딩 기술이 성숙하면서 Recurrent Neural Network (RNN) 계열도 이용되고 있습니다. 최근에는 Transformer 를 이용하는 BERT 까지도 sequential labeling 에 이용됩니다. 이번 포스트에서는 이 분야에서 중요한 알고리즘들을 살펴봅니다.
+머신 러닝의 분류기 (classifiers) 는 input vector $$x$$ 에 대하여 클래스를 분류합니다. 만약 입력값이 벡터가 아닌 $$x = [x_1, x_2 ,\ldots, x_n]$$ 시퀀스일 경우, 각 시퀀스에 적절한 클래스 시퀀스 $$y = [y_1, y_2, \ldots, y_n]$$ 들을 분류하는 문제를 sequential labeling 이라 합니다. 이를 위해 처음에는 Hidden Markov Model (HMM) 도 이용되었습니다만, 구조적인 단점이 존재하였습니다. 이후 Conditional Random Field (CRF) 와 같은 maximum entropy classifiers 들이 제안되었고, Word2Vec 이후 단어 임베딩 기술이 성숙하면서 Recurrent Neural Network (RNN) 계열도 이용되고 있습니다. 최근에는 Transformer 를 이용하는 BERT 까지도 sequential labeling 에 이용됩니다. 이번 포스트에서는 이 분야에서 중요한 알고리즘들을 살펴봅니다.
 
 ## Sequential labeling
 
@@ -32,7 +32,7 @@ $$argmax_y P(y_{1:n} \vert x_{1:n})$$
 
 ### v.s. sequence segmentation
 
-Sequence 를 다루는 문제 중 하나로, sequence segmentation 이 있습니다. 이는 길이가 $$n$$ 인 input sequence $$x_{1:n}$$ 에 대하여 길이가 $$m \le $n$$ 인 output sequence $$y_{1:m}$$ 을 출력하는 문제입니다. 대표적인 문제는 문장을 단어로 분리하는 토크나이저 입니다. 중국어권 연구에서는 주로 word segmentation 이라 부릅니다. 아래 예시처럼 $$7$$ 개의 글자열이 입력되면 $$4$$ 개의 단어열을 출력하는 것입니다. 띄어쓰기도 어절 단위에서의 sequence segmentation 이기도 합니다.
+Sequence 를 다루는 문제 중 하나로, sequence segmentation 이 있습니다. 이는 길이가 $$n$$ 인 input sequence $$x_{1:n}$$ 에 대하여 길이가 $$m \le n$$ 인 output sequence $$y_{1:m}$$ 을 출력하는 문제입니다. 대표적인 문제는 문장을 단어로 분리하는 토크나이저 입니다. 중국어권 연구에서는 주로 word segmentation 이라 부릅니다. 아래 예시처럼 $$7$$ 개의 글자열이 입력되면 $$4$$ 개의 단어열을 출력하는 것입니다. 띄어쓰기도 어절 단위에서의 sequence segmentation 이기도 합니다.
 
 - $$x$$ = '이것은예문이다'
 - $$y$$ = [이것, 은, 예문, 이다]
@@ -76,13 +76,13 @@ TnT 는 영어 단어의 품사를 추정하기 위한 모델입니다. 이 모�
 
 ### Unguaranteed Independency Problem
 
-두번째 문제는 매우 치명적입니다. 우리는 `오늘, 의, A, 는, ... `이라는 문장에서 `A` 라는 단어의 품사를 추정하기 위하여 앞, 뒤의 단어들의 정보를 이용합니다. 문맥 정보는 주로 앞, 뒤에 등장하는 단어들입니다. 하지만 HMM 은 $$P(y_i \vert y_{i-1}$$ 에 대한 정보는 학습하여도 $$(x_{i-1}, x_i)$$ 의 정보는 학습하지 않습니다. 앞선 예시처럼 `이` 라는 단어는 명사, 조사, 형용사 등 다양한 품사를 가질 수 있기 때문에 $$x_i = 이$$ 의 품사 추정을 위해서는 앞, 뒤 단어를 살펴봐야 합니다. 하지만 HMM 은 그 앞에 등장한 단어의 품사 $$y_{i-1}$$ 정보만 이용할 뿐입니다. 
+두번째 문제는 매우 치명적입니다. 우리는 `오늘, 의, A, 는, ... `이라는 문장에서 `A` 라는 단어의 품사를 추정하기 위하여 앞, 뒤의 단어들의 정보를 이용합니다. 문맥 정보는 주로 앞, 뒤에 등장하는 단어들입니다. 하지만 HMM 은 $$P(y_i \vert y_{i-1})$$ 에 대한 정보는 학습하여도 $$(x_{i-1}, x_i)$$ 의 정보는 학습하지 않습니다. 앞선 예시처럼 `이` 라는 단어는 명사, 조사, 형용사 등 다양한 품사를 가질 수 있기 때문에 $$x_i = 이$$ 의 품사 추정을 위해서는 앞, 뒤 단어를 살펴봐야 합니다. 하지만 HMM 은 그 앞에 등장한 단어의 품사 $$y_{i-1}$$ 정보만 이용할 뿐입니다. 
 
 이러한 문제를 unguaranteed indeiendency problem 이라 합니다. 각 단어 $$x_i$$ 가 서로 독립이라는 잘못된 가정을 한다는 의미입니다. 주로 sequential modeling 에서는 한 시점 주변의 스냅샷 정보를 이용하는 경우가 많은데, HMM 은 이러한 능력이 없습니다.
 
 ### Number of words (Label bias)
 
-세번째 문제도 치명적입니다. 앞의 예시처럼 실제로 학습데이터의 단어 `이` 의 확률은 $$P(이 \vert Josa) \ge P(이 \vert Noun)$$ 입니다. 이는 명사의 종류가 조사의 종류보다 압도적으로 많기 때문에 명사의 각 단어의 확률 $$P(w \vert Noun)$$ 은 대체로 매우 작은 값입니다. 반대로 $$P(w \vert Josa)$$ 는 매우 큰 값을 지닙니다. 아래는 세종 말뭉치 데이터의 일부에서의 각 품사 별 고유 단어의 개수 예시입니다.
+세번째 문제도 치명적입니다. 앞의 예시처럼 실제로 학습데이터의 단어 `이` 의 확률은 $$P(이 \vert Josa)$$ 이 $$ P(이 \vert Noun)$$ 보다 큽니다. 명사의 종류가 조사의 종류보다 압도적으로 많기 때문에 명사의 각 단어의 확률 $$P(w \vert Noun)$$ 은 대체로 매우 작은 값입니다. 반대로 $$P(w \vert Josa)$$ 는 매우 큰 값을 지닙니다. 아래는 세종 말뭉치 데이터의 일부에서의 각 품사 별 고유 단어의 개수 예시입니다.
 
 | Tag | Number of unique words |
 | --- | --- |
@@ -101,7 +101,7 @@ TnT 는 영어 단어의 품사를 추정하기 위한 모델입니다. 이 모�
 
 네번째 문제 역시 치명적입니다. 이 역시 output values 의 빈도수 때문에 발생하는 문제입니다. 만약 $$t_1$$ 은 자주 이용되는 품사이기 때문에 그 다음에 등장하는 품사들은 그 종류가 30 가지 정도 된다고 가정합니다. 다른 품사 $$t_2$$ 는 특정한 문맥에서만, 상대적으로 적게 이용되는 품사이기 때문에 그 다음에 등장하는 품사들의 종류 역시 3 가지 정도 작다고 가정합니다. 그러면 위의 문제처럼 일반적으로 $$P(t \vert t_1) \le P(t \vert t_2)$$ 이게 됩니다. 하지만 $$t_2$$ 는 가정한 것처럼 거의 등장하지 않았습니다.
 
-즉, 실제 데이터의 분포를 보면 $$(y_{i-1} = t_2, y_i = t)$$ 의 경우가 매우 작음에도 불구하고 확률값은 더 크게 계산됩니다. 이는 매 시점 $$i$$ 마다 $$P(y_{1:i} \vert x_{1:n}$$ 까지의 확률을 정의하고 가기 때문인데, 이를 local normalization 이라 합니다. Sequence 전체를 보기 전에 이미 sub-sequence 에 대한 확률을 정의한다는 의미입니다.
+즉, 실제 데이터의 분포를 보면 $$(y_{i-1} = t_2, y_i = t)$$ 의 경우가 매우 작음에도 불구하고 확률값은 더 크게 계산됩니다. 이는 매 시점 $$i$$ 마다 $$P(y_{1:i} \vert x_{1:n})$$ 까지의 확률을 정의하기 때문인데, 이를 local normalization 이라 합니다. Sequence 전체를 보기 전에 sub-sequence 에 대한 확률을 정의한다는 의미입니다.
 
 ### Length bias
 
@@ -111,24 +111,24 @@ TnT 는 영어 단어의 품사를 추정하기 위한 모델입니다. 이 모�
 - $$y_0$$ = [B-Noun, I-Noun, **B-Josa**, B-Noun, I-Noun, B-Adjective, I-Adjective]
 - $$y_1$$ = [B-Noun, I-Noun, **I-Noun**, B-Noun, I-Noun, B-Adjective, I-Adjective]
 
-하지만 아래처럼 $$y_0$$ 은 4 개의 단어열로, $$y_1$$ 은 3 개의 단어열로 문장을 분해한다면 $$y_1$$ 이 잘못된 문장임에도 불구하고 더 큰 확률을 가질 수 있습니다. HMM 은 $$2n$$ 개의 확률의 곱으로 $$P(y_{1:n} \vert x_{1:n})$$ 의 확률을 정의합니다. 그리고 각 확률은 1 이하의 값으로 정의됩니다. 확률적으로는 짧은 output sequence 에 더 큰 확률이 주어질 가능성이 높습니다. 그래서 HMM 은 길이가 긴 단어로 구성된 문장, 즉 최대한 적은 수의 단어들로 문장을 분해하려는 편향성이 생깁니다.
+하지만 아래처럼 $$y_0$$ 은 4 개의 단어열로, $$y_1$$ 은 3 개의 단어열로 문장을 분해한다면 $$y_1$$ 이 잘못된 문장임에도 불구하고 더 큰 확률을 가질 수 있습니다. HMM 은 $$2n$$ 개의 확률의 곱으로 $$P(y_{1:n} \vert x_{1:n})$$ 의 확률을 정의합니다. 그리고 각 확률은 1 이하의 값으로 정의됩니다. 1 보다 작은 숫자는 여러 번 곱할수록 그 값이 작아지기 때문에 확률적으로는 짧은 output sequence 에 더 큰 확률이 주어질 가능성이 높습니다. 그래서 HMM 은 길이가 긴 단어로 구성된 문장, 즉 최대한 적은 수의 단어들로 문장을 분해하려는 편향성이 생깁니다.
 
 - $$y_0$$ = [이것/Noun, 은/Josa, 예문/Noun, 이다/Adjective]
 - $$y_1$$ = [이것은/Noun, 예문/Noun, 이다/Adjective]
 
-단, 이는 일단 문장이 제대로 된 단어열로 분해되었다는 가정을 할 때 입니다. 한국어는 표의 문자인 한자어를 일부 차용하는 언어이기 때문에 각 음절이 단어인 경우가 많습니다. 게다가 미등록단어 문제까지 발생합니다. 그렇기 때문에 HMM 을 이용하는 한국어 형태소 분석기에서 미등록단어 문제가 발생하면 학습데이터에 등장하는 단어가 포함된 가장 긴 단어를 우선적으로 선호할 가능성이 높습니다.
+단, 이는 일단 문장이 제대로 된 단어열로 분해되었다는 가정을 할 때 입니다. 한국어는 표의 문자인 한자어를 일부 차용하는 언어이기 때문에 각 음절이 단어인 경우가 많습니다. 게다가 미등록단어 문제까지 발생합니다. 그렇기 때문에 HMM 을 이용하는 한국어 형태소 분석기에서 미등록단어 문제가 발생하면 학습데이터에 등장하는 단어가 포함된 가장 긴 단어를 선호할 가능성이 높습니다.
 
-1, 2 번은 HMM 의 구조적 한계점이며, 3 - 5 번은 특정한 경우에 편향성이 생기는 문제입니다. 좋은 sequential labeling 은 주어진 $$x$$ 에 대하여 편향성 없이 $$y$$ 를 찾을 수 있어야 합니다. TnT 는 2000 년에 제안되었지만 HMM 기반 모델들은 주로 90 년대까지 이용되었습니다. 뒤이어 설명할 MEMM 같은 maximum entropy classifiers 들은 1, 2 번의 한계점을 극복하기 때문에 HMM 기반으로 작업할 이유가 사라진 것입니다.
+1, 2 번은 HMM 의 구조적 한계점이며, 3 - 5 번은 특정한 경우에 편향성이 생기는 문제입니다. 좋은 sequential labeling 은 주어진 $$x$$ 에 대하여 편향성 없이 $$y$$ 를 찾을 수 있어야 합니다. TnT 는 2000 년에 제안되었지만 HMM 기반 모델들은 주로 90 년대까지 이용되었습니다. 뒤이어 설명할 MEMM 같은 maximum entropy classifiers 들은 1, 2 번의 한계점을 극복하기 때문에 HMM 의 대안으로 이용되었고, HMM 기반 품사 판별 작업은 그 이후로 거의 이뤄지지 않았습니다.
 
 ## Maximum Entropy Markov Model (MEMM)
 
-2000 년에 ICML 에 Maximum Entropy Markov Model 이 제안됩니다 (McCallum et al., 2000) ^[4]. 이는 maximum entropy classifiers 에 속하는 모델로, maximum entropy classifier 는 쉽게 생각하여 softmax regression 형식의 classifier 를 의미한다고 생각해도 좋습니다. 물론 MEMM 이 이런 종류의 첫번째 모델은 아니지만, 분기점 같은 역할을 하는 알고리즘입니다.
+2000 년에 ICML 에 Maximum Entropy Markov Model 이 제안됩니다 (McCallum et al., 2000) ^[4]. 이는 maximum entropy classifiers 에 속하는 모델로, 편하게 설명하는 softmax regression 형식의 classifier 를 의미합니다. 물론 MEMM 이 이런 종류의 첫번째 모델은 아니지만, MEMM 은 이러한 모델 시리즈의 중요한 랜드마크 역할을 하는 알고리즘입니다.
 
-MEMM 과 CRF 에 대해서도 [이전의 포스트][memm_crf]에서 다뤘습니다. 그 중에서 중요을 집고 넘어갑니다.
+MEMM 과 CRF 에 대해서도 [이전의 포스트][memm_crf]에서 다뤘습니다. 그중, 중요한 내용들을 다시 알아봅니다.
 
 ### Potential function
 
-그전에 MEMM 에 대하여 이야기하려면 단어와 같은 category sequence 를 벡터로 표현하는 방법부터 알아야 합니다. HMM 은 (단어, 품사) 의 확률만을 계산하였기 때문에 단어열을 벡터 형식으로 변환할 필요는 없었습니다. 하지만 softmax regression 을 이용하는 MEMM 은 단어열을 벡터로 표현해야 했습니다. 이를 위하여 potential function 이 이용됬습니다. 이는 categorical 뿐 아니라 numerical sequence 도 벡터로 표현할 수 있는 방법입니다.
+MEMM 에 대하여 이야기하려면 단어열 같은 category sequence 를 벡터로 표현하는 방법부터 알아야 합니다. HMM 은 (단어, 품사) 의 확률만을 계산하였기 때문에 단어열을 벡터 형식으로 변환할 필요는 없었습니다. 하지만 softmax regression 을 이용하는 MEMM 은 단어열을 벡터로 표현해야 했습니다. 이를 위하여 potential function 이 이용됬습니다. 이는 categorical 뿐 아니라 numerical sequence 도 벡터로 표현할 수 있는 방법입니다.
 
 예를 들어 $$x = [3.2, 2.1, -0.5]$$ 라는 길이가 3 인 sequence 에 대하여 아래의 필터 $$F_1$$ 를 적용할 수 있습니다.
 
@@ -171,19 +171,19 @@ Potential function 은 데이터를 암기하여 Boolean vector 로 표현하는
 
 MEMM 은 potential function 을 이용하여 입력된 단어열 $$x_{1:n}$$ 을 Boolean vector sequence $$h_{1:n}$$ 으로 변환합니다. 그 뒤, 각 $$h_i$$ 에 대하여 $$y_i$$ 의 확률을 계산합니다.
 
-$$P(y_{1:n} \vert x_{1:n}} = \prod_i^n P(y_i \vert h_i)$$
+$$P(y_{1:n} \vert x_{1:n}) = \prod_i^n P(y_i \vert h_i)$$
 
-$$P(y_i \vert h_i)$$ 을 아래처럼 표현할 수 있습니다. $$h_i$$ 가 클래스 $$k$$ (품사 $$k$$) 가 될 확률을 계산하고, 각 $$i$$ 에 대하여 독립적인 $$n$$ 번의 softmax regression 을 수행한다는 의미입니다. 이 때 $$\lambda$$ 는 매 시점 $$i$$ 마다 공통으로 이용됩니다.
+$$P(y_i \vert h_i)$$ 을 아래처럼 표현할 수 있습니다. $$P(y_i \vert h_i)$$ 를 통하여 $$h_i$$ 가 품사 혹은 클래스 $$k$$ 일 확률을 계산합니다. 그리고 각 $$i$$ 에 대하여 독립적인 $$n$$ 번의 softmax regression 을 수행하여 전체의 확룰 $$P(y \vert h)$$ 를 계산합니다. 이 때 $$\lambda$$ 는 매 시점 $$i$$ 마다 공통으로 이용됩니다.
 
-$$P(y_{1:n} \vert x_{1:n}} = \prod_i^n \frac{exp(\lambda_{k}^T h_i)}{\sum_l exp(\lambda_{l}^T h_i)}$$
+$$P(y_{1:n} \vert x_{1:n}) = \prod_i^n \frac{exp(\lambda_{k}^T h_i)}{\sum_l exp(\lambda_{l}^T h_i)}$$
 
-이를 아래처럼 더 자세하게 기술할 수도 있습니다. $$f_j(x, i, y_i, y_{i-1})$$ 은 현재 시점 $$i$$ 의 앞의 품사가 $$y_{i-1}$$ 이고 지금 시점의 품사가 $$y_i$$ 라면 이라는 potential function 의 Boolean 값 입니다. 그리고 $$\lambda_j$$ 는 그럴 경우의 점수, 즉 logistic regression 의 coefficient 입니다.
+이를 아래처럼 더 자세하게 기술할 수도 있습니다. $$f_j(x, i, y_i, y_{i-1})$$ 은 "현재 시점 $$i$$ 의 앞의 품사가 $$y_{i-1}$$ 이고 지금 시점의 품사가 $$y_i$$ 라면" 이라는 potential function 의 Boolean 값 입니다. 그리고 $$\lambda_j$$ 는 그럴 경우의 점수, 즉 logistic regression 의 coefficient 입니다.
 
 $$P(y \vert x) = \prod_{i=1}^{n} \frac{exp(\sum_{j=1}^{m} \lambda_j f_j (x, i, y_i, y_{i-1}))}{ \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`})) }$$
 
 마지막 수식은 복잡하긴 하지만, 결국 potential function 을 이용하여 $$x$$ 를 sparse vector $$h$$ 로 만든 뒤, softmax regression 을 수행한다는 의미입니다. 그렇기 때문에 **ME**MM 이라는 이름을 가졌습니다.
 
-MEMM 은 discriminative model 인 softmax regression 형식입니다. 확률 모델이 아니기 때문에 $$f_j$$ 의 빈도수의 영향을 덜받습니다. $$f_j$$ 가 학습데이터에 몇 번 등장하지 않은 변수라 하더라도 그 정보가 명확하다면 매우 큰 값의 $$\lambda_j$$ 가 학습될 것입니다. 하지만 이는 그렇게 잘 학습될 수 있다는 가정일 뿐, 현실은 softmax regression 을 근사학습하는 최적화 방법들에 의하여 약간의 frequency bias 가 있습니다.
+MEMM 은 discriminative model 인 softmax regression 형식입니다. Generative model 이 아니기 때문에 $$\lambda_j$$ 는 $$f_j$$ 빈도수의 영향을 덜받습니다. $$f_j$$ 가 학습데이터에 몇 번 등장하지 않은 변수라 하더라도 그 정보가 명확하다면 매우 큰 값의 $$\lambda_j$$ 가 학습될 것입니다. 하지만 이는 그렇게 잘 학습될 수 있다는 가정일 뿐, 현실은 softmax regression 을 근사학습하는 최적화 방법들에 의하여 약간의 frequency bias 가 있습니다.
 
 ### MEMM as Markov Model
 
@@ -201,69 +201,69 @@ MEMM 의 저자들은 바로 1년 뒤인 2001 년에 동일한 학회인 ICML �
 
 $$P(y \vert x) = \frac{exp(\sum_{j=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i, y_{i-1}))}{ \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`})) }$$
 
-식은 $$\prod$$ 가 $$\sum$$ 으로 바뀐 것 뿐입니다. 그리고 $$x_{1:n}$$ 로부터 만들 수 있는 $$y_{1:n}$$ 의 종류는 매우 많기 때문에 가능성이 높은 후보 몇 개만을 효율적으로 찾아야 합니다. 그렇기 때문에 MEMM 과 CRF 모두 최적의 $$y_{1:n}$$ 을 찾기 위하여 beam search 가 이용되었습니다.
+식은 $$\prod$$ 가 $$\sum$$ 으로 바뀐 것 뿐입니다. 그리고 $$x_{1:n}$$ 로부터 만들 수 있는 $$y_{1:n}$$ 의 종류는 매우 많기 때문에 가능성이 높은 후보 몇 개만을 효율적으로 찾아야 합니다. 이를 위하여 MEMM 과 CRF 모두 최적의 $$y_{1:n}$$ 을 찾기 위해 beam search 를 이용합니다.
 
-CRF 가 이용된 대표적인 한국어 형태소 분석기가 MeCab-ko 입니다. MeCab 은 일본어 분석을 위하여 제안된 형태소 분석기 입니다 (Kudo et al., 2004) ^[6]. 그리고 학습 데이터를 한국어로 변형한 버전이 MeCab-ko 입니다. 일본어 역시 word segmentation & labeling 을 동시에 해결해야 했으며, local normalization 의 문제가 해결된 방법이 필요했습니다. 그렇기 때문에 CRF 모델이 이용되었습니다.
+MeCab-ko 는 CRF 를 이용하는 대표적인 한국어 형태소 분석기 입니다. MeCab 은 일본어 분석을 위하여 제안된 형태소 분석기 입니다 (Kudo et al., 2004) ^[6]. 그리고 학습 데이터를 한국어로 변형한 버전이 MeCab-ko 입니다. 일본어 역시 word segmentation & labeling 을 동시에 해결해야 했기 때문에 local normalization 의 문제가 해결된 방법이 필요했습니다. 그렇기 때문에 CRF 모델이 이용되었습니다.
 
 ### CRF as log-linear model
 
 위 CRF 식을 변형할 수 있습니다. $$P(y \vert x)$$ 에 log 를 씌우면 exponental 이 사라져 다음처럼 기술할 수 있습니다.
 
-$$log P(y \vert x) = \sum_{j=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i, y_{i-1})) - \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`}))$$
+$$log P(y \vert x) = \sum_{j=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i, y_{i-1})) - log \sum_{y^{`}} exp(\sum_{j^{`}=1}^{m} \sum_{i=1}^{n} \lambda_j f_j (x, i, y_i^{`}, y_{i-1}^{`}))$$
 
-좀 더 간단히 기술하기 위하여 $$\sum_i sum_j f_j(x, i, y)$$ 를 $$F(x, y) 로, $$\lambda_j$$ 를 $$\lambda$$ 로 표현합니다.
+좀 더 간단히 기술하기 위하여 $$\sum_i \sum_j f_j(x, i, y)$$ 를 $$F(x, y)$$ 로, $$\lambda_j$$ 를 $$\lambda$$ 로 표현합니다. 물론 $$log \sum$$ 에 의한 scaling 의 차이는 있습니다만, 이는 잠시 무시합니다.
 
-$$log P(y \vert x) = \lambda (F(x,y) - \sum_{y^'} F(x,y^{'}))$$
+$$log P(y \vert x) = <\lambda, (F(x,y)> - \sum_{y^{'}} <\lambda, F(x,y^{'})>$$
 
-$$F(x,y)$$ 는 $$n \times m$$ 크기의 sparse input vector 이며, $$\lambda^T F(x,y)$$ 혹은 $$<\lambda, F(x,y)>$$ 는 linear score function 입니다. Softmax regression 에서의 coefficient $$lambda$$ 와 input vector $$x$$ 의 내적과 같은 형식입니다. $$F(x,y^')$$ 은 input sequence $$x$$ 로부터 만들 수 있는 output sequence $$y^'$$ 의 feature vector representation 입니다.
+$$F(x,y)$$ 는 $$n \times m$$ 크기의 sparse input vector 이며, $$\lambda^T F(x,y)$$ 혹은 $$<\lambda, F(x,y)>$$ 는 linear score function 입니다. Softmax regression 에서의 coefficient $$\lambda$$ 와 input vector $$x$$ 의 내적과 같은 형식입니다. $$F(x,y^{'})$$ 은 input sequence $$x$$ 로부터 만들 수 있는 output sequence $$y^{'}$$ 의 feature vector representation 입니다.
 
-CRF 는 학습데이터의 $$(x, y)$$ 를 이용하여 $$P(y \vert x)$$ 가 최대화 되도록 학습합니다. 이는 true output sequence 인 $$y$$ 의 $$F(x,y)$$ 에서 1 인 features 에 해당하는 $$\lambda$$ 의 크기는 크게, 가능한 모든 output sequence $$y^'$$ 의 $$F(x,y^')$$ 에서 1 인 features 에 해당하는 $$\lambda$$ 의 크기는 작게 학습하는 것입니다.
+CRF 는 학습데이터의 $$(x, y)$$ 를 이용하여 $$P(y \vert x)$$ 가 최대화 되도록 학습합니다. 이는 true output sequence 인 $$y$$ 의 $$F(x,y)$$ 의 1 에 해당하는 $$\lambda$$ 의 크기는 크게, 모든 output sequence $$y^{'}$$ 의 $$F(x,y^{'})$$ 의 1 에 해당하는 $$\lambda$$ 의 크기는 작게 학습하는 것입니다.
 
 ## Transition based sequence labeling
 
-그런데 학습 목적식을 다르게 정의할 수도 있습니다. $$y^'$$ 은 현재의 모델로 만들 수 있는 best output sequence 입니다. 이제부터는 $$\lambda$$ 를 $$w$$ 로 기술하겠습니다. 주로 maximum entropy model 에서 coefficient 를 $$\lambda$$ 로 쓰며, transition based model 논문에서는 weight 라는 의미로 $$w$$ 로 자주 기술합니다.
+그런데 학습 목적식을 다르게 정의할 수도 있습니다. $$y^{'}$$ 은 현재의 모델로 만들 수 있는 best output sequence 입니다. 이제부터는 $$\lambda$$ 를 $$w$$ 로 기술하겠습니다. 주로 maximum entropy model 에서 coefficient 를 $$\lambda$$ 로 쓰며, transition based model 논문에서는 weight 라는 의미로 $$w$$ 로 자주 기술합니다.
 
-$$maximize w \cdot (F(x,y) - F(x,y^{'}))$$
+$$\maximize w \cdot (F(x,y) - F(x,y^{'}))$$
 
 $$F$$ 가 $$(y_{i-1}, y_i)$$ 의 정보를 이용한다면 아래처럼 기술할 수도 있습니다. 이러한 방식으로 기술된 모델을 주로 traisiton based model 이라 합니다. 
 
-$$maximize w \cdot (\sum_i F(x,y_{i-1}, y_i) - F(x,y_{i-1}^{'}, y_{i}^{'}))$$
+$$\maximize w \cdot (\sum_i F(x,y_{i-1}, y_i) - F(x,y_{i-1}^{'}, y_{i}^{'}))$$
 
 Output sequence 의 bigram 이기 때문에 beam search 를 이용하기 매우 좋은 구조입니다. 학습이 완료된 뒤, 새로운 $$x$$ 가 주어지면 다음의 점수가 가장 높은 $$\hat{y}$$ 를 beam search 를 이용하여 탐색합니다.
 
 $$\hat{y} = argmax_{y \in G(x)} w \cdot \sum_{i}^{n} F(x, y_{i-1}, y_i)$$
 
-만약 $$y = y^'$$ 이라면 현재 모델이 $$x$$ 에 대하여 정답값인 $$y$$ 를 출력함으로, 학습을 따로 하지는 않습니다. $$y$$ 가 $$y^'$$ 이 아니라면, 이는 $$\lambda^T F(x, y^') > \lambda^T F(x, y)$$ 라는 의미이니, $$F(x,y)$$ 의 features 에 해당하는 $$\lambda$$ 를 크게, $$F(x,y^')$$ 에 해당하는 $$\lambda$$ 를 작게 조절합니다.
+만약 $$y = y^{'}$$ 이라면 현재 모델이 $$x$$ 에 대하여 정답값인 $$y$$ 를 출력하기 때문에, 패러매터의 변화는 없습니다. $$y$$ 가 $$y^{'}$$ 이 아니라면, 이는 $$<\lambda, F(x, y^{'}> \ge <\lambda, F(x, y)>$$ 라는 의미이니, $$F(x,y)$$ 의 features 에 해당하는 $$\lambda$$ 를 크게, $$F(x,y^{'})$$ 에 해당하는 $$\lambda$$ 를 작게 조절합니다.
 
 ## Structured Support Vector Machine (StructuredSVM)
 
 위 transition based model 의 식은 $$\hat{y}$$ 가 $$y$$ 가 되도록 만드는데만 노력합니다. 여기에 한 가지 조건을 더 더하여 $$\hat{y}$$ 와 $$y$$ 가 다를 경우, 그 점수의 차이가 어느 정도 이상이 되도록 유도할 수도 있습니다.
 
-$$\rVert w \rVert^2 = 1$$ 로 만든 뒤, 다음의 식을 학습합니다. $$\Delta(x,y,\hat{y})$$ 는 $$y$$ 와 $$\hat{y}$$ 가 얼마나 틀렸는지를 나타내는 loss function 입니다. 만약 best output sequence 가 true output sequence 라면 0 을, 그렇지 않다면 0 보다 큰 값을 return 하는 함수입니다. $$\rVert w \rVert^2 = 1$$ 로 고정되어있기 때문에 $$\gamma$$ 를 최대화 하라는 의미는 틀린 $$\hat{y}$$ 는 loss 가 크라는 의미입니다.
+$$\rVert w \rVert^2 = 1$$ 로 만든 뒤, 다음의 식을 학습합니다. $$\Delta(x,y,\hat{y})$$ 는 $$y$$ 와 $$\hat{y}$$ 가 얼마나 틀렸는지를 나타내는 loss function 입니다. 만약 best output sequence 가 true output sequence 라면 0 을, 그렇지 않다면 0 보다 큰 값을 return 합니다. $$\rVert w \rVert^2 = 1$$ 로 고정되어있기 때문에 $$\gamma$$ 를 최대화 하라는 의미는 틀린 $$\hat{y}$$ 는 큰 loss 를 가지도록 $$w$$ 를 학습하라는 의미입니다.
 
-$$maximize \gamma$$
+$$\maximize \gamma$$
 
-$$w^T(F(x,y) - F(x,\hat{y})) \ge \gamma \Delta(x,y,\hat{y})
+$$w^T(F(x,y) - F(x,\hat{y})) \ge \gamma \Delta(x,y,\hat{y})$$
 
-이는 Support Vcetor Machine 같은 max margin classifiers 의 개념입니다. $$y$$ 를 잘 맞추는 것도 좋지만, 잘못된 $$\hat{y}$$ 와 정답 $$y$$ 의 점수가 충분히 차이나도록 모델을 학습하는 것입니다. 이처럼 sequential labeling 에 max margin 개념을 도입한 모델을 structured SVM 이라 합니다 (Taskar et al., 2004; Tsochantaridis et al., 2005) ^[7,8]. 단순한 $$y$$ 값이 아닌 sequence 와 같은 구조체를 분별하는 classifiers 라는 의미입니다. 구문 구조를 판단하는 dependency parser 도 structured classifiers 의 하나입니다.
+이는 Support Vcetor Machine 같은 max margin classifiers 의 개념입니다. $$y$$ 를 잘 맞추는 것도 좋지만, 잘못된 $$\hat{y}$$ 와 정답 $$y$$ 의 점수가 충분히 차이나도록 모델을 학습합니다. 이처럼 sequential labeling 에 max margin 개념을 도입한 모델을 structured SVM 이라 합니다 ^[7,8]. 단순한 $$y$$ 값이 아닌 sequence 와 같은 구조체를 분별하는 classifiers 라는 의미입니다. 구문 구조를 판단하는 dependency parser 도 structured classifiers 의 하나입니다.
 
 다시 돌아와서, transition based parser 의 식이 더 정교하게 정의되고 있습니다. 이 식을 hinge loss 형식으로 기술할 수도 있습니다. 이번에는 $$(x_i, y_i)$$ 는 학습 데이터, $$y$$ 는 $$x_i$$ 의 best output sequence 입니다.
 
 $$\min_w \frac{1}{2} \rVert w \rVert^2 + \frac{C}{n} \sum_{i}^{n} \max_{y \in \mathcal{Y}} \left(0, \Delta(y_i, y) - \left( w \cdot F(x_i, y_i) - w \cdot F(x_i, y) \right) \right) $$
 
-위 식은 네 종류의 성분으로 구성되어 있습니다. \rVert w \rVert^2 은 L2 regularization 의 역할을 합니다. Weight vector $$w$$ 의 크기가 지나치게 커져 over fitting 이 일어나는 것을 방지합니다. \Delta(y_i, y) 는 margin, threshold 의 역할을 합니다. $$w \cdot F(x_i, y_i)$$ 는 true sequence 의 점수이고, $$w \cdot F(x_i, y)$$ 는 best sequence 의 점수입니다. Best sequence 가 true sequence 가 아니면 최소한 \Delta(y_i, y) 이상 점수 차이가 나도록 $$w$$ 를 유도합니다. 즉 structured SVM 은 margin 과 regularization 이 추가된 형태입니다.
+위 식은 네 종류의 성분으로 구성되어 있습니다. $$\rVert w \rVert^2$$ 은 L2 regularization 의 역할을 합니다. Weight vector $$w$$ 의 크기가 지나치게 커져 over fitting 이 일어나는 것을 방지합니다. $$\Delta(y_i, y)$$ 는 margin, threshold 의 역할을 합니다. $$<w, F(x_i, y_i)>$$ 는 true sequence 의 점수이고, $$<w,   F(x_i, y)>$$ 는 best sequence 의 점수입니다. Best sequence 가 true sequence 가 아니면 최소한 $$\Delta(y_i, y)$$ 이상 점수 차이가 나도록 $$w$$ 를 유도합니다. 즉 structured SVM 은 margin 과 regularization 이 추가된 형태입니다.
 
 ## Average perceptron
 
 위의 (쉬운 버전의) transition based model 의 식은 $$w$$ 에 대하여 1차 식이기 때문에 미분 가능합니다. 그러므로 gradient descent 계열의 방법을 이용하여 학습할 수 있습니다. 하지만 $$F(x,y)$$ 에 의하여 만들어지는 feature space 는 매우 큰 공간의 sparse vector 입니다. 벡터의 대부분의 값이 0 일 경우에는 gradient descent 보다 효율적인 학습 방법들이 많습니다. 그 중 하나로 (Collins, 2002) 에 제안된 average perceptron 이 있습니다 ^[9].
 
-이 방법은 perceptron 의 학습 방법을 거의 대부분 이용하지만, over fitting 의 방지를 위해서 average 개념을 도입합니다. 그 결과 sequential labeling 에서 CRF 나 structured SVM 과 비슷한 성능을 보이기도 했습니다. 또한 (Collins, 2002) 에서 이 방법은 gradient descent 을 이용하지 않음에도 몇 번의 반복안에 $$w$$ 가 수렴함을 증명하고 있습니다.
+이 방법은 perceptron 의 학습 방법과 매우 유사하지만, over fitting 의 방지를 위해서 average 개념을 도입합니다. 그 결과 sequential labeling 에서 CRF 나 structured SVM 과 비슷한 성능을 보이기도 했습니다. 그리고 논문 (Collins, 2002) 에서는 이 방법이 gradient descent 을 이용하지 않음에도 불구하고 제한된 반복만으로 $$w$$ 가 수렴함을 증명했습니다.
 
-Average perceptron 이 풀고 싶은 문제와 이를 위해 제안된 알고리즘입니다. $$w_k$$ 는 처음 zero vector 로 초기화합니다. 매 번 $$F(x,y)$$ 를 더하고 $$F(x, \hat{y})$$ 를 빼서 $$w_{k+1}$$ 로 이용합니다. 그리고 매 순간의 $$w_k$$ 를 $$v$$ 에 누적합니다. 만약 $$\hat{y}$$ 가 $$y$$ 라면 $$w$$ 는 변하지 않습니다. 만약 변한다면 그 변화량은 $$w$$ 와 $$v$$ 에 모두 저장됩니다. 그리고 학습이 끝나면 문장의 개수와 반복 횟수의 개수의 곱으로 $$v$$ 를 나눠 최종 $$w$$ 를 얻습니다.
+Average perceptron 이 풀고 싶은 문제와 이를 위해 제안된 알고리즘입니다. $$w_k$$ 는 처음 zero vector 로 초기화합니다. 매 번 $$F(x,y)$$ 를 더하고 $$F(x, \hat{y})$$ 를 빼서 $$w_{k+1}$$ 로 업데이트 합니다. 그리고 매 순간의 $$w_k$$ 를 $$v$$ 에 누적합니다. 만약 $$\hat{y}$$ 가 $$y$$ 라면 $$w$$ 는 변하지 않습니다. 만약 변한다면 그 변화량은 $$w$$ 와 $$v$$ 에 모두 저장됩니다. 그리고 학습이 끝나면 문장의 개수와 반복 횟수의 개수의 곱으로 $$v$$ 를 나눠 최종 $$w$$ 를 얻습니다.
 
 ![]({{ "/assets/figures/sequential_labeling_average_perceptron.png" | absolute_url }}){: width="80%" height="80%"}
 
-이는 사실 반복 횟수를 증가하면서 learning rate 를 낮춰가는 방식과 같습니다. 학습의 후반부로 갈수록 $$w$$ 는 안정화 될 것이기 때문에 상대적으로 $$w_k$$ 가 바뀌는 경우가 줄어들기 때문입니다.
+이는 반복 횟수를 증가하면서 learning rate 를 낮춰가는 것으로 해석할 수 있습니다. 학습의 후반부로 갈수록 $$w$$ 는 안정화 될 것이기 때문에 상대적으로 $$w_k$$ 가 바뀌는 경우가 줄어들기 때문입니다.
 
 ## Pegasos: Primal Estimation sub-GrAdient SOlver for SVM
 
@@ -295,7 +295,9 @@ $$score(x, y) = \sum_i A(y_{i-1}, y_i) + f_{\theta} (x_i, y_i)$$
 
 그리고 반드시 RNN 계열 모델을 이용하여 $$f_{\theta}$$ 를 정의해야 하는 것도 아닙니다. Natural language processing from (almost) scratch 논문에서는 이를 위하여 feed forward network 를 그대로 이용하기도 합니다.
 
-이처럼 word embedding vector 를 이용하는 모델들은 그 과정을 확인하기가 어렵습니다. 이는 사용자가 정보를 조작하기 어렵다는 의미입니다. 하지만 무엇보다도 semantic 정보가 모델에 잘 표현됩니다. 그리고 새로운 단어에 대해서도 word embedding vector 를 제대로 정의할 수만 있다면 학습데이터에 등장하지 않은 단어의 품사 추정도 원활히 이뤄집니다. 단 input sequence 의 단어의 벡터가 정의가 되어야 합니다. 즉 neural network 기반 모델이라 하여 미등록단어 문제가 완전히 해결되는 것도 아닙니다. Embedding vector 수준에서는 여전히 미등록단어 문제가 발생합니다. bag of words model 같은 one hot representation 과 word embedding 같은 distributed representation 기반 모델들의 차이이기도 합니다. 이러한 내용들에 대해서는 다른 포스트에서 정리할 예정입니다.
+Word embedding vector 를 이용하는 모델들은 그 과정을 확인하기가 어렵습니다. 이는 사용자가 정보를 조작하기 어렵다는 것을 의미하기도 합니다. 하지만 전통적인 모델들보다 단어의 의미적인 정보를 잘 표현할 수 있습니다.
+
+학습 데이터에 등장하지 않았던 단어에 대해서도 word embedding vector 를 제대로 정의할 수만 있다면 품사 추정도 원활히 이뤄집니다. 단 input sequence 의 단어의 벡터가 정의가 되어야 합니다. 즉 neural network 기반 모델이라 하여 미등록단어 문제가 완전히 해결되는 것도 아닙니다. Embedding vector 수준에서는 여전히 미등록단어 문제가 발생합니다. 이러한 내용들에 대해서는 다른 포스트에서 정리할 예정입니다.
 
 
 ## References
