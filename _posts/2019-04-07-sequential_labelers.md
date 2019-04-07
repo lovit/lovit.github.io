@@ -277,27 +277,25 @@ Structured SVM 역시 sparse vector 에서 효율적으로 작동하는 학습 �
 
 ## Recurrent Neural Network
 
-### GRU and LSTM
+위의 방법들은 단어열 $$x$$ 를 potential function $$F$$ 를 이용하여 sparse vector $$h$$ 로 변환한 뒤 sequential labeling 을 수행하는 방법들입니다. 이들은 단어의 문맥 정보를 표현하기 위하여 bigram, trigram 들을 feature 로 이용합니다. 하지만 앞서 언급한 것처럼 단어나 n-grams 간의 의미적 유사성을 표현할 방법이 적습니다.
 
-문맥 정보를 hidden vectors 의 정보로
+Word2Vec 과 같은 word embedding 은 이러한 정보를 distributed representation 으로 표현하는 장점이 있습니다. 그렇기 때문에 word sequence $$x$$ 를  word embedding vector sequence 로 바꿀 수도 있습니다. 하지만 potential function 은 continuous vector space 에서 정의하기가 어렵기 때문에 위의 방법들을 이용하기 어렵습니다.
 
-### LSTM-CRF
+대신 neural network 계열을 이용할 수 있습니다. 특히 sequence modeling 에 뛰어난 GRU ^[10] 나 LSTM ^[11] 같은 Recurrent Neural Network (RNN) 계열 모델들을 이용할 수 있습니다. 이때는 문맥 정보가 hidden vector 에 저장되기를 바라는 것입니다. LSTM, GRU 와 같은 RNN 계열 모델들은 어느 정도 떨어진 단어의 정보를 hidden vector 에 저장할 수 있다고 알려져 있습니다. Bidirectional 모델을 이용하면 뒤에 등장한 단어의 정보도 함께 이용할 수 있습니다.
 
-Label sequence 에 bigram 을. 이는 transition based labeler 형식
+이때에도 $$(x, y)$$ 에 대한 score 를 정의할 수 있습니다.
 
-### BERT
+$$score(x, y) = \sum_i f_{\theta} (x_i, y_i)$$
 
-문맥을 반영한 semantic word vector sequences 를
+GRU 나 LSTM 은 hidden vector $$h_i$$ 에서 output value 를 선택하기 위하여 softmax 를 이용합니다. 이때의 확률값을 $$f_{\theta}(x_i, y_i)$$ 로 이용할 수도 있습니다. 그렇다면 maximum likelihood 가 score function 이 됩니다.
 
-## Neural transition based sequence labeling
+그러나 위의 식에서는 $$y_{i-1}$$ 과 $$y_i$$ 의 상관성이 직접적으로 학습되지 않는데, 여기에 transition 개념을 더하면 아래와 같은 식이 됩니다. 이 식이 LSTM-CRF 입니다 ^[12].
 
-## Sequence labeling and segmentation
+$$score(x, y) = \sum_i A(y_{i-1}, y_i) + f_{\theta} (x_i, y_i)$$
 
+그리고 반드시 RNN 계열 모델을 이용하여 $$f_{\theta}$$ 를 정의해야 하는 것도 아닙니다. Natural language processing from (almost) scratch 논문에서는 이를 위하여 feed forward network 를 그대로 이용하기도 합니다.
 
-
-
-
-
+이처럼 word embedding vector 를 이용하는 모델들은 그 과정을 확인하기가 어렵습니다. 이는 사용자가 정보를 조작하기 어렵다는 의미입니다. 하지만 무엇보다도 semantic 정보가 모델에 잘 표현됩니다. 그리고 새로운 단어에 대해서도 word embedding vector 를 제대로 정의할 수만 있다면 학습데이터에 등장하지 않은 단어의 품사 추정도 원활히 이뤄집니다. 단 input sequence 의 단어의 벡터가 정의가 되어야 합니다. 즉 neural network 기반 모델이라 하여 미등록단어 문제가 완전히 해결되는 것도 아닙니다. Embedding vector 수준에서는 여전히 미등록단어 문제가 발생합니다. bag of words model 같은 one hot representation 과 word embedding 같은 distributed representation 기반 모델들의 차이이기도 합니다. 이러한 내용들에 대해서는 다른 포스트에서 정리할 예정입니다.
 
 
 ## References
@@ -310,6 +308,10 @@ Label sequence 에 bigram 을. 이는 transition based labeler 형식
 - [7] Taskar, B., Klein, D., Collins, M., Koller, D., & Manning, C. (2004). Max-margin parsing. In Proceedings of the 2004 Conference on Empirical Methods in Natural Language Processing.
 - [8] Tsochantaridis, I., Joachims, T., Hofmann, T., and Altun, Y. (2005). Large margin methods for structured and interdependent output variables. Journal of machine learning research
 - [9] Collins, M. (2002, July). Discriminative training methods for hidden markov models: Theory and experiments with perceptron algorithms. In Proceedings of the ACL-02 EMNLP 2002
+- [10] Cho, K., Van Merri ̈enboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., and Bengio, Y.(2014). Learning phrase representations using rnn encoder-decoder for statistical machine translation.arXiv preprint arXiv:1406.1078.
+- [11] Hochreiter, S. and Schmidhuber, J. (1997). Long short-term memory. Neural computation, 9(8):1735–1780.
+- [12] Lample, G., Ballesteros, M., Subramanian, S., Kawakami, K., and Dyer, C. (2016). Neural architectures for named entity recognition. arXiv preprint arXiv:1603.01360
+- [13] Collobert, R., Weston, J., Bottou, L., Karlen, M., Kavukcuoglu, K., & Kuksa, P. (2011). Natural language processing (almost) from scratch. Journal of machine learning research, 12(Aug), 2493-2537.
 
 [hmmpost]: {{ site.baseurl }}{% link _posts/2018-09-11-hmm_based_tagger.md %}
 [memm_crf]: {{ site.baseurl }}{% link _posts/2018-04-24-crf.md %}
