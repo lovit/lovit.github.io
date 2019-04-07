@@ -1,6 +1,6 @@
 ---
-title: Reviews of sequential labeling algorithms (Sparse representation model 을 중심으로)
-date: 2018-12-05 21:00:00
+title: Reviews of sequential labeling algorithms (Sparse representation model)
+date: 2019-04-07 11:00:00
 categories:
 - nlp
 - machine learning
@@ -8,11 +8,11 @@ tags:
 - sequential labeling
 ---
 
-머신 러닝의 분류기 (classifiers) 는 input vector $$x$$ 에 대하여 클래스를 분류합니다. 만약 입력값이 벡터가 아닌 $$x = [x_1, x_2 ,\ldots, x_n]$$ 시퀀스일 경우, 각 시퀀스에 적절한 클래스 시퀀스 $$y = [y_1, y_2, \ldots, y_n]$$ 들을 분류하는 문제를 sequential labeling 이라 합니다. 이를 위해 처음에는 Hidden Markov Model (HMM) 도 이용되었습니다만, 구조적인 단점이 존재하였습니다. 이후 Conditional Random Field (CRF) 와 같은 maximum entropy classifiers 들이 제안되었고, Word2Vec 이후 단어 임베딩 기술이 성숙하면서 Recurrent Neural Network (RNN) 계열도 이용되고 있습니다. 최근에는 Transformer 를 이용하는 BERT 까지도 sequential labeling 에 이용됩니다. 이번 포스트에서는 이 분야에서 중요한 알고리즘들을 살펴봅니다.
+Classifiers 는 input vector $$x$$ 가 주어지면 이에 해당하는 클래스를 분류합니다. 그런데 입력값이 벡터가 아니라 $$x = [x_1, x_2 ,\ldots, x_n]$$ 같은 시퀀스일 수 있습니다. 이때 가장 적절한 클래스를 시퀀스 $$y = [y_1, y_2, \ldots, y_n]$$ 들을 분류하는 문제를 sequential labeling 이라 합니다. 이를 위해 Hidden Markov Model (HMM) 도 이용되었습니다만, HMM 은 많은 문제점을 지니고 있습니다. 이후 Conditional Random Field (CRF) 와 같은 maximum entropy classifiers 들이 제안되었고, Word2Vec 이후 단어 임베딩 기술이 성숙하면서 Recurrent Neural Network (RNN) 계열도 이용되고 있습니다. 최근에는 Transformer 를 이용하는 BERT 까지도 sequential labeling 에 이용됩니다. 이번 포스트에서는 이 문제를 위하여 sparse representation 을 이용하는 알고리즘들에 대해서 살펴봅니다.
 
 ## Sequential labeling
 
-일반적인 머신 러닝의 분류기는, 하나의 입력 벡터 $$x$$ 에 대하여 하나의 label 값 $$y$$ 를 return 합니다. 그런데 입력되는 $$x$$ 가 벡터가 아닌 sequence 일 경우가 있습니다. $$x$$ 를 길이가 $$n$$ 인 sequence, $$x = [x_1, x_2, \ldots, x_n]$$ 라 할 때, 같은 길이의 $$y = [y_1, y_2, \ldots, y_n]$$ 을 출력해야 하는 경우가 있습니다. 각 $$y_i$$ 에 대하여 출력 가능한 label 중에서 적절한 것을 선택하는 것이기 때문에 classification 에 해당하며, 데이터의 형식이 벡터가 아닌 sequence 이기 때문에 sequential data 에 대한 classification 이라는 의미로 sequential labeling 이라 부릅니다.
+일반적인 머신 러닝의 분류기는, 하나의 입력 벡터 $$x$$ 에 대하여 하나의 label 값 $$y$$ 를 return 합니다. 그런데 입력되는 $$x$$ 가 벡터가 아닌 sequence 일 경우가 있습니다. $$x$$ 를 길이가 $$n$$ 인 sequence, $$x = [x_1, x_2, \ldots, x_n]$$ 라 할 때, 같은 길이의 $$y = [y_1, y_2, \ldots, y_n]$$ 을 출력해야 합니다. 각 $$y_i$$ 에 대하여 출력 가능한 label 중에서 적절한 것을 선택하는 것이기 때문에 classification 에 해당하며, 데이터의 형식이 벡터가 아닌 sequence 이기 때문에 sequential data 에 대한 classification 이라는 의미로 sequential labeling 이라 부릅니다.
 
 띄어쓰기 문제나 품사 판별이 대표적인 sequential labeling 입니다. 품사 판별은 주어진 단어열 $$x$$ 에 대하여 품사열 $$y$$ 를 출력합니다. 
 
@@ -24,7 +24,7 @@ tags:
 - $$x$$ = 이것은예문이다
 - $$y$$ = $$[0, 0, 1, 0, 1, 0, 1]$$
 
-이 과정을 확률모형으로 표현하면 주어진 $$x$$ 에 대하여 $$P(y \vert x)$$ 가 가장 큰 $$y$$ 를 찾는 문제입니다. 이를 아래처럼 기술하기도 합니다. $$x_{1:n}$$ 은 길이가 $$n$$ 인 sequence 라는 의미입니다. 많은 sequential labeling 알고리즘들은 아래의 식을 어떻게 정의할 것이냐에 따라 다양한 방법으로 발전하였습니다.
+이 과정을 확률모형으로 표현하면 주어진 $$x$$ 에 대하여 $$P(y \vert x)$$ 가 가장 큰 $$y$$ 를 찾는 것 입니다. 이를 아래처럼 기술하기도 합니다. $$x_{1:n}$$ 은 길이가 $$n$$ 인 sequence 라는 의미이며, sequential labeling 알고리즘들은 아래의 식을 어떻게 정의할 것이냐에 따라 다양한 방법으로 발전하였습니다.
 
 $$argmax_y P(y_{1:n} \vert x_{1:n})$$
 
@@ -41,7 +41,7 @@ Sequence segmentation 은 sequential labeling 문제로 생각할 수도 있습�
 
 - $$y$$ = [B, I, B, B, I, B, I]
 
-혹은 품사태그까지 한 번에 부여가 가능합니다. 아래처럼 각 단어의 시작 위치 태그 (B, I) 뿐 아니라 각 단어의 품사를 함께 부여할 수도 있습니다. [카카오 형태소 분석기](https://github.com/kakao/khaiii) 역시 음절 단위의 품사 태깅을 수행한다고 설명한 적이 있습니다 ([블로그 참고](https://brunch.co.kr/@kakao-it/308))
+혹은 품사태그까지 한 번에 부여가 가능합니다. 아래처럼 각 단어의 시작 위치 태그 (B, I) 뿐 아니라 각 단어의 품사를 함께 부여할 수도 있습니다. [카카오 형태소 분석기](https://github.com/kakao/khaiii) 역시 음절 단위의 품사 태깅을 수행한다고 카카오의 블로그에서는 설명하고 있습니다 ([블로그 참고](https://brunch.co.kr/@kakao-it/308))
 
 - $$y$$ = [B-Noun, I-Noun, B-Josa, B-Noun, I-Noun, B-Adjective, I-Adjective]
 
@@ -66,17 +66,17 @@ $$P(t_{1:n} \vert w_{1:n}) = \prod_i P(w_i \vert t_i) \times P(t_i \vert t_{i-1}
 
 TnT 는 영어 단어의 품사를 추정하기 위한 모델입니다. 이 모델은 모르는 단어 (미등록단어 문제) 의 품사를 추정하기 위하여 단어의 끝 부분의 2, 3 글자 (suffix) 정보를 이용했습니다. 단어의 끝 부분이 -ed 라면 동사나 형용사의 과거형일 가능성이 높을 것입니다. 이러한 정보를 규칙 기반으로 이용하였는데, 이는 각 단어의 경계가 띄어쓰기로 나뉘어지는 영어의 특징을 이용한 것입니다.
 
-그러나 HMM 은 **품사 판별기로써의 약점**이 여러 가지가 있습니다. 이 문제들에 대하여 간단히 정리해봅니다. 그리고 이 문제들은 HMM 뿐 아니라 많은 sequential labeling 알고리즘들의 문제이기도 하며, 이후의 모델들은 이를 해결하기 위한 방법들이기도 합니다.
+그러나 HMM 은 **품사 판별기로써의 약점**이 여러 가지가 있습니다. 이 문제들에 대하여 간단히 정리해봅니다. 그리고 이 문제들은 HMM 뿐 아니라 많은 sequential labeling 알고리즘들의 문제이기도 하며, 이후의 모델들은 이를 해결하면서 발전하였습니다.
 
 ### Out of vocabulary
 
 첫번째 문제는 한 번도 보지 못한 단어는 제대로 인식할 방법이 없다는 것입니다. [이전의 포스트][hmmpost]에서 다룬 것처럼 HMM 은 학습 데이터에 등장한 (단어, 품사) 정보를 확률 모델로 암기합니다. 그렇기 때문에 학습 데이터에 등장한 단어를 제대로 인식할 방법이 없습니다. 즉 모르는 단어 $$x_i$$ 에 대해서는 $$P(x_i \vert y_i) = 0$$ 입니다. 이는 단어를 있는 그대로 외웠기 때문입니다. 다른 모델들은 그 단어가 등장하는 문맥 정보를 학습하기 때문에 모르는 단어라도 비슷한 문맥이 입력되면 해당 단어의 품사를 어느 정도는 추정할 수 있습니다.
 
-그러나 이는 사용자 사전에 단어를 추가함으로써 간단하게 해결할 수 있습니다. 사용자에 의하여 단어와 품사 쌍 $$(w, t)$$ 를 특정 확률로 추가하고, $$\sum_w P(w \vert t) = 1$$ 이 되도록 re-scaling 하면 됩니다.
+그러나 이 문제는 사용자 사전에 단어를 추가함으로써 간단하게 해결할 수 있습니다. 사용자에 의하여 단어와 품사 쌍 $$(w, t)$$ 를 특정 확률로 추가하고, $$\sum_w P(w \vert t) = 1$$ 이 되도록 re-scaling 하면 됩니다.
 
 ### Unguaranteed Independency Problem
 
-두번째 문제는 매우 치명적입니다. 우리는 `오늘, 의, A, 는, ... `이라는 문장에서 `A` 라는 단어의 품사를 추정하기 위하여 앞, 뒤의 단어들의 정보를 이용합니다. 문맥 정보는 주로 앞, 뒤에 등장하는 단어들입니다. 하지만 HMM 은 $$P(y_i \vert y_{i-1})$$ 에 대한 정보는 학습하여도 $$(x_{i-1}, x_i)$$ 의 정보는 학습하지 않습니다. 앞선 예시처럼 `이` 라는 단어는 명사, 조사, 형용사 등 다양한 품사를 가질 수 있기 때문에 $$x_i = 이$$ 의 품사 추정을 위해서는 앞, 뒤 단어를 살펴봐야 합니다. 하지만 HMM 은 그 앞에 등장한 단어의 품사 $$y_{i-1}$$ 정보만 이용할 뿐입니다. 
+두번째 문제는 매우 치명적입니다. 우리는 `"오늘, 의, A, 는, ... "`이라는 문장에서 `A` 라는 단어의 품사를 추정하기 위하여 앞, 뒤의 단어들의 정보를 이용합니다. 문맥 정보는 주로 앞, 뒤에 등장하는 단어들입니다. 하지만 HMM 은 $$P(y_i \vert y_{i-1})$$ 에 대한 정보는 학습하여도 $$(x_{i-1}, x_i)$$ 의 정보는 학습하지 않습니다. 앞선 예시처럼 `이` 라는 단어는 명사, 조사, 형용사 등 다양한 품사를 가질 수 있기 때문에 $$x_i = $$`이` 의 품사 추정을 위해서는 앞, 뒤 단어를 살펴봐야 합니다. 하지만 HMM 은 그 앞에 등장한 단어의 품사 $$y_{i-1}$$ 정보만 이용할 뿐입니다. 
 
 이러한 문제를 unguaranteed indeiendency problem 이라 합니다. 각 단어 $$x_i$$ 가 서로 독립이라는 잘못된 가정을 한다는 의미입니다. 주로 sequential modeling 에서는 한 시점 주변의 스냅샷 정보를 이용하는 경우가 많은데, HMM 은 이러한 능력이 없습니다.
 
@@ -122,7 +122,7 @@ TnT 는 영어 단어의 품사를 추정하기 위한 모델입니다. 이 모�
 
 ## Maximum Entropy Markov Model (MEMM)
 
-2000 년에 ICML 에 Maximum Entropy Markov Model 이 제안됩니다 (McCallum et al., 2000) ^[4]. 이는 maximum entropy classifiers 에 속하는 모델로, 편하게 설명하는 softmax regression 형식의 classifier 를 의미합니다. 물론 MEMM 이 이런 종류의 첫번째 모델은 아니지만, MEMM 은 이러한 모델 시리즈의 중요한 랜드마크 역할을 하는 알고리즘입니다.
+2000 년에 ICML 에 Maximum Entropy Markov Model 이 제안됩니다 (McCallum et al., 2000) ^[4]. 이는 maximum entropy classifiers 에 속하는 모델로, softmax regression 형식의 classifier 를 의미합니다. 물론 MEMM 이 이런 종류의 첫번째 모델은 아니지만, MEMM 은 이러한 모델 시리즈의 중요한 랜드마크 역할을 하는 알고리즘입니다.
 
 MEMM 과 CRF 에 대해서도 [이전의 포스트][memm_crf]에서 다뤘습니다. 그중, 중요한 내용들을 다시 알아봅니다.
 
@@ -183,7 +183,7 @@ $$P(y \vert x) = \prod_{i=1}^{n} \frac{exp(\sum_{j=1}^{m} \lambda_j f_j (x, i, y
 
 마지막 수식은 복잡하긴 하지만, 결국 potential function 을 이용하여 $$x$$ 를 sparse vector $$h$$ 로 만든 뒤, softmax regression 을 수행한다는 의미입니다. 그렇기 때문에 **ME**MM 이라는 이름을 가졌습니다.
 
-MEMM 은 discriminative model 인 softmax regression 형식입니다. Generative model 이 아니기 때문에 $$\lambda_j$$ 는 $$f_j$$ 빈도수의 영향을 덜받습니다. $$f_j$$ 가 학습데이터에 몇 번 등장하지 않은 변수라 하더라도 그 정보가 명확하다면 매우 큰 값의 $$\lambda_j$$ 가 학습될 것입니다. 하지만 이는 그렇게 잘 학습될 수 있다는 가정일 뿐, 현실은 softmax regression 을 근사학습하는 최적화 방법들에 의하여 약간의 frequency bias 가 있습니다.
+MEMM 은 discriminative model 인 softmax regression 형식입니다. Generative model 이 아니기 때문에 $$\lambda_j$$ 는 $$f_j$$ 빈도수의 영향을 덜받습니다. $$f_j$$ 가 학습데이터에 몇 번 등장하지 않은 변수라 하더라도 그 정보가 명확하다면 매우 큰 값의 $$\lambda_j$$ 가 학습될 것입니다. 하지만 이는 이론일 뿐, 현실은 softmax regression 을 근사학습하는 최적화 방법들에 의하여 약간의 frequency bias 가 있습니다.
 
 ### MEMM as Markov Model
 
@@ -221,27 +221,27 @@ CRF 는 학습데이터의 $$(x, y)$$ 를 이용하여 $$P(y \vert x)$$ 가 최�
 
 ## Transition based sequence labeling
 
-그런데 학습 목적식을 다르게 정의할 수도 있습니다. $$y^{'}$$ 은 현재의 모델로 만들 수 있는 best output sequence 입니다. 이제부터는 $$\lambda$$ 를 $$w$$ 로 기술하겠습니다. 주로 maximum entropy model 에서 coefficient 를 $$\lambda$$ 로 쓰며, transition based model 논문에서는 weight 라는 의미로 $$w$$ 로 자주 기술합니다.
+그런데 학습 목적식을 다르게 정의할 수도 있습니다. $$y^{'}$$ 은 현재의 모델로 만들 수 있는 best output sequence 입니다. 이제부터는 $$\lambda$$ 를 $$w$$ 로 기술하겠습니다. 주로 maximum entropy model 에서 coefficient 를 $$\lambda$$ 로 쓰며, transition based model 논문에서는 weight 라는 의미로 $$w$$ 를 이용합니다.
 
-$$\maximize w \cdot (F(x,y) - F(x,y^{'}))$$
+Transition based models 는 아래의 식을 최대화 하는 방향으로 $$w$$ 를 학습합니다.
+
+$$w \cdot (F(x,y) - F(x,y^{'}))$$
 
 $$F$$ 가 $$(y_{i-1}, y_i)$$ 의 정보를 이용한다면 아래처럼 기술할 수도 있습니다. 이러한 방식으로 기술된 모델을 주로 traisiton based model 이라 합니다. 
 
-$$\maximize w \cdot (\sum_i F(x,y_{i-1}, y_i) - F(x,y_{i-1}^{'}, y_{i}^{'}))$$
+$$w \cdot (\sum_i F(x,y_{i-1}, y_i) - F(x,y_{i-1}^{'}, y_{i}^{'}))$$
 
 Output sequence 의 bigram 이기 때문에 beam search 를 이용하기 매우 좋은 구조입니다. 학습이 완료된 뒤, 새로운 $$x$$ 가 주어지면 다음의 점수가 가장 높은 $$\hat{y}$$ 를 beam search 를 이용하여 탐색합니다.
 
 $$\hat{y} = argmax_{y \in G(x)} w \cdot \sum_{i}^{n} F(x, y_{i-1}, y_i)$$
 
-만약 $$y = y^{'}$$ 이라면 현재 모델이 $$x$$ 에 대하여 정답값인 $$y$$ 를 출력하기 때문에, 패러매터의 변화는 없습니다. $$y$$ 가 $$y^{'}$$ 이 아니라면, 이는 $$<\lambda, F(x, y^{'}> \ge <\lambda, F(x, y)>$$ 라는 의미이니, $$F(x,y)$$ 의 features 에 해당하는 $$\lambda$$ 를 크게, $$F(x,y^{'})$$ 에 해당하는 $$\lambda$$ 를 작게 조절합니다.
+만약 $$y = y^{'}$$ 이라면 현재 모델이 $$x$$ 에 대하여 정답값인 $$y$$ 를 출력하기 때문에, 패러매터의 변화는 없습니다. $$y$$ 가 $$y^{'}$$ 이 아니라면, 이는 $$<\lambda, F(x, y^{'}>$$ 가 $$<\lambda, F(x, y)>$$ 보다 크다는 의미이니, $$F(x,y)$$ 의 features 에 해당하는 $$\lambda$$ 를 크게, $$F(x,y^{'})$$ 에 해당하는 $$\lambda$$ 를 작게 조절합니다.
 
 ## Structured Support Vector Machine (StructuredSVM)
 
 위 transition based model 의 식은 $$\hat{y}$$ 가 $$y$$ 가 되도록 만드는데만 노력합니다. 여기에 한 가지 조건을 더 더하여 $$\hat{y}$$ 와 $$y$$ 가 다를 경우, 그 점수의 차이가 어느 정도 이상이 되도록 유도할 수도 있습니다.
 
-$$\rVert w \rVert^2 = 1$$ 로 만든 뒤, 다음의 식을 학습합니다. $$\Delta(x,y,\hat{y})$$ 는 $$y$$ 와 $$\hat{y}$$ 가 얼마나 틀렸는지를 나타내는 loss function 입니다. 만약 best output sequence 가 true output sequence 라면 0 을, 그렇지 않다면 0 보다 큰 값을 return 합니다. $$\rVert w \rVert^2 = 1$$ 로 고정되어있기 때문에 $$\gamma$$ 를 최대화 하라는 의미는 틀린 $$\hat{y}$$ 는 큰 loss 를 가지도록 $$w$$ 를 학습하라는 의미입니다.
-
-$$\maximize \gamma$$
+$$\rVert w \rVert^2 = 1$$ 로 만든 뒤, 다음의 식을 학습합니다. $$\Delta(x,y,\hat{y})$$ 는 $$y$$ 와 $$\hat{y}$$ 가 얼마나 틀렸는지를 나타내는 loss function 입니다. 만약 best output sequence 가 true output sequence 라면 0 을, 그렇지 않다면 0 보다 큰 값을 return 합니다. $$\rVert w \rVert^2 = 1$$ 로 고정되어있기 때문에 $$\gamma$$ 를 최대화 하라는 의미는 틀린 $$\hat{y}$$ 는 큰 loss 를 가지도록 $$w$$ 를 학습하라는 의미입니다. Structured SVM 은 $$\gamma$$ 를 최대화 하도록 $$w$$ 를 학습합니다.
 
 $$w^T(F(x,y) - F(x,\hat{y})) \ge \gamma \Delta(x,y,\hat{y})$$
 
@@ -271,7 +271,7 @@ Structured SVM 역시 sparse vector 에서 효율적으로 작동하는 학습 �
 
 ![]({{ "/assets/figures/sequential_labeling_pegasos.png" | absolute_url }}){: width="80%" height="80%"}
 
-그리고 위의 식은 mini batch version 입니다. SVM 의 학습에 $$n \times n$$ 크기의 kernel matrix 가 계산되어야 하지만, 데이터가 클 경우에는 학습 불가능한 경우가 많습니다. 이를 해결하기 위하여 여러가지 근사 알고리즘들이 제안되었는데 Pegasos 도 그둘 중 한 가지 입니다. Mini-batch style 이기 때문에 메모리에는 $$w$$ 만 보관하면 됩니다.
+그리고 위의 식은 mini batch version 입니다. SVM 의 학습에 $$n \times n$$ 크기의 kernel matrix 가 계산되어야 하지만, 데이터가 클 경우에는 학습 불가능한 경우가 많습니다. 이를 해결하기 위하여 여러가지 근사 알고리즘들이 제안되었는데 Pegasos 도 그들 중 하나 입니다. Mini-batch style 이기 때문에 메모리에는 $$w$$ 만 보관하면 됩니다.
 
 이 방법은 강원대학교의 이창기 교수님의 연구들에서 자주 등장하는 방법입니다. Structured SVM 을 자주 이용하셨는데, 그 때의 학습 방법으로 pegasos 를 사용하셨다고 여러 논문에 기술하셨습니다.
 
