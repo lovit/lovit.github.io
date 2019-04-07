@@ -17,6 +17,7 @@ layout: page
 - [From Softmax Regression to Conditional Random Field for Sequential Labeling][crf]
 - [Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계][ford_for_pos]
 - [Hidden Markov Model 기반 품사 판별기의 decode 함수][hmm_based_tagger_tag]
+- [Reviews of sequential labeling algorithms (Sparse representation model)][sequential_labelers]
 
 ### Clustering
 - [k-means initial points 선택 방법][kmeans_initializer]
@@ -207,3 +208,4 @@ layout: page
 [textmining_dataset]: {{ site.baseurl }}{% link _posts/2019-02-16-textmining_dataset.md %}
 [logistic_w2v_ner]: {{ site.baseurl }}{% link _posts/2019-02-16-logistic_w2v_ner.md %}
 [attention_in_nlp]: {{ site.baseurl }}{% link _posts/2019-03-17-attention_in_nlp.md %}
+[sequential_labelers]: {{ site.baseurl }}{% link _posts/2019-04-07-sequential_labelers.md %}
