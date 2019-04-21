@@ -53,7 +53,7 @@ Negative sampling 은 각 단어의 빈도수를 고려해야 합니다. 자주 
 
 ## Doc2Vec
 
-Word2Vec 이 등장한 이후 몇 달 지나지 않아 의미공간에 document 의 위치좌표를 학습하는 방법이 제안됩니다. Doc2Vec 은 document id 를 하나의 단어처럼 생각합니다. 'a little doc sit on the table' 이란 문장에 해당하는 document id, #doc5 역시 의미공간에서의 위치 좌표를 지닙니다. 그리고 모든 스냅샷에서 다른 단어들의 위치좌표와 함께 평균을 취하여 context vector 를 만듭니다. 그 다음은 Word2Vec 과 같습니다. document id + 4 개의 단어로 이뤄진 context vector 에 가깝도록 $$Y$$, cat 의 위치를 조절합니다. 
+Word2Vec 이 등장한 이후 몇 달 지나지 않아 의미공간에 document 의 위치좌표를 학습하는 방법이 제안됩니다. Doc2Vec 은 document id 를 하나의 단어처럼 생각합니다. 'a little dog sit on the table' 이란 문장에 해당하는 document id, #doc5 역시 의미공간에서의 위치 좌표를 지닙니다. 그리고 모든 스냅샷에서 다른 단어들의 위치좌표와 함께 평균을 취하여 context vector 를 만듭니다. 그 다음은 Word2Vec 과 같습니다. document id + 4 개의 단어로 이뤄진 context vector 에 가깝도록 $$Y$$, cat 의 위치를 조절합니다. 
 
 ![]({{ "/assets/figures/doc2vec_logistic_structure.png" | absolute_url }})
 
