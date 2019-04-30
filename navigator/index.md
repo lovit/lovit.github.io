@@ -32,6 +32,7 @@ layout: page
 ### Graph ranking, similarity, distance
 - [Graph ranking algorithm. PageRank and HITS][pagerank_and_hits]
 - [Implementing PageRank. Python dict vs numpy][pagerank_implementation_dict_vs_numpy]
+- [TextRank 를 이용한 키워드 추출과 핵심 문장 추출 (구현과 실험)][textrank]
 - [Ford algorithm 을 이용한 최단 경로 탐색][ford_for_shortestpath]
 - [Ford algorithm 을 이용한 품사 판별, 그리고 Hidden Markov Model (HMM) 과의 관계][ford_for_pos]
 
@@ -76,6 +77,7 @@ layout: page
 - [Term proportion ratio base Keyword extraction][proportion_keywords]
 - [KR-WordRank, 토크나이저를 이용하지 않는 한국어 키워드 추출기][krwordrank]
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
+- [TextRank 를 이용한 키워드 추출과 핵심 문장 추출 (구현과 실험)][textrank]
 
 ### Named Entity Recognition
 - [Conditional Random Field based Named Entity Recognition][crf_ner]
@@ -209,3 +211,4 @@ layout: page
 [logistic_w2v_ner]: {{ site.baseurl }}{% link _posts/2019-02-16-logistic_w2v_ner.md %}
 [attention_in_nlp]: {{ site.baseurl }}{% link _posts/2019-03-17-attention_in_nlp.md %}
 [sequential_labelers]: {{ site.baseurl }}{% link _posts/2019-04-07-sequential_labelers.md %}
+[textrank]: {{ site.baseurl }}{% link _posts/2019-04-30-textrank.md %}
