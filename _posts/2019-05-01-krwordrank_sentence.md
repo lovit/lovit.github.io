@@ -321,5 +321,5 @@ Reference summaries 로 키워드를 이용할 경우에도 키워드의 개수 
 ### Results
 
 [krwordrank]: {{ site.baseurl }}{% link _posts/2018-04-16-krwordrank.md %}
-[textrank]: {{ site.baseurl }}{% link _posts/2019-04-30-krwordrank.md %}
+[textrank]: {{ site.baseurl }}{% link _posts/2019-04-30-textrank.md %}
 [soynlp]: {{ site.baseurl }}{% link _posts/2018-04-09-three_tokenizers_soynlp.md %}
