@@ -78,6 +78,7 @@ layout: page
 - [KR-WordRank, 토크나이저를 이용하지 않는 한국어 키워드 추출기][krwordrank]
 - [Implementing PMI (Practice handling matrix of numpy & scipy)][implementing_pmi_numpy_practice]
 - [TextRank 를 이용한 키워드 추출과 핵심 문장 추출 (구현과 실험)][textrank]
+- [KR-WordRank 를 이용한 핵심 문장 추출과 ROUGE 를 이용한 요약문 성능 평가][krwordrank_sentence]
 
 ### Named Entity Recognition
 - [Conditional Random Field based Named Entity Recognition][crf_ner]
@@ -212,3 +213,4 @@ layout: page
 [attention_in_nlp]: {{ site.baseurl }}{% link _posts/2019-03-17-attention_in_nlp.md %}
 [sequential_labelers]: {{ site.baseurl }}{% link _posts/2019-04-07-sequential_labelers.md %}
 [textrank]: {{ site.baseurl }}{% link _posts/2019-04-30-textrank.md %}
+[krwordrank_sentence]: {{ site.baseurl }}{% link _posts/2019-05-01-krwordrank_sentence.md %}
