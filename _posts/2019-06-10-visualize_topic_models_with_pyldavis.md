@@ -22,9 +22,9 @@ $$P(t \vert d)$$
 
 $$P(w \vert t)$$
 
-그리고 한 문서에서 특정 단어들이 등장할 가능성 $$P(w, d)$$ 은 위의 두 확률 분포의 곱으로 표현됩니다. 아래의 식은 문서 $$d$$ 에 단어 $$w = w_1, w_2, \dots$$ 가 등장할 확률입니다. $$C$$ 는 Dirichlet distribution 에 의한 상수입니다.
+그리고 한 문서에서 특정 단어들이 등장할 가능성 $$P(w, d)$$ 은 위의 두 확률 분포의 곱으로 표현됩니다. 아래의 식은 문서 $$d$$ 에 단어 $$w = w_1, w_2, \dots$$ 가 등장할 확률입니다. $$C$$ 는 Dirichlet distribution 에 의한 상수이며, $$n^{w_j, d}$$ 는 문서 $$d$$ 에서 단어 $$w_j$$ 가 등장한 횟수입니다.
 
-$$P(w, d) = C \times \sum_{w_j \in w} \prod_i P(w_j \vert t_i) \times P(t_i \vert d)$$
+$$P(w, d) = C \times \sum_{w_j \in w} n^{w_j, d} \prod_i P(w_j \vert t_i) \times P(t_i \vert d)$$
 
 그리고 LDA 의 학습 결과로 각 문서에 대한 토픽 벡터 $$P_{dt}$$ 와 토픽에 대한 단어 벡터 $$P_{tw}$$ 를 얻습니다. LDAvis 는 이 두 가지 정보와 원 데이터를 이용하여 토픽 모델링의 결과를 시각화 합니다.
 
@@ -89,11 +89,11 @@ Nonnegative Matrix Factorization (NMF) 은 Latent Semantic Indexing (LSI) 와 �
 
 NMF 는 아래의 식으로부터 두 가지 성분을 학습합니다. $$D$$ 는 Sparse coding 의 dictionary 역할을 하며, 토픽 모델링에서는 각 토픽의 단어 벡터 입니다. $$Y$$ 는 $$D$$ 를 이용하는 각 문서의 새로운 토픽 벡터 입니다. $$y$$ 는 각 문서 $$x$$ 가 $$D$$ 의 성분을 얼마나 지니고 있는지 표현하는 coefficient vector 입니다.
 
-$$min \vert X - DY \vert_{Fro}^{2}, D \le 0 & Y \le 0$$
+$$min \rVert X - DY \rVert_{Fro}^{2}, D \ge 0 \& Y \ge 0$$
 
 그리고 여기에 과적합을 해결하기 위한 L1, L2 regularization 을 추가할 수 있습니다. Scikit-learn 의 NMF 구현체는 두 가지 regularization 에 대하여 모두 구현되어 있습니다. $$\gamma$$ 는 L1, L2 penalty 를 상대적으로 얼마나 줄지 조절하는 패러매터입니다. $$\gamma$$ 가 1 이면 Sparse coding 입니다. 
 
-$$min \vert X - DY \vert_{Fro}^{2} + \alpha \times \gamma \times (\vert D \vert_1 + \vert Y \vert_1) +  0.5 \cdot \alpha \times (1 - \gamma ) \times (\vert D \vert_2 + \vert Y \vert_2), D \le 0 & Y \le 0$$
+$$min \rVert X - DY \rVert_{Fro}^{2} + \alpha \times \gamma \times (\rVert D \rVert_1 + \rVert Y \rVert_1) +  0.5 \cdot \alpha \times (1 - \gamma ) \times (\rVert D \rVert_2 + \rVert Y \rVert_2), D \ge 0 \& Y \ge 0$$
 
 위의 해를 탐색하기 위해서는 PCA 와 비슷한 해법이 이용됩니다. 하지만 우리가 학습해야 하는 패러매터는 $$D, Y$$ 두 가지 입니다. 이러한 상황에서 이용할 수 있는 해법 중 하나는 하나의 변수를 고정하고 다른 변수를 학습하는 것입니다. 처음에는 $$D, Y$$ 를 임의의 값으로 초기화 한 뒤, $$D$$ 를 고정하여 최적의 $$Y$$ 를 찾습니다. 하나의 변수를 고정하면 Least Square Estimation 을 이용할 수 있습니다. 여기에 nonnegativity 까지 고려할 수 있는 추정 방법을 이용하여 해를 탐색합니다 (Constrained least square estimation methods). 그러나 아직 $$D$$ 는 학습이 되지 않은 값입니다. 이번에는 $$Y$$ 를 고정한 뒤 위와 동일한 과정으로 $$D$$ 를 학습합니다. 이러한 과정을 두 값이 수렴할 때까지 반복합니다.
 
