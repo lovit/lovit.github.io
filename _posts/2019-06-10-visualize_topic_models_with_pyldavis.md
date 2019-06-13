@@ -1,5 +1,5 @@
 ---
-title: PyLDAvis 를 이용한 NMF, k-means 결과 시각화
+title: NMF, k-means 를 이용한 토픽 모델링과  NMF, k-means + PyLDAvis 시각화
 date: 2019-06-10 21:00:00
 categories:
 - nlp

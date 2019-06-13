@@ -97,7 +97,7 @@ layout: page
 ### Topic modeling
 - [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
 - [pyLDAvis 를 이용한 k-means 학습 결과 시각화하기][pyldavis_kmeans]
-- [PyLDAvis 를 이용한 NMF, k-means 결과 시각화][visualize_topic_models_with_pyldavis]
+- [NMF, k-means 를 이용한 토픽 모델링과  NMF, k-means + PyLDAvis 시각화][visualize_topic_models_with_pyldavis]
 
 ### String distance
 - [Levenshtein (edit) distance 를 이용한 한국어 단어의 형태적 유사성][levenshtein_hangle]
