@@ -346,7 +346,7 @@ X, Y, W = create_dataset(vocab_to_idx, texts, seed_words)
 print(Y.sum(), Y.size()) tensor(361787) torch.Size([5216400])
 ```
 
-`seed_words` 가 포함된 문맥은 총 12,864 개 이며, 이들이 포함된 문장에서 생성된 문맥은 517,373 개 입니다. 앞서 scikit-learn 은 class weight 가 자동으로 보정되지만, PyTorch 에서는 이를 따로 정의해야 합니다. 학습데이터의 positive, negative 샘플 개수의 역수로 class weight 를 정의합니다.
+`seed_words` 가 포함된 문맥은 총 12,864 개 이며, 이들이 포함된 문장에서 생성된 문맥은 517,373 개 입니다. 앞서 scikit-learn 의 Logistic Regression 에는 class 별로 loss 에 weight 를 더할 수 있지만, feed forward neural network 에는 이 기능을 제공하지 않습니다. 대신 PyTorch 에서 class weight 를 사용자가 설정할 수 있습니다. 학습데이터의 positive, negative 샘플 개수의 역수로 class weight 를 정의합니다.
 
 ```python
 n_pos = int(Y.sum())
