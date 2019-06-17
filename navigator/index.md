@@ -93,6 +93,7 @@ layout: page
 - [GloVe, word representation][glove]
 - [FastText, Word representation using subword][fasttext_subword]
 - [(Gensim) Word2Vec 의 최소 빈도수 설정][min_count_of_word2vec]
+- [Document vectors 와 word vectors 를 함께 시각화 하기 (Doc2vec 공간의 이해)][joint_visualization_of_worddoc]
 
 ### Topic modeling
 - [pyLDAvis 를 이용한 Latent Dirichlet Allocation (LDA) 시각화하기][pyldavis_lda]
@@ -216,3 +217,4 @@ layout: page
 [textrank]: {{ site.baseurl }}{% link _posts/2019-04-30-textrank.md %}
 [krwordrank_sentence]: {{ site.baseurl }}{% link _posts/2019-05-01-krwordrank_sentence.md %}
 [visualize_topic_models_with_pyldavis]: {{ site.baseurl }}{% link _posts/2019-06-10-visualize_topic_models_with_pyldavis.md %}
+[joint_visualization_of_worddoc]: {{ site.baseurl }}{% link _posts/2019-06-18-joint_visualization_of_worddoc.md %}
