@@ -15,7 +15,7 @@ Doc2Vec 은 단어와 문서를 같은 임베딩 공간의 벡터로 표현하�
 
 Doc2Vec 은 Word2Vec 이 확장된 임베딩 방법입니다. Document id 를 모든 문맥에 등장하는 단어로 취급합니다. 예를 들어 'a little dog sit on the table' 이란 문장에 해당하는 document id, #doc5 는 `dog` 의 문맥에도 [a, little, sit, on, #doc5] 로, `sit` 의 문맥에도 [little, dog, on, the, #doc5] 로 등장합니다. 결국 document id 에 해당하는 벡터는 해당 문서에 등장하는 모든 단어들과 가까워지는 방향으로 이동하여 아래의 그림과 같은 벡터를 지닙니다. 그렇기 때문에 두 문서에 등장한 단어가 다르더라도 단어의 벡터들이 비슷하다면 두 문서의 벡터는 서로 비슷해집니다. 
 
-![]({{ "/assets/figures/doc2vec_concept.png" | absolute_url }})
+![]({{ "/assets/figures/doc2vec_concept.png" | absolute_url }}){: width="80%" height="80%"}
 
 Document id 는 반드시 각 문서마다 서로 다르게 정의할 필요는 없습니다. 리뷰들을 기반으로 영화 벡터를 학습하고 싶다면 각 리뷰마다 해당하는 영화의 아이디를 document id 로 정의할 수도 있습니다. 이때는 한 영화에 대한 모든 리뷰들이 합쳐져 하나의 가상의 문서가 만들어지는 것과 같은 효과가 생깁니다. 이에 대한 더 자세한 이야기와 Word2Vec, Doc2Vec 설명은 [이전 포스트][doc2vec]를 참고하세요.
 
@@ -49,25 +49,25 @@ sim(#5) : #5, #4, #6, #3, #2, #7, #1, #8, #9, #10
 
 또한 t-SNE 는 넓은 영역의 공간을 휘어서 표현합니다. 이는 t-SNE 가 오로직 가까운 점들 간의 관계만 고려하기 때문에 발생하는 문제입니다. 데이터의 전체적인 구조는 Principal Component Analysis (PCA) 가 더 잘 표현합니다. 아래 그림들은 뉴스 데이터를 이용하여 단어와 뉴스에 대한 벡터를 학습한 그림입니다. 첫번째 그림은 PCA 를 이용하여 단어와 뉴스 벡터를 함께 2 차원으로 표현한 경우입니다. 파란색이 뉴스 벡터입니다. 뉴스가 원점 주변에 몰려있고 단어가 많은 공간에 퍼져있다는 것은 Doc2Vec 의 많은 공간에 단어가 흩뿌려져 있고, 문서는 좁은 공간에 몰려있음을 의미합니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_news_word_pca.png)
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_news_word_pca.png){: width="80%" height="80%"}
 
 하지만 t-SNE 를 이용하여 아래 그림을 그리면 좁은 영역에 몰려 있어야 하는 뉴스 문서 벡터들이 널리 퍼져 단어 벡터들을 감싸는 모양을 하고 있습니다. 학습 시 문서는 약 3 만개, 단어는 약 2 만 3 천개였습니다. 원 공간에서는 서로 다른 밀도로 존재하지만 2 차원에서는 서로 비슷한 밀도로 그려지면서 아래와 같은 왜곡이 발생합니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_news_word_tsne.png)
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_news_word_tsne.png){: width="80%" height="80%"}
 
 ## 우리가 원하는 시각적인 공간이 무엇인지부터 정의해야 한다.
 
 영화 평점을 document id 로 학습한 뒤, 단어와 함께 t-SNE 나 PCA 를 이용하여 2 차원의 벡터로 표현하면 아래와 같습니다. 일단 t-SNE 에서는 고작 10 개의 점인 영화 평점 벡터들을 한쪽 구석의 점들로 표현합니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_tsne.png)
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_tsne.png){: width="80%" height="80%"}
 
 PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 살짝 곡선 형태가 보이기도 합니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_pca.png)
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_pca.png){: width="80%" height="80%"}
 
 영화 평점 벡터 10 개 만을 따로 PCA 를 이용하여 그려봅니다. 10 개의 점이 위치하는 공간은 100 차원이 아닙니다. 비록 벡터는 100 차원의 공간이지만, 그들의 특성을 표현하는 manifold 의 차원의 크기는 훨씬 적습니다. 그렇기 때문에 PCA 는 10 개 평점 간의 관계를 잘 표현할 수 있습니다. 1 점부터 10 점까지 곡선 형태를 그리며 펼쳐져 있습니다. 영화 평점과 단어를 함께 2 차원의 그림으로 그리려 할 때 아마도 많은 사람들이 기대하는 것은 이와 같은 그림 위에 각 점수와 상관이 높은 단어들이 그 점수 근처에 위치하는 그림일 것입니다. 그리고 이 관점은 단어 간의 관계를 문맥적 유사성이 아닌 단어 - 점수 간 유사성으로 보는 것입니다. 즉 우리가 그림을 그리려 했던 공간은 context space 가 아닌 topic (rate) space 입니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_pca.png)
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_pca.png){: width="80%" height="80%"}
 
 이런 그림을 그릴 때에는 뼈대를 먼저 잘 세우는 것이 좋습니다. 영화 평점만을 2 차원으로 표현한 뒤, 단어 벡터들을 이 2 차원 공간에 투영시킵니다. 가장 간단한 방법으로 각 단어가 특정 점수에 등장했던 비율, 혹은 lift 와 같은 값을 이용하여 단어와 점수 간의 상관성을 수치로 표현합니다. 이를 가중치로 이용하여 각 단어의 2 차원 벡터를 점수 벡터의 가중 평균으로 취합니다. 그 결과는 아래와 같습니다. 위의 그림에서 점수 벡터들이 일종의 convex 형식의 공간을 만들었고, 단어 벡터는 이 점수 벡터 간의 가중 평균이기 때문에 점수 안에 단어가 들어있는 모양의 그림이 그려졌습니다. 그리고 `드럽/VA`, `역겹/VA` 과 같은 단어는 2, 3 점에 `짱/MAG`, `재밌어요/NA` 와 같은 단어는 9, 10 점 근처에 위치함을 볼 수 있습니다.
 
@@ -85,7 +85,7 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
       $(wvdv).ready(function(){
-         $("#ldavis_example").load("https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/demo/joint_visualization_word_doc_movie_pca_affinity.html")
+         $("#ldavis_example").load("https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html")
       });
 </script>
 
