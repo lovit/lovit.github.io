@@ -59,15 +59,15 @@ sim(#5) : #5, #4, #6, #3, #2, #7, #1, #8, #9, #10
 
 영화 평점을 document id 로 학습한 뒤, 단어와 함께 t-SNE 나 PCA 를 이용하여 2 차원의 벡터로 표현하면 아래와 같습니다. 일단 t-SNE 에서는 고작 10 개의 점인 영화 평점 벡터들을 한쪽 구석의 점들로 표현합니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_tsne.png){: width="80%" height="80%"}
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_tsne.png){: width="60%" height="60%"}
 
 PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 살짝 곡선 형태가 보이기도 합니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_pca.png){: width="80%" height="80%"}
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_pca.png){: width="60%" height="60%"}
 
 영화 평점 벡터 10 개 만을 따로 PCA 를 이용하여 그려봅니다. 10 개의 점이 위치하는 공간은 100 차원이 아닙니다. 비록 벡터는 100 차원의 공간이지만, 그들의 특성을 표현하는 manifold 의 차원의 크기는 훨씬 적습니다. 그렇기 때문에 PCA 는 10 개 평점 간의 관계를 잘 표현할 수 있습니다. 1 점부터 10 점까지 곡선 형태를 그리며 펼쳐져 있습니다. 영화 평점과 단어를 함께 2 차원의 그림으로 그리려 할 때 아마도 많은 사람들이 기대하는 것은 이와 같은 그림 위에 각 점수와 상관이 높은 단어들이 그 점수 근처에 위치하는 그림일 것입니다. 그리고 이 관점은 단어 간의 관계를 문맥적 유사성이 아닌 단어 - 점수 간 유사성으로 보는 것입니다. 즉 우리가 그림을 그리려 했던 공간은 context space 가 아닌 topic (rate) space 입니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_pca.png){: width="80%" height="80%"}
+![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_pca.png){: width="60%" height="60%"}
 
 이런 그림을 그릴 때에는 뼈대를 먼저 잘 세우는 것이 좋습니다. 영화 평점만을 2 차원으로 표현한 뒤, 단어 벡터들을 이 2 차원 공간에 투영시킵니다. 가장 간단한 방법으로 각 단어가 특정 점수에 등장했던 비율, 혹은 lift 와 같은 값을 이용하여 단어와 점수 간의 상관성을 수치로 표현합니다. 이를 가중치로 이용하여 각 단어의 2 차원 벡터를 점수 벡터의 가중 평균으로 취합니다. 그 결과는 아래와 같습니다. 위의 그림에서 점수 벡터들이 일종의 convex 형식의 공간을 만들었고, 단어 벡터는 이 점수 벡터 간의 가중 평균이기 때문에 점수 안에 단어가 들어있는 모양의 그림이 그려졌습니다. 그리고 `드럽/VA`, `역겹/VA` 과 같은 단어는 2, 3 점에 `짱/MAG`, `재밌어요/NA` 와 같은 단어는 9, 10 점 근처에 위치함을 볼 수 있습니다.
 
@@ -84,8 +84,8 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
-      $(wvdv).ready(function(){
-         $("#ldavis_example").load("https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html")
+      $(document).ready(function(){
+         $("#wvdv").load("https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html")
       });
 </script>
 
