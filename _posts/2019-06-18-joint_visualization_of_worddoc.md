@@ -77,9 +77,9 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 
 [이 링크](https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html)는 Bokeh 를 이용하여 위의 그림을 interactive 하게 살펴보도록 만든 것입니다. 위의 그림을 그리기 위한 Bokeh 코드와 실험에 이용한 데이터 및 Doc2Vec 학습 코드는 모두 [이 repository][git] 에 올려두었습니다. 
 
-<div id="wvdv_fig"></div>
+[git]: https://github.com/lovit/joint_visualization_of_words_and_docs/
 
-## References
+<div id="wvdv_fig"></div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script type="text/javascript">
@@ -90,4 +90,3 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 
 [doc2vec]: {{ site.baseurl }}{% link _posts/2018-03-26-word_doc_embedding.md %}
 [levy]: {{ site.baseurl }}{% link _posts/2018-04-22-context_vector_for_word_similarity.md %}
-[git]: https://github.com/lovit/joint_visualization_of_words_and_docs/
