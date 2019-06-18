@@ -132,12 +132,13 @@ Saliency 와 discriminative power 를 모두 고려하기 위하여 우리는 �
 
 ## Packages
 
-이와 관련된 코드는 github 의 [clustering4docs][clustering4docs] repository 에 올려뒀습니다. 사용법은 아래와 같습니다. 
+이와 관련된 코드는 github 의 [clustering4docs][clustering4docs] repository 에 올려뒀습니다. Vectorizer 의 vocabulary_ 에서 각 index 에 해당하는 단어 리스트를 만듭니다. kmeans 의 학습 결과에서 labels 와 centers 를 가져옵니다. proportion_keywords 함수의 사용법은 아래와 같습니다. 
 
 {% highlight python %}
 from soyclustering import proportion_keywords
 
-vocabs = ['this', 'is', 'vocab', 'list']
+# list of str form
+vocabs = [vocab for vocab, idx in sorted(enumerate(vectorizer.vocabulary_.items()), key=lambda x:x[1])]
 labels = kmeans.labels_
 centers = kmeans.cluster_centers_
 
