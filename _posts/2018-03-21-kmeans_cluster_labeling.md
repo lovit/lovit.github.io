@@ -138,7 +138,7 @@ Saliency 와 discriminative power 를 모두 고려하기 위하여 우리는 �
 from soyclustering import proportion_keywords
 
 # list of str form
-vocabs = [vocab for vocab, idx in sorted(enumerate(vectorizer.vocabulary_.items()), key=lambda x:x[1])]
+vocabs = [vocab for vocab, idx in sorted(vectorizer.vocabulary_.items(), key=lambda x:x[1])]
 labels = kmeans.labels_
 centers = kmeans.cluster_centers_
 

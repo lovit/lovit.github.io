@@ -145,7 +145,7 @@ verbose = 1 로 설정하면 매 반복 마다 label 이 변하는 rows 의 개�
 {% highlight python %}
 from soyclustering import proportion_keywords
 
-vocabs = [vocab for vocab, idx in sorted(enumerate(vectorizer.vocabulary_.items()), key=lambda x:x[1])]
+vocabs = [vocab for vocab, idx in sorted(vectorizer.vocabulary_.items(), key=lambda x:x[1])]
 centers = kmeans.cluster_centers_
 
 keywords = proportion_keywords(
