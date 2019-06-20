@@ -13,13 +13,6 @@ Doc2Vec 은 단어와 문서를 같은 임베딩 공간의 벡터로 표현하�
 
 ## Doc2Vec
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-      $(document).ready(function(){
-         $("#contents").load("https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html")
-      });
-</script>
-
 Doc2Vec 은 Word2Vec 이 확장된 임베딩 방법입니다. Document id 를 모든 문맥에 등장하는 단어로 취급합니다. 예를 들어 'a little dog sit on the table' 이란 문장에 해당하는 document id, #doc5 는 `dog` 의 문맥에도 [a, little, sit, on, #doc5] 로, `sit` 의 문맥에도 [little, dog, on, the, #doc5] 로 등장합니다. 결국 document id 에 해당하는 벡터는 해당 문서에 등장하는 모든 단어들과 가까워지는 방향으로 이동하여 아래의 그림과 같은 벡터를 지닙니다. 그렇기 때문에 두 문서에 등장한 단어가 다르더라도 단어의 벡터들이 비슷하다면 두 문서의 벡터는 서로 비슷해집니다. 
 
 ![]({{ "/assets/figures/doc2vec_concept.png" | absolute_url }}){: width="80%" height="80%"}
@@ -87,6 +80,13 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 [git]: https://github.com/lovit/joint_visualization_of_words_and_docs/
 
 <div id="contents"></div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+      $(document).ready(function(){
+         $("#contents").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/resources/joint_visualization_word_doc_movie_pca_affinity.html")
+      });
+</script>
 
 [doc2vec]: {{ site.baseurl }}{% link _posts/2018-03-26-word_doc_embedding.md %}
 [levy]: {{ site.baseurl }}{% link _posts/2018-04-22-context_vector_for_word_similarity.md %}
