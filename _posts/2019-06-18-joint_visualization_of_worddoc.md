@@ -82,7 +82,7 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 
 이처럼 Doc2Vec 에서 단어와 문서 벡터는 한 집에 살지만 서로 각방을 쓰는 사이처럼 반드시 같은 공간에 위치하지 않을 수도 있습니다. 이런 상황에서 단어와 문서 벡터를 한 장의 그림에 함께 그리기 위해서는 두 개의 레이어를 겹쳐줘야 합니다. 우리가 표현할 기준 공간의 레이어가 무엇인지를 먼저 정의합니다. 그리고 나머지 레이어들을 기준 레이어에 맞춰 그리면 (아마도) 우리가 원하는 그림을 그릴 수 있습니다.
 
-<a href="https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html" target="_blank">[이 링크]</a>는 Bokeh 를 이용하여 위의 그림을 interactive 하게 살펴보도록 만든 것입니다. 위의 그림을 그리기 위한 Bokeh 코드와 실험에 이용한 데이터 및 Doc2Vec 학습 코드는 모두 [이 repository][git] 에 올려두었습니다. 
+<a href="https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html" download>[이 링크]</a>는 Bokeh 를 이용하여 위의 그림을 interactive 하게 살펴보도록 만든 것입니다. 위의 그림을 그리기 위한 Bokeh 코드와 실험에 이용한 데이터 및 Doc2Vec 학습 코드는 모두 [이 repository][git] 에 올려두었습니다. 
 
 [git]: https://github.com/lovit/joint_visualization_of_words_and_docs/
 
