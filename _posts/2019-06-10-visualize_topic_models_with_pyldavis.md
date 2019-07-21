@@ -46,9 +46,9 @@ vocab            # list of str, vocab list
 term_frequency   # numpy.ndarray, shape = (n_vocabs,)
 ```
 
-LDA 의 구현체 중 가장 널리 이용되는 것은 아마도 Python 의 Gensim 일 것입니다. 그리고 많은 경우 Gensim LDA 를 시각화 하기 위하여 LDAvis 가 이용되기 때문에 PyLDAvis 에는 gensim 용 함수를 따로 만들어 두었습니다. 아래는 Bag of words model 로 표현된 데이터를 이용하여 Gensim LDA 를 학습한 뒤, LDAvis 로 시각화 하는 과정의 코드입니다. Gensim LDA 는 dict 형식으로 된 int -> str 의 dictionary 가 필요합니다. 이는 enumerate 와 dict 함수를 이용하여 list of str 로부터 손쉽게 만들 수 있습니다.
+LDA 의 구현체 중 가장 널리 이용되는 것은 아마도 Python 의 Gensim 일 것입니다. 그리고 많은 경우 Gensim LDA 를 시각화 하기 위하여 LDAvis 가 이용되기 때문에 PyLDAvis 에는 gensim 용 함수를 따로 만들어 두었습니다. 아래는 Bag of words model 로 표현된 데이터를 이용하여 Gensim LDA 를 학습한 뒤, LDAvis 로 시각화 하는 과정의 코드입니다. Gensim LDA 는 dict 형식으로 된 int -> str 의 dictionary 가 필요합니다. Gensim 의 Dictionary 는 실제 텍스트 파일에서 단어의 빈도수와 document frequency 를 계산하여 생성됩니다. 하지만 다른 목적을 위하여 이미 벡터라이징이 끝나있는 경우들도 많습니다. 이 코드는 이러한 상황을 가정하였습니다. 그러므로 Gensim 의 Dictionary 를 만들기 위하여 다시 한 번 텍스트 파일을 이용하지는 않을 겁니다 (심지어 scikit-learn 의 Vectorizer 와 Gensim 의 Dictionay 에서의 vocabulary 순서가 다를 수도 있습니다). 아래처럼 sparse matrix 와 vocabulary index 를 가지고 있을 때 Dictionary 의 대용은 enumerate 와 dict 함수를 이용하여 list of str 로부터 손쉽게 만들 수 있습니다.
 
-{% highlight python %}
+```python
 import gensim # version=3.6.0
 from gensim.models import LdaModel
 import pyLDAvis # version=2.1.1
@@ -65,10 +65,40 @@ corpus = gensim.matutils.Sparse2Corpus(x, documents_columns=False)
 id2word = dict(enumerate(idx_to_vocab))
 lda_model = LdaModel(corpus=corpus, num_topics=100, id2word=id2word)
 
+# make dictionary
+dictionary = dict(enumerate(idx_to_vocab))
+
 # train LDAvis
 prepared_data = gensimvis.prepare(lda_model, corpus, dictionary)
 pyLDAvis.show(prepared_data)
-{% endhighlight %}
+```
+
+혹은 dict (int, str) 형식이 아닌 gensim 의 Dictionary 를 직접 만들 수도 있습니다. Dictionary 에는 여섯 종류의 attributes 가 포함되어 있는데, 이들은 모두 bag of words 와 같은 sparse matrix 와 각 column 이 어떤 단어에 해당하는지에 대한 인덱스로부터 만들 수 있는 정보들입니다. 물론 LDAvis 만을 학습하기 위해서는 위처럼 dict(enumerate(idx_to_vocab)) 만으로도 충분합니다.
+
+```python
+from gensim.corpora import Dictionary
+
+def bow_to_dictionary(bow, idx_to_vocab):
+    id2token = dict(enumerate(idx_to_vocab))
+    token2id = {token:id for id, token in id2token.items()}
+    num_docs, num_pos = bow.shape
+    _, cols = bow.nonzero()
+    dfs = np.bincount(cols, minlength=num_pos)
+    dfs = dict(enumerate(dfs.tolist()))
+    num_nnz = x.nnz
+
+    dictionary = Dictionary()
+    dictionary.id2token = id2token
+    dictionary.token2id = token2id
+    dictionary.num_docs = num_docs
+    dictionary.num_pos = num_pos
+    dictionary.dfs = dfs
+    dictionary.num_nnz = num_nnz
+    return dictionary
+
+dictionary = bow_to_dictionary(x, idx_to_vocab)
+```
+
 
 그 결과 예시는 아래와 같습니다.
 
