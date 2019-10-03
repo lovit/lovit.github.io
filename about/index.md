@@ -2,8 +2,7 @@
 layout: page
 ---
 
-저는 김현중 (Hyunjoong Kim) 입니다.
-머신러닝 관련 작업 때는 "lovit" 이라는 아이디를 이용하고 있습니다.
+.
 
 # Education
 
