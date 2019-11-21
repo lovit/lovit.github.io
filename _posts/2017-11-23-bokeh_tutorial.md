@@ -12,7 +12,7 @@ Seaborn 이 matplotlib 을 바탕으로 통계 분석 결과의 시각화에만 
 
 ## Bokeh vs Seaborn ?
 
-check!
+check!!
 
 Bokeh 역시 plotting 을 도와주는 파이썬 패키지 이지만, 훨씬 범용적으로 이용할 수 있는 plotting 툴입니다. 그리고 둘의 특징과 장단점은 명확히 구분됩니다. Seaborn 은 matplotlib 을 이용하여 통계 분석에서 자주 이용되는 몇 가지 plots 을 함수 한 두 번의 호출로 그리는 것을 목적으로, high-level plotting functions 들을 제공합니다. Bokeh 는 통계 분석 외에도 임의의 데이터 시각화를 지원합니다. 지원하는 형식이 다양하기 때문에 high-level plotting functions 보다는 그림을 그리는 과정을 분할한 middle-level functions 과 그 그림의 요소들을 직접 조절할 수 있는 low-level components 들을 지원합니다.
 
@@ -731,7 +731,7 @@ from PIL import Image
 Image.fromarray(image)
 ```
 
-![]({{ "/bokeh_tutorial/output_22.png" | relative_url }}){: width="50%" height="50%"}
+![]({{ "/figures/bokeh_tutorial/output_22.png" | relative_url }}){: width="50%" height="50%"}
 
 혹은 bokeh 를 이용하여 표현할 수도 있습니다. 이 때 `image` 를 시계 반대 방향으로 90 도 회전시킨 `image_` 를 이용하였는데, 이는 행렬의 index 기준으로 (0, 0) 이 실제 그림에서는 좌상단의 꼭지점이기 때문입니다. 또한 행렬의 index 는 0 부터 시작하는데, 그림의 축은 0 이 아닌 -5 입니다. 그림에서의 x 의 범위는 x_range 로 표현합니다. 행렬의 (0, 0) 의 값이 그림의 range 에서 (x, y) 에 표현됩니다. 그림의 좌 하단은 (x + dw, y) 에 표현됩니다. 만약 x + dw 가 x_range 보다 짧을 경우, 행렬이 그림 그림 전체를 채우지 않습니다. y 축에 대해서도 동일합니다.
 
