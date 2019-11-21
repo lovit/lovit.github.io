@@ -105,7 +105,10 @@ layout: page
 - [Inverted index 를 이용한 빠른 Levenshtein (edit) distance 탐색][levenshtein_inverted_index]
 
 <font color="#2851a4"><h2>Data visualization</h2></font>
-- [Python plotting kit Bokeh][bokeh_python_plotting]
+
+- [Seaborn vs Bokeh. Part 1. Seaborn tutorial][seaborn_tutorial]
+- [Seaborn vs Bokeh. Part 2. Bokeh tutorial][bokeh_tutorial]
+- [Python plotting kit Bokeh (beginner)][bokeh_python_plotting]
 - [Plotly 를 이용한 3D scatter plot][plotly_3d_scatterplot]
 - [Word cloud in Python][word_cloud]
 - [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
@@ -218,3 +221,5 @@ layout: page
 [krwordrank_sentence]: {{ site.baseurl }}{% link _posts/2019-05-01-krwordrank_sentence.md %}
 [visualize_topic_models_with_pyldavis]: {{ site.baseurl }}{% link _posts/2019-06-10-visualize_topic_models_with_pyldavis.md %}
 [joint_visualization_of_worddoc]: {{ site.baseurl }}{% link _posts/2019-06-18-joint_visualization_of_worddoc.md %}
+[seaborn_tutorial]: {{ site.baseurl }}{% link _posts/2019-11-22-seaborn_tutorial.md %}
+[bokeh_tutorial]: {{ site.baseurl }}{% link _posts/2019-11-22-bokeh_tutorial.md %}
