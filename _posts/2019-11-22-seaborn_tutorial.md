@@ -1506,65 +1506,6 @@ anscombe = sns.load_dataset("anscombe")
 anscombe.head(5)
 ```
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>dataset</th>
-      <th>x</th>
-      <th>y</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>I</td>
-      <td>10.0</td>
-      <td>8.04</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>I</td>
-      <td>8.0</td>
-      <td>6.95</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>I</td>
-      <td>13.0</td>
-      <td>7.58</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>I</td>
-      <td>9.0</td>
-      <td>8.81</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>I</td>
-      <td>11.0</td>
-      <td>8.33</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
 2차식으로부터 만들어진 데이터는 1차 선형 회귀 모델로 추정되기 어렵습니다.
 
 ```python
