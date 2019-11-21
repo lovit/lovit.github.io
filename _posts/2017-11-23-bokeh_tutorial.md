@@ -746,6 +746,61 @@ show(p)
 
 {% include_relative figures/bokeh_tutorial/output_22_image.html %}
 
+
+## Pandas plotting using Bokeh
+
+앞서 Pandas 의 DataFrame 에는 matplotlib 을 이용한 빠른 플랏팅 기능이 제공되고 있음을 살펴보았습니다. 그런데 Pandas >= 0.25 이후부터는 `Pandas-Bokeh` 패키지를 이용하면 matplotlib 대신 Bokeh 를 이용할 수 있는 방법이 있습니다. 설치는 pip 으로 할 수 있습니다. 더 자세한 내용은 공식 홈페이지, [https://github.com/PatrikHlobil/Pandas-Bokeh](https://github.com/PatrikHlobil/Pandas-Bokeh) 을 참고하시기 바랍니다.
+
+```
+pip install pandas-bokeh
+```
+
+`pandas.DataFrame.plot()` 는 기본으로 matplotlib 을 이용하여 그림을 그립니다. 이 코드를 IPython notebook 에서 실행하고 있다면 반드시 한 번 `%matplotlib inline` 을 입력하는 것을 잊지 마세요.
+
+
+```python
+%matplotlib inline
+import seaborn as sns
+
+tips = sns.load_dataset("tips")
+g = tips.plot(x='total_bill', y='tip', kind='scatter', title='Pandas matploblit plot example')
+```
+
+![]({{ "/assets/figures/bokeh_tutorial_dist_image.png" | absolute_url }}){: width="50%" height="50%"}
+
+이 때 그려진 그림은 앞서 살펴본 바와 같이 matplotlib 의 AxesSubplot instance 입니다.
+
+```python
+type(g)
+```
+
+```
+matplotlib.axes._subplots.AxesSubplot
+```
+
+이제 Bokeh 로 그림을 그릴 것이니 IPython notebook 환경이라면 `output_notebook()` 을 한 번 실행합니다. 그 뒤 다음의 코드를 통하여 plotting backend 을 `Pandas-Bokeh` 로 변경합니다. 그 뒤 동일한 plot 을 그리면 Bokeh 의 Figure 로 scatter plot 이 그려집니다.
+
+```python
+from bokeh.plotting import output_notebook
+import pandas as pd
+
+pd.set_option('plotting.backend', 'pandas_bokeh')
+output_notebook()
+
+g = tips.plot(x='total_bill', y='tip', kind='scatter', title='Pandas Bokeh plot example')
+```
+
+{% include_relative figures/bokeh_tutorial/pandas_bokeh.html %}
+
+```python
+type(g)
+```
+
+```
+bokeh.plotting.figure.Figure
+```
+
+
 ## See more
 
 데이터 분석의 관점에서 자주 사용하거나, 알아두면 유용한 내용들만을 발췌하여 튜토리얼로 정리하였습니다. 그 외에 bokeh 로 만들 수 있는 plots 과 apps 에 대해서는 bokeh gallery 를 살펴보길 추천합니다. 그 중에서 몇 가지 apps 예시를 링크에 넣어뒀습니다. Bokeh 가 제공하는 재료들을 잘 가공하면 이러한 설명력 좋은 시각화가 가능합니다.
