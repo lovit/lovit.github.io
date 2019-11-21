@@ -12,6 +12,8 @@ Seaborn 이 matplotlib 을 바탕으로 통계 분석 결과의 시각화에만 
 
 ## Bokeh vs Seaborn ?
 
+check!
+
 Bokeh 역시 plotting 을 도와주는 파이썬 패키지 이지만, 훨씬 범용적으로 이용할 수 있는 plotting 툴입니다. 그리고 둘의 특징과 장단점은 명확히 구분됩니다. Seaborn 은 matplotlib 을 이용하여 통계 분석에서 자주 이용되는 몇 가지 plots 을 함수 한 두 번의 호출로 그리는 것을 목적으로, high-level plotting functions 들을 제공합니다. Bokeh 는 통계 분석 외에도 임의의 데이터 시각화를 지원합니다. 지원하는 형식이 다양하기 때문에 high-level plotting functions 보다는 그림을 그리는 과정을 분할한 middle-level functions 과 그 그림의 요소들을 직접 조절할 수 있는 low-level components 들을 지원합니다.
 
 그림의 형식도 다릅니다. Matplotlib 은 정해진 크기의 그림 형식의 plot 을 그리지만, Bokeh 는 JavaScript 를 이용하는, HTML 기반 interactive plots 을 그립니다. JavaScript 를 이용하기 때문에 plots 안에서 간단한 연산도 가능하며, 데이터의 변화에 따라 plots 이 업데이트 되기도 합니다. 이를 이용하여 독립적인 웹서버를 띄울수도 있습니다. 그러나 자유도가 많은 만큼 빠르게 고정된 크기의 scatter plot 정도만 그리기 위함이라면 seaborn 이 더 편할 수도 있습니다.
@@ -150,7 +152,7 @@ p.scatter(x='total_bill', y='tip', size='tip', source=tips)
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_0_scatterplot.html %}
+{% include_relative figures/bokeh_tutorial/output_0_scatterplot.html %}
 
 Bokeh 의 그림은 HTML 코드 형식입니다. 그렇기 때문에 한 번 그려진 그림에서 크기와 같은 attribute 를 수정하여 다시 출력할 수 있습니다. `height` 나 `width` 는 숫자이기 때문에 수정이 쉽지만, 그림의 제목은 'str' 형식이 아닙니다. 이는 그림을 구성하는 요소로 `bokeh.models.Title` 형식입니다. `figure(title='text')` 처럼 제목을 입력해도 되지만, 아래처럼 제목을 추가하여도 됩니다.
 
@@ -164,7 +166,7 @@ p.title = Title(text='Figure example')
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_1_scatterplot_w_title.html %}
+{% include_relative figures/bokeh_tutorial/output_1_scatterplot_w_title.html %}
 
 ## Map categorical value to color code
 
@@ -183,7 +185,7 @@ p.scatter(x='total_bill', y='tip', size='tip', alpha=0.5, source=tips,
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_2_scatterplot_color_by_cat.html %}
+{% include_relative figures/bokeh_tutorial/output_2_scatterplot_color_by_cat.html %}
 
 연속형 변수를 이용하여 색을 바꿀 경우에는 `bokeh.transform.linear_cmap()` 을 이용할 수 있습니다.
 
@@ -203,7 +205,7 @@ p.scatter(x='total_bill', y='tip', size='tip', alpha=0.5, source=tips,
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_3_scatterplot_color_by_numeric.html %}
+{% include_relative figures/bokeh_tutorial/output_3_scatterplot_color_by_numeric.html %}
 
 ## Palettes, lists of color code
 
@@ -255,7 +257,7 @@ layout = gridplot([[p1, p2]])
 show(layout)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_4_gridplot.html %}
+{% include_relative figures/bokeh_tutorial/output_4_gridplot.html %}
 
 ## Toolbar
 
@@ -268,7 +270,7 @@ p.scatter(x='total_bill', y='tip', size='tip', alpha=0.5,
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_5_toolbar_location.html %}
+{% include_relative figures/bokeh_tutorial/output_5_toolbar_location.html %}
 
 이용할 tools 를 `figure()` 에 넣어 설정할 수도 있습니다.
 
@@ -280,7 +282,7 @@ p.scatter(x='total_bill', y='tip', size='tip', alpha=0.5,
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_6_selective_toolbar.html %}
+{% include_relative figures/bokeh_tutorial/output_6_selective_toolbar.html %}
 
 ## Hover tool
 
@@ -300,7 +302,7 @@ p.scatter(x='total_bill', y='tip', size='tip', alpha=0.5,
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_7_tooltips.html %}
+{% include_relative figures/bokeh_tutorial/output_7_tooltips.html %}
 
 ## Save figure as HTML or image
 
@@ -353,7 +355,7 @@ p.line(x='time', y='value', line_dash=(5,3), source=line_source)
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_8_lineplot.html %}
+{% include_relative figures/bokeh_tutorial/output_8_lineplot.html %}
 
 ## Combining multiple plots
 
@@ -366,7 +368,7 @@ p.scatter(x='time', y='value', source=noise_source, size=1, alpha=0.25, color='g
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_9_line_scatter_plot.html %}
+{% include_relative figures/bokeh_tutorial/output_9_line_scatter_plot.html %}
 
 
 ## Plotting with datetime format data
@@ -408,7 +410,7 @@ p.legend.click_policy="hide"
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_10_datetime_lineplot.html %}
+{% include_relative figures/bokeh_tutorial/output_10_datetime_lineplot.html %}
 
 ## Interaction using legend
 
@@ -430,7 +432,7 @@ p.legend.click_policy="mute"
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_11_lineplot_legend_mute.html %}
+{% include_relative figures/bokeh_tutorial/output_11_lineplot_legend_mute.html %}
 
 ## Area stack plot
 
@@ -457,7 +459,7 @@ v = p.varea_stack(['A', 'B', 'C',], x='date', color=Spectral3, source=source)
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_12_varea_stack.html %}
+{% include_relative figures/bokeh_tutorial/output_12_varea_stack.html %}
 
 ## Add Legend to outside of figure
 
@@ -485,7 +487,7 @@ p.add_layout(legend, 'right')
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_13_varea_stack_w_legend.html %}
+{% include_relative figures/bokeh_tutorial/output_13_varea_stack_w_legend.html %}
 
 그런데 이 legend 는 앞서 `show()` 를 한 그림 `p` 위에 추가하였습니다. 만약 IPython notebook 으로 이 코드를 실행하고 계시다면 다시 한 번 그림을 그리는 부분을 실행시켜 보세요. 그러면 바로 위 cell 의 그림은 사라집니다. `p` 라는 변수에 저장된 그림이 새로 그려졌기 때문입니다.
 
@@ -515,7 +517,7 @@ layout = gridplot([[p0, p1]])
 show(layout)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_14_vbar_hbar.html %}
+{% include_relative figures/bokeh_tutorial/output_14_vbar_hbar.html %}
 
 ## Stacked bar plot
 
@@ -539,7 +541,7 @@ v = p.hbar_stack(years, y='category', height=0.95, color=Spectral3, source=sourc
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_15_hbar_stack.html %}
+{% include_relative figures/bokeh_tutorial/output_15_hbar_stack.html %}
 
 ## Customize Hovertool
 
@@ -553,7 +555,7 @@ v = p.hbar_stack(years, y='category', height=0.95, color=Spectral3, source=sourc
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_16_custom_hovertool.html %}
+{% include_relative figures/bokeh_tutorial/output_16_custom_hovertool.html %}
 
 Bokeh 의 그림이 HTML 코드이기 때문에 hover tool 에 의하여 표현되는 부분도 HTML 로 임으로 만들 수 있습니다. Division 을 만들고 그 안에 링크, 그림 등의 요소를 넣을 수도 있으며, font style 도 바꿀 수 있습니다. 이 튜토리얼을 작성할 때 보고싶던 영화가 개봉했어서 그 영화의 스크린샷을 몇 장 샘플 이미지로 이용하였습니다.
 
@@ -599,7 +601,7 @@ for i, year in enumerate(years):
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_17_custom_hovertool2.html %}
+{% include_relative figures/bokeh_tutorial/output_17_custom_hovertool2.html %}
 
 ## Customize Tools
 
@@ -627,7 +629,7 @@ p.line(x=x, y=y3, color='black')
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_18_custom_hovertool3.html %}
+{% include_relative figures/bokeh_tutorial/output_18_custom_hovertool3.html %}
 
 ## Density plot using patch
 
@@ -667,7 +669,7 @@ p.patch(x, pdf_exp, alpha=0.5, fill_color='#8dd3c7', line_color=None, legend_lab
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_19_patch.html %}
+{% include_relative figures/bokeh_tutorial/output_19_patch.html %}
 
 앞서 `patch()` 함수는 끝점과 시작점을 이어 폐쇄된 다각형을 그린다고 설명하였습니다. 그렇기 때문에 y 에 0.5 를 더하면 y = 0 부터 벨 모양의 선이 채워지지는 않습니다. (5, 0.5) 와 (-5, 0.5) 가 이어졌기 때문입니다.
 
@@ -679,7 +681,7 @@ p.patch(x, y, alpha=0.5, fill_color='#fb8072', line_color='#bebada', legend_labe
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_20_patch_y_shift.html %}
+{% include_relative figures/bokeh_tutorial/output_20_patch_y_shift.html %}
 
 이때에는 (-5, 0.45), (5, 0.45) 처럼 다른 몇 개의 점을 추가하면 원하는 그림을 그릴 수 있습니다.
 
@@ -691,7 +693,7 @@ p.patch(x2, y2, alpha=0.5, fill_color='#fb8072', line_color='#bebada', legend_la
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_21_patch_under_line.html %}
+{% include_relative figures/bokeh_tutorial/output_21_patch_under_line.html %}
 
 ## Density plot using image
 
@@ -729,7 +731,7 @@ from PIL import Image
 Image.fromarray(image)
 ```
 
-![]({{ "/2019-11-22-bokeh_tutorial/output_22.png" | relative_url }}){: width="50%" height="50%"}
+![]({{ "/bokeh_tutorial/output_22.png" | relative_url }}){: width="50%" height="50%"}
 
 혹은 bokeh 를 이용하여 표현할 수도 있습니다. 이 때 `image` 를 시계 반대 방향으로 90 도 회전시킨 `image_` 를 이용하였는데, 이는 행렬의 index 기준으로 (0, 0) 이 실제 그림에서는 좌상단의 꼭지점이기 때문입니다. 또한 행렬의 index 는 0 부터 시작하는데, 그림의 축은 0 이 아닌 -5 입니다. 그림에서의 x 의 범위는 x_range 로 표현합니다. 행렬의 (0, 0) 의 값이 그림의 range 에서 (x, y) 에 표현됩니다. 그림의 좌 하단은 (x + dw, y) 에 표현됩니다. 만약 x + dw 가 x_range 보다 짧을 경우, 행렬이 그림 그림 전체를 채우지 않습니다. y 축에 대해서도 동일합니다.
 
@@ -742,7 +744,7 @@ p.image(image=[image_], x=[x_min], dw=[x_max - x_min], y=[y_min], dh=[y_max - y_
 show(p)
 ```
 
-{% include_relative figures/2019-11-22-bokeh_tutorial/output_22_image.html %}
+{% include_relative figures/bokeh_tutorial/output_22_image.html %}
 
 ## See more
 
