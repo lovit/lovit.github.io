@@ -11,15 +11,7 @@ Seaborn 이 matplotlib 을 바탕으로 통계 분석 결과의 시각화에만 
 
 
 
-<div id="output_0"></div>
-
-
+{% include_relative bokeh_tutorial/output_0_scatterplot.html %}
 
 사진 아이콘을 누르면 현재의 그림의 snapshot 이 png 로 저장됩니다.
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script type="text/javascript">
-      $(document).ready(function(){
-         $("#output_0").load("https://raw.githubusercontent.com/lovit/lovit.github.io/master/assets/figures/output_0_scatterplot.html")
-      });
-</script>
