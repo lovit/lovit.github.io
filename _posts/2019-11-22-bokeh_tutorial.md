@@ -1,6 +1,6 @@
 ---
 title: Seaborn vs Bokeh. Part 2. Bokeh tutorial
-date: 2017-11-23 05:00:00
+date: 2019-11-22 05:10:00
 categories:
 - visualization
 tags:
