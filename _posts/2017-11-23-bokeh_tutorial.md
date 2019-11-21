@@ -766,7 +766,7 @@ tips = sns.load_dataset("tips")
 g = tips.plot(x='total_bill', y='tip', kind='scatter', title='Pandas matploblit plot example')
 ```
 
-![]({{ "/assets/figures/bokeh_tutorial_dist_image.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/pandas_matplotlib_example.png" | absolute_url }}){: width="50%" height="50%"}
 
 이 때 그려진 그림은 앞서 살펴본 바와 같이 matplotlib 의 AxesSubplot instance 입니다.
 
