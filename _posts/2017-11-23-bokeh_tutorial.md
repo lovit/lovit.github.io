@@ -1,5 +1,5 @@
 ---
-title: Seaborn vs Bokeh: Part 2. Bokeh tutorial
+title: Seaborn vs Bokeh. Part 2. Bokeh tutorial
 date: 2017-11-23 05:00:00
 categories:
 - visualization
