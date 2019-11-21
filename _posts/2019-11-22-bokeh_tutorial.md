@@ -12,8 +12,6 @@ Seaborn 이 matplotlib 을 바탕으로 통계 분석 결과의 시각화에만 
 
 ## Bokeh vs Seaborn ?
 
-check!!
-
 Bokeh 역시 plotting 을 도와주는 파이썬 패키지 이지만, 훨씬 범용적으로 이용할 수 있는 plotting 툴입니다. 그리고 둘의 특징과 장단점은 명확히 구분됩니다. Seaborn 은 matplotlib 을 이용하여 통계 분석에서 자주 이용되는 몇 가지 plots 을 함수 한 두 번의 호출로 그리는 것을 목적으로, high-level plotting functions 들을 제공합니다. Bokeh 는 통계 분석 외에도 임의의 데이터 시각화를 지원합니다. 지원하는 형식이 다양하기 때문에 high-level plotting functions 보다는 그림을 그리는 과정을 분할한 middle-level functions 과 그 그림의 요소들을 직접 조절할 수 있는 low-level components 들을 지원합니다.
 
 그림의 형식도 다릅니다. Matplotlib 은 정해진 크기의 그림 형식의 plot 을 그리지만, Bokeh 는 JavaScript 를 이용하는, HTML 기반 interactive plots 을 그립니다. JavaScript 를 이용하기 때문에 plots 안에서 간단한 연산도 가능하며, 데이터의 변화에 따라 plots 이 업데이트 되기도 합니다. 이를 이용하여 독립적인 웹서버를 띄울수도 있습니다. 그러나 자유도가 많은 만큼 빠르게 고정된 크기의 scatter plot 정도만 그리기 위함이라면 seaborn 이 더 편할 수도 있습니다.
