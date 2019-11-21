@@ -179,7 +179,8 @@ sns.scatterplot(x="total_bill", y="tip", size="size", sizes=(15, 200), data=tips
 
 
 ```python
-sns.scatterplot(x="total_bill", y="tip", size="size", sizes=(15, 200), alpha=.3, data=tips)
+sns.scatterplot(x="total_bill", y="tip", size="size",
+    sizes=(15, 200), alpha=.3, data=tips)
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_00/output_19_1.png" | absolute_url }}){: width="50%" height="50%"}
@@ -192,7 +193,8 @@ sns.scatterplot(x="total_bill", y="tip", size="size", sizes=(15, 200), alpha=.3,
 한 장의 scatter/line plot 을 그릴 때에도 `relplot()` 은 이용가능하기 때문에 이후로는 특별한 경우가 아니라면 `relplot()` 을 이용하도록 하겠습니다.
 
 ```python
-sns.relplot(x="total_bill", y="tip", hue="smoker", size="size", sizes=(15, 200), data=tips, kind='scatter')
+sns.relplot(x="total_bill", y="tip", hue="smoker", size="size",
+    sizes=(15, 200), data=tips, kind='scatter')
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_00/output_21_1.png" | absolute_url }}){: width="50%" height="50%"}
@@ -219,7 +221,8 @@ sns.relplot(x="total_bill", y="tip", hue="smoker", size="size", sizes=(15, 200),
 
 
 ```python
-g = sns.relplot(x="total_bill", y="tip", hue="smoker", size="size", sizes=(15, 200), data=tips, kind='scatter')
+g = sns.relplot(x="total_bill", y="tip", hue="smoker", size="size",
+    sizes=(15, 200), data=tips, kind='scatter')
 g = g.set_titles('scatter plot example')
 ```
 
@@ -228,7 +231,8 @@ g = g.set_titles('scatter plot example')
 그런데 어떤 경우에는 (이유를 파악하지 못했습니다) 제목이 추가되지 않습니다. 이 때는 아래의 코드를 실행해보세요. Matplotlib 은 가장 최근의 그림 위에 plots 을 덧그립니다. 아래 코드는 이미 그려진 g 위에 제목을 추가하는 코드입니다.
 
 ```python
-g = sns.relplot(x="total_bill", y="tip", hue="smoker", size="size", sizes=(15, 200), data=tips, kind='scatter')
+g = sns.relplot(x="total_bill", y="tip", hue="smoker", size="size",
+    sizes=(15, 200), data=tips, kind='scatter')
 plt.title('scatter plot example')
 ```
 
@@ -242,8 +246,10 @@ plt.title('scatter plot example')
 
 
 ```python
-g0 = sns.relplot(x="total_bill", y="tip", hue="smoker", size="size", data=tips, kind='scatter')
-g1 = sns.relplot(x="total_bill", y="tip", size="size", sizes=(15, 200), data=tips)
+g0 = sns.relplot(x="total_bill", y="tip", hue="smoker",
+    size="size", data=tips, kind='scatter')
+g1 = sns.relplot(x="total_bill", y="tip", size="size",
+    sizes=(15, 200), data=tips)
 
 g0.savefig('total_bill_tip_various_color_by_size.png')
 g1.savefig('total_bill_tip_various_size_by_size.png')
@@ -348,7 +354,8 @@ random_noise_df.head(5)
 
 
 ```python
-g0 = sns.scatterplot(x="total_bill", y="tip", hue='smoker', alpha=0.8, size="size", sizes=(15, 200), data=tips)
+g0 = sns.scatterplot(x="total_bill", y="tip", hue='smoker',
+    alpha=0.8, size="size", sizes=(15, 200), data=tips)
 g1 = sns.scatterplot(x="x", y="y", alpha=0.2, color='g', data=random_noise_df)
 ```
 
@@ -368,7 +375,8 @@ g0, g1
 이 경우, 두 그림을 다르게 그리기 위해서는 `matplotlib.pyplot.close()` 함수를 중간에 실행시켜야 합니다. Matplotlib 은 현재의 Figure 가 닫히지 않으면 계속 그 Figure 위에 그림을 덧그리는 형식입니다. 그래서 앞서 `matplotlib.pyplot.title()` 함수를 실행하여 제목을 더할 수도 있었습니다. 즉 그림이 계속 수정된다는 의미입니다.
 
 ```python
-g0 = sns.scatterplot(x="total_bill", y="tip", hue='smoker', alpha=0.8, size="size", sizes=(15, 200), data=tips)
+g0 = sns.scatterplot(x="total_bill", y="tip", hue='smoker',
+    alpha=0.8, size="size", sizes=(15, 200), data=tips)
 plt.close()
 g1 = sns.scatterplot(x="x", y="y", alpha=0.2, color='g', data=random_noise_df)
 ```
@@ -406,7 +414,8 @@ g0, g1
 그럼 언제 `matplotlib.pyplot.close()` 가 실행될까요? `relplot()` 이 다시 호출될 때 이전에 그리던 Figure 를 닫고, 새 Figure 를 그리기 시작합니다.
 
 ```python
-g0 = sns.relplot(x="total_bill", y="tip", hue='smoker', alpha=0.8, size="size", sizes=(15, 200), data=tips)
+g0 = sns.relplot(x="total_bill", y="tip", hue='smoker',
+    alpha=0.8, size="size", sizes=(15, 200), data=tips)
 g1 = sns.scatterplot(x="x", y="y", alpha=0.2, color='g', data=random_noise_df)
 ```
 
@@ -415,7 +424,8 @@ g1 = sns.scatterplot(x="x", y="y", alpha=0.2, color='g', data=random_noise_df)
 그래서 `seaborn.scatterplot()` 을 실행한 뒤 `seaborn.relplot()` 을 실행하면 그림이 분리되어 그려집니다. 혼동될 수 있으니 새 그림이 그려질 때에는 습관적으로 `close()` 함수를 호출하는 것이 명시적입니다.
 
 ```python
-g0 = sns.scatterplot(x="total_bill", y="tip", hue='smoker', alpha=0.8, size="size", sizes=(15, 200), data=tips)
+g0 = sns.scatterplot(x="total_bill", y="tip", hue='smoker',
+    alpha=0.8, size="size", sizes=(15, 200), data=tips)
 g1 = sns.relplot(x="x", y="y", alpha=0.2, color='g', data=random_noise_df)
 ```
 
@@ -717,7 +727,8 @@ g = sns.relplot(x="timepoint", y="signal", hue="event", kind="line", data=fmri)
 ![]({{ "/assets/figures/seaborn_tutorial_00/output_75_0.png" | absolute_url }}){: width="50%" height="50%"}
 
 ```python
-g = sns.relplot(x="timepoint", y="signal", hue="event", style="event", kind="line", data=fmri)
+g = sns.relplot(x="timepoint", y="signal", hue="event",
+    style="event", kind="line", data=fmri)
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_00/output_76_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -856,7 +867,8 @@ g = sns.relplot(x="total_bill", y="tip", hue="smoker", data=tips, col="time")
 `row` 를 성별 기준으로 정의하면 (2,2) 형식의 grid plot 이 그려집니다. 그런데 plot 마다 (sex, time) 이 모두 기술되니 title 이 너무 길어보입니다. 이후 살펴볼 FacetGrid 에서는 margin_title 을 이용하여 깔끔하게 col, row 의 기준을 표시하는 방법이 있습니다. 아마 0.9.0 이후의 버전에서는 언젠가 `seaborn.relplot()` 에도 그 기능이 제공되지 않을까 기대해봅니다.
 
 ```python
-g = sns.relplot(x="total_bill", y="tip", hue="smoker", data=tips, col="time", row="sex")
+g = sns.relplot(x="total_bill", y="tip", hue="smoker",
+    data=tips, col="time", row="sex")
 ```
 
 ## Plotting with categorical data
@@ -870,7 +882,8 @@ g = sns.relplot(x="total_bill", y="tip", hue="smoker", data=tips, col="time", ro
 앞서 `order`, `kind`, 등의 argument 사용법에 대하여 살펴보았으니, 여기에서는 어떤 그림들을 그릴 수 있는지에 대해서만 간단히 살펴봅니다.
 
 ```python
-g = sns.catplot(x="smoker", y="tip", kind='strip', order=["No", "Yes"], jitter=False, data=tips)
+g = sns.catplot(x="smoker", y="tip", kind='strip',
+    order=["No", "Yes"], jitter=False, data=tips)
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_01/output_3_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -898,7 +911,8 @@ g = sns.catplot(x="day", y="total_bill", hue="smoker", kind="box", data=tips)
 찾다보면 seaborn 으로 여러 설정들을 할 수는 있지만, 이를 위해서는 matplotlib 함수들의 arguments 를 찾아야 하는 일들이 발생합니다. `seaborn.catplot()` 의 그림을 수정하기 위하여 `seaborn.boxplot()` 의 arguments 를 확인하고, 또 디테일한 설정을 하기 위해서 `seaborn.boxplot()` 이 이용하는 `matplotlib.pyplot.boxplot()` 의 arguments 를 확인해야 합니다. 복잡해지네요.
 
 ```python
-g = sns.catplot(x="day", y="total_bill", hue="smoker", kind="box", data=tips, dodge=False)
+g = sns.catplot(x="day", y="total_bill", hue="smoker",
+    kind="box", data=tips, dodge=False)
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_01/output_9_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -1032,7 +1046,8 @@ g = sns.catplot(x="day", y="total_bill", kind="violin", hue="sex", data=tips)
 그런데 `hue` 가 두 종류라면 굳이 두 개의 분포를 나눠 그릴 필요는 없어보입니다. 이때는 `split=True` 로 설정하면 두 종류의 분포를 서로 붙여서 보여줍니다.
 
 ```python
-g = sns.catplot(x="day", y="total_bill", hue="sex", kind="violin", split=True, inner="stick", data=tips)
+g = sns.catplot(x="day", y="total_bill", hue="sex",
+    kind="violin", split=True, inner="stick", data=tips)
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_01/output_17_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -1187,7 +1202,8 @@ g = sns.catplot(x="sex", y="survived", hue="class", kind="bar", data=titanic)
 `hue` 의 종류가 여러 개이면 `x` 축의 종합적인 분포가 잘 보이지 않습니다. 누적 형식의 bar plot 을 그리기 위해서는 `dodge=False` 로 설정합니다.
 
 ```python
-g = sns.catplot(x="sex", y="survived", hue="class", kind="bar", data=titanic, dodge=False)
+g = sns.catplot(x="sex", y="survived", hue="class",
+    kind="bar", data=titanic, dodge=False)
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_01/output_23_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -1195,7 +1211,8 @@ g = sns.catplot(x="sex", y="survived", hue="class", kind="bar", data=titanic, do
 누적 형식으로 그림을 그리니 생존율이 명확히 보이지 않습니다. 생존자 수를 bar plot 으로 그려봅니다. 이를 위해서 `seaborn.countplot()` 를 이용합니다. 이번에는 x, y 축을 바꿔보았고, bar 의 모서리에 선을 칠하기 위하여 `edgecolor` 를 조절하였습니다. `edgecolor` 는 그 값이 분명 실수형식인데, 입력할 때에는 str 형식으로 입력해야 합니다. 이는 matplotlib 의 함수를 이용하기 때문인데, 다음 버전에서는 직관적이게 float 를 입력하도록 바꿔줬으면 좋겠네요.
 
 ```python
-g = sns.catplot(y="deck", hue="class", kind="count", data=titanic, dodge=False, edgecolor=".5")
+g = sns.catplot(y="deck", hue="class", kind="count",
+    data=titanic, dodge=False, edgecolor=".5")
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_01/output_25_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -1287,8 +1304,10 @@ g = sns.distplot(x, kde=False, fit=stats.gamma)
 또한 `seaborn.distplot()` 에서 `kde=True` 를 설정하는 것은 `seaborn.kdeplot()` 을 실행하는 것과 같기 때문에 이 때 필요한 설정은 `kde_kws` 에 입력할 수 있습니다.
 
 ```python
-g = sns.distplot(x, hist=True, kde=True, fit=stats.gamma, kde_kws={'bw':2.0, 'color':'c', 'label':'bw 2'})
-g = sns.distplot(x, hist=False, kde=True, fit=stats.gamma, kde_kws={'bw':0.2, 'color':'r', 'label':'bw 0.2'})
+g = sns.distplot(x, hist=True, kde=True, fit=stats.gamma,
+    kde_kws={'bw':2.0, 'color':'c', 'label':'bw 2'})
+g = sns.distplot(x, hist=False, kde=True, fit=stats.gamma,
+    kde_kws={'bw':0.2, 'color':'r', 'label':'bw 0.2'})
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_02/output_15_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -1581,7 +1600,8 @@ g = sns.jointplot(x="total_bill", y="tip", data=tips, kind="reg")
 ![]({{ "/assets/figures/seaborn_tutorial_03/output_18_0.png" | absolute_url }}){: width="50%" height="50%"}
 
 ```python
-g = sns.pairplot(tips, x_vars=["total_bill", "size"], y_vars=["tip"], hue="smoker", height=5, kind="reg")
+g = sns.pairplot(tips, x_vars=["total_bill", "size"],
+    y_vars=["tip"], hue="smoker", height=5, kind="reg")
 ```
 
 ![]({{ "/assets/figures/seaborn_tutorial_03/output_19_0.png" | absolute_url }}){: width="50%" height="50%"}
@@ -1647,7 +1667,8 @@ g = g.map(sns.regplot, "size", "total_bill", color=".3", fit_reg=False, x_jitter
 fmri = sns.load_dataset("fmri").query("region == 'frontal'")
 col_order = [f's{i}' for i in range(14)]
 
-g = sns.FacetGrid(fmri, col='subject', col_wrap=5, col_order=col_order, aspect=.75, height=3, hue='event')
+g = sns.FacetGrid(fmri, col='subject', col_wrap=5, col_order=col_order,
+    aspect=.75, height=3, hue='event')
 g = g.map(sns.lineplot, 'timepoint', 'signal')
 g = g.add_legend()
 ```
@@ -1772,7 +1793,7 @@ iris.head(5)
 g = sns.pairplot(iris)
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_21_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_21_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 명목형 변수인 'species' 별로 색을 다르게 칠하기 위해서 `seaborn.pairplot()` 함수의 `hue` 에 변수 이름을 입력할 수 있습니다. 여러 종류의 species 에 대하여 histogram 을 그리기 어려우니 대각선의 subplots 에 밀도 추정 line plot 을 그렸습니다.
 
@@ -1780,15 +1801,16 @@ g = sns.pairplot(iris)
 g = sns.pairplot(iris, hue="species")
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_23_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_23_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 만약 반드시 histogram 을 그리겠다면 `seaborn.pairplot()` 의 `diag_kind` 에 'hist' 를 입력합니다. seaborn==0.9.0 에서 지원되는 값은 'hist' 와 'kde' 뿐입니다. 그리고 diagonal subplots 을 그릴 때 이용하는 arguments 는 `diag_kws` 에 입력할 수 있습니다.
 
 ```python
-g = sns.pairplot(iris, hue="species", diag_kind="hist", height=2.5, diag_kws={'alpha':0.5})
+g = sns.pairplot(iris, hue="species", diag_kind="hist", height=2.5,
+    diag_kws={'alpha':0.5})
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_25_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_25_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 이 역시 수작업으로 그릴 수 있습니다. 단, `seaborn.PairGrid` 는 변수 간 상관관계를 보이기 위한 그림이기 때문에 정방형의 grid plot 이 그려집니다. 그리고 대각선과 그 외에 각각 어떤 plot 을 그릴지 `map_diag()` 와 `map_offdiag()` 로 정의할 수 있습니다.
 
@@ -1798,7 +1820,7 @@ g = g.map_diag(sns.kdeplot)
 g = g.map_offdiag(sns.kdeplot, n_levels=6)
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_27_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_27_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 `map_diag()` 와 `map_offdiag()` 모두 각각의 plot 을 그리는데 필요한 arguments 를 keyword argument 형식으로 입력받습니다.
 
@@ -1809,7 +1831,7 @@ g = g.map_offdiag(plt.scatter)
 g = g.add_legend()
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_29_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_29_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 혹은 대각선 위의 그림과 아래의 그림을 다르게 정의할 수도 있습니다. `lw` 는 line width 입니다.
 
@@ -1820,7 +1842,7 @@ g = g.map_lower(sns.kdeplot)
 g = g.map_diag(sns.kdeplot, lw=3, legend=True)
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_31_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_31_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 만약 데이터셋의 변수가 10 개라면 10 x 10 크기의 grid plot 이 그려집니다. 확인할 변수가 있다면 그 변수 이름들만을 `seaborn.PairGrid` 의 argument `vars` 에 입력합니다.
 
