@@ -139,7 +139,7 @@ tips = ColumnDataSource(tips_df)
 tips.data
 ```
 
-## scatter plots
+## Scatter plots
 
 Bokeh 의 `bokeh.plotting.figure()` 는 그림을 그릴 캔버스를 준비하는 역할을, `Figure.scatter()` 는 scatter plot 을 그리는 역할을, `bokeh.plotting.show()` 는 그려진 그림을 실제로 출력하는 역할을 합니다.
 

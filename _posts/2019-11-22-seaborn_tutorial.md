@@ -111,8 +111,6 @@ tips.head(5)
 </table>
 </div>
 
-
-
 ### Scatter plots
 
 두 변수 간의 관계를 살펴볼 수 있는 대표적인 plots 으로는 scatter plot 과 line plot 이 있습니다. 우선 scatter plot 을 그리는 연습을 통하여 seaborn 의 기본적인 문법을 익혀봅니다.
