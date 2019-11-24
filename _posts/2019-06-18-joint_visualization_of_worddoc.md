@@ -71,11 +71,9 @@ PCA 의 경우에는 조금 더 넓게 펼쳐져 있습니다. 자세히 보면 
 
 이런 그림을 그릴 때에는 뼈대를 먼저 잘 세우는 것이 좋습니다. 영화 평점만을 2 차원으로 표현한 뒤, 단어 벡터들을 이 2 차원 공간에 투영시킵니다. 가장 간단한 방법으로 각 단어가 특정 점수에 등장했던 비율, 혹은 lift 와 같은 값을 이용하여 단어와 점수 간의 상관성을 수치로 표현합니다. 이를 가중치로 이용하여 각 단어의 2 차원 벡터를 점수 벡터의 가중 평균으로 취합니다. 그 결과는 아래와 같습니다. 위의 그림에서 점수 벡터들이 일종의 convex 형식의 공간을 만들었고, 단어 벡터는 이 점수 벡터 간의 가중 평균이기 때문에 점수 안에 단어가 들어있는 모양의 그림이 그려졌습니다. 그리고 `드럽/VA`, `역겹/VA` 과 같은 단어는 2, 3 점에 `짱/MAG`, `재밌어요/NA` 와 같은 단어는 9, 10 점 근처에 위치함을 볼 수 있습니다.
 
-![](https://github.com/lovit/joint_visualization_of_words_and_docs/raw/master/figures/joint_visualization_rate_word_pca_affinity.png)
+{% include_relative figures/joint_visualization_of_worddoc/joint_visualization_word_doc_movie_pca_affinity.html %}
 
 이처럼 Doc2Vec 에서 단어와 문서 벡터는 한 집에 살지만 서로 각방을 쓰는 사이처럼 반드시 같은 공간에 위치하지 않을 수도 있습니다. 이런 상황에서 단어와 문서 벡터를 한 장의 그림에 함께 그리기 위해서는 두 개의 레이어를 겹쳐줘야 합니다. 우리가 표현할 기준 공간의 레이어가 무엇인지를 먼저 정의합니다. 그리고 나머지 레이어들을 기준 레이어에 맞춰 그리면 (아마도) 우리가 원하는 그림을 그릴 수 있습니다.
-
-{% include_relative figures/joint_visualization_of_worddoc/joint_visualization_word_doc_movie_pca_affinity.html %}
 
 <a href="https://raw.githubusercontent.com/lovit/joint_visualization_of_words_and_docs/master/demo/joint_visualization_word_doc_movie_pca_affinity.html" download>[이 링크]</a>는 Bokeh 를 이용하여 위의 그림을 interactive 하게 살펴보도록 만든 것입니다. 위의 그림을 그리기 위한 Bokeh 코드와 실험에 이용한 데이터 및 Doc2Vec 학습 코드는 모두 [이 repository][git] 에 올려두었습니다. 
 
