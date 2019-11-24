@@ -32,8 +32,6 @@ import seaborn as sns
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import output_notebook, figure, show
 
-from bokeh.plotting import output_notebook
-
 output_notebook()
 ```
 
@@ -257,7 +255,7 @@ show(layout)
 
 {% include_relative figures/bokeh_tutorial/output_4_gridplot.html %}
 
-## Toolbar
+## Toolbar & tooltips (Simple hover tool)
 
 Bokeh 와 seaborn 의 가장 큰 차이점은 bokeh 가 interactive plot 을 제공한다는 점입니다. 위 그림들의 우측 상단에는 여러 개의 아이콘이 있습니다. 기본값은 pan 으로 되어있는데, 그림을 마우스로 누른 상태에서 움직이면 시점이 변화합니다. Box Zoom (돋보기 모양)을 누른 뒤 영역을 box 로 표시하면 확대가 됩니다. 이와 같은 아이콘들을 Bokeh 의 tools 이라 합니다. 그리고 tools 을 모아놓은 아이콘 리스트를 toolbar 라 합니다. Bokeh 의 Figure 는 D3 처럼 JavaScript 로 이뤄진 웹페이지입니다. 물론 이를 고정된 그림으로 저장도 할 수 있습니다. 그런데 그림을 저장하면 아이콘 모양도 함께 저장됩니다. `toolbar_location=None` 으로 설정하면 이 tool bar 가 사라집니다. Argument 이름에서 눈치챘겠지만, location 을 'left', 'right', 'below', 'above' 으로 설정하면 그 위치가 옮겨집니다.
 
@@ -281,8 +279,6 @@ show(p)
 ```
 
 {% include_relative figures/bokeh_tutorial/output_6_selective_toolbar.html %}
-
-## Hover tool
 
 Hover tool 은 plot 의 객체 위에 마우스를 올려두면 해당 데이터에 관련된 값을 보여주는 tool 입니다. `figure()` 의 `tooltips` 에 다음의 정보를 입력하여 그림을 그리면 tuple 의 첫번째 값이 text 로, 두번째 값이 정규식으로 표현됩니다. 이때 `$` 는 field name, 즉 함수에서 이용하는 변수 이름, `@` 은 source 의 column 이름입니다. 직접 아래 그림 위에 마우스를 올려보세요.
 
@@ -314,7 +310,7 @@ export_png(p, 'bokeh_scatter_hover.png')
 save(p, 'bokeh_scatter_hover.html', title='Bokeh Hovertool HTML file example')
 ```
 
-## Line plot
+## Line plot (and overlay other plots)
 
 Line plot 을 그리기 위하여 시계열 형식의 데이터를 만듭니다. Seaborn tutorial 에서 이용하였던 time 축을 기준으로 트렌드 (value) 가 변하는 데이터입니다. 여기에 각 time 마다 정규분포를 따르는 노이즈가 추가된 'noise' 데이터도 추가로 만듭니다.
 
@@ -355,7 +351,7 @@ show(p)
 
 {% include_relative figures/bokeh_tutorial/output_8_lineplot.html %}
 
-## Combining multiple plots
+**Combining multiple plots**
 
 처음 `bokeh.plotting.figure()` 를 실행하면 빈 웹페이지가 생성됩니다. 여기에 `bokeh.plotting.Figure.line()` 함수를 실행시키니 line plot 을 그리는 HTML 코드가 추가된 것입니다. 그러니 해당 웹페이지 `p` 에 또다른 함수를 실행하면 그에 해당하는 HTML 코드가 추가됩니다. 아래처럼 직선으로 그린 line plot 위에 노이즈를 추가한 데이터를 scatter plot 으로 그립니다. 이 때 `color` 는 `str` 형식으로 입력했는데, 모든 점을 'grey' 로 칠하겠다는 의미입니다. 이처럼 하나의 그림 위에 계속하여 코드를 쌓아갈 수 있습니다. 더하여 `show()` 함수를 통하여 그림을 표현한 뒤, 그 뒤에 덧그릴 수도 있습니다.
 
@@ -369,7 +365,7 @@ show(p)
 {% include_relative figures/bokeh_tutorial/output_9_line_scatter_plot.html %}
 
 
-## Plotting with datetime format data
+## Plotting datetime format data with interactive legend
 
 Datetime 형식의 데이터도 plots 을 그릴 수 있습니다. 이를 위하여 bokeh 에서 제공하는 주식가격 데이터를 이용합니다. 'GOOG' 의 'date' 는 `yyyy-mm-dd` 형식의 `str` 이며, 'close' 는 주식시장 종가 입니다.
 
@@ -409,8 +405,6 @@ show(p)
 ```
 
 {% include_relative figures/bokeh_tutorial/output_10_datetime_lineplot.html %}
-
-## Interaction using legend
 
 이번에는 위의 그림에서 `legend.click_policy` 를 'mute' 로 조절하였고, `bokeh.plotting.Figure.line()` 함수를 실행할 때 `muted_color` 를 설정하였습니다. 한 번 클릭하면 선의 색이 `muted_color` 로 다시 클릭하면 본래 `color` 로 변화함을 확인할 수 있습니다. 여러 개의 선이 그려진 line plot 을 천천히 살펴볼 때 유용해 보입니다.
 
@@ -629,7 +623,7 @@ show(p)
 
 {% include_relative figures/bokeh_tutorial/output_18_custom_hovertool3.html %}
 
-## Density plot using patch
+## Density plot (using patch & image)
 
 Density plot 은 선 아래의 영역을 하나의 색으로 채워 표현합니다. 이를 위하여 `bokeh.plotting.Figure.patch()` 함수가 이용됩니다. `patch()` 는 정확히는 다각형을 그리고 그 내부를 칠하는 함수입니다. 예를 들어 아래와 같은 함수가 실행되면 (1,4), (2,5), (3,6) 을 잇는 삼각형이 그려집니다. 즉 입력된 값들을 서로 연결하고 끝점과 시작점을 다시 잇는 형식입니다. 한붓그리기로 다각형을 그린다 생각하면 됩니다. 그리고 곡선은 아주 작은 여러 개의 다각형으로 그립니다.
 
@@ -693,7 +687,7 @@ show(p)
 
 {% include_relative figures/bokeh_tutorial/output_21_patch_under_line.html %}
 
-## Density plot using image
+**Using image**
 
 혹은 density 를 image 로 만들 수도 있습니다. 이를 위하여 seaborn tutorial 에서 이용했던 2차원의 정규분포를 따르는 샘플데이터를 만들었습니다. 그리고 (256, 256) 크기의 grid 를 만든 뒤, 각 grid 에 포함되는 샘플의 개수를 아래처럼 계산하였습니다.
 

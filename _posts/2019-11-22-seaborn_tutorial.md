@@ -1612,7 +1612,7 @@ g = g.map(sns.lineplot, 'timepoint', 'signal')
 g = g.add_legend()
 ```
 
-![]({{ "/assets/figures/seaborn_tutorial_04/output_13_0.png" | absolute_url }}){: width="50%" height="50%"}
+![]({{ "/assets/figures/seaborn_tutorial_04/output_13_0.png" | absolute_url }}){: width="80%" height="80%"}
 
 ### Using custom functions
 
