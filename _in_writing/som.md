@@ -2,7 +2,7 @@
 
 - concept
   - structure : grid, learning steps, input space -> output space mapper
-  - competitive vs corperative leraning
+  - competitive vs corperative learning
   - update rules : stochastic gradient with small learning rate
   - goal : to visualize high dimensional space with 2D map (so they generally use 2D grid)
 - vanilla version
