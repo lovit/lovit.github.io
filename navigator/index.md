@@ -39,6 +39,7 @@ layout: page
 ### Embedding for visualization
 - [t-Stochastic Neighbor Embedding (t-SNE) 와 perplexity][tsne]
 - [Embedding for Word Visualization (LLE, ISOMAP, MDS, t-SNE)][mds_isomap_lle]
+- [Self Organizing Map. Part 1. Implementing SOM from scratch][som_part1]
 
 ### Attention mechanism
 - [Attention mechanism in NLP. From seq2seq + attention to BERT][attention_in_nlp]
@@ -223,3 +224,4 @@ layout: page
 [joint_visualization_of_worddoc]: {{ site.baseurl }}{% link _posts/2019-06-18-joint_visualization_of_worddoc.md %}
 [seaborn_tutorial]: {{ site.baseurl }}{% link _posts/2019-11-22-seaborn_tutorial.md %}
 [bokeh_tutorial]: {{ site.baseurl }}{% link _posts/2019-11-22-bokeh_tutorial.md %}
+[som_part1]: {{ site.baseurl }}{% link _posts/2019-12-02-som_part1.md %}
