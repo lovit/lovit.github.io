@@ -1,4 +1,4 @@
-# Self Organizing Map. Part 1. Introducing SOM (initializer, update rules, grid size)
+# Self Organizing Map. Part 1. Implementing SOM from scratch (initializer, update rules, grid size)
 
 - concept
   - structure : grid, learning steps, input space -> output space mapper
@@ -23,6 +23,7 @@
 - initializing grid with sparse matrix (selection based)
 - project high dimensional space to 2D grid map
 - learning empty space (add constraint to grid)
+  - density estimation: outlier detection
 - Documents to SOM (keyword lookup)
 - LDA to SOM (Hover tool)
 - evaluation
