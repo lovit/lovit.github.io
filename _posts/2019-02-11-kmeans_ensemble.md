@@ -57,7 +57,7 @@ p = draw_scatterplot(X, y, title='2 classes spiral dataset', width=500, height=5
 
 ## Kernel k-means and Spectral Clustering
 
-이처럼 분포가 복잡한 데이터를 군집화 하기 위해 Spectral Clustering 과 같은 방법이 제안되기도 했지만, 이 역시 parameter setting 을 잘 설정해주지 않으면 군집화가 잘 되지 않습니다. 이는 Kernerl k-means 역시 동일합니다. 어떠한 kernel function 을 이용할 것인지에 따라 데이터 간의 affinity 정의가 달라지기 때문에 군집화 결과가 다르게 학습될 수 있습니다. 
+이처럼 분포가 복잡한 데이터를 군집화 하기 위해 Spectral Clustering 과 같은 방법이 제안되기도 했지만, 이 역시 parameter setting 을 잘 설정해주지 않으면 군집화가 잘 되지 않습니다. 이는 Kernel k-means 역시 동일합니다. 어떠한 kernel function 을 이용할 것인지에 따라 데이터 간의 affinity 정의가 달라지기 때문에 군집화 결과가 다르게 학습될 수 있습니다. 
 
 실제로 Scikit-learn 의 SpectralClustering 을 이용하여 위 데이터를 2 개의 군집으로 학습해 봅니다. 사용자가 설정할 수 있는 parameters 가 있는데, 어떻게 설정하여도 제대로 나뉘어지지 않았습니다. 우리가 눈으로 볼 수 있는 2 차원 공간의 데이터인데도 적절한 parameters 를 찾을 수 없다면, 우리가 눈으로 확인하기 어려운 고차원 공간의 대량의 데이터라면 군집화가 잘 되지 않는 알고리즘이라 생각해야 합니다 (좋은 학습 결과를 얻기가 까다로운 알고리즘입니다).
 
