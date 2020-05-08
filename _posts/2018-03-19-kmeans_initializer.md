@@ -120,7 +120,7 @@ k-means++ 은 한 가지 단점이 더 있습니다. Initial point $$c_t$$ 를 �
 
 ![]({{ "/assets/figures/kmeans_initializer_ball_cut.png" | absolute_url }})
 
-더하여 계산도 빠릅니다. 우리가 1M 의 데이터에 대하여 k=1,000 으로 k-means 를 학습할 경우, k-means++ 은 $$10^{15}$$ 의 거리 계산을 합니다. k-means++ 의 실제 비용은 거리 계산에 cumulative distribution function 에서의 random sampling 비용을 더해야 합니다. 다시 한 번 강조하지만, 이 계산으로 얻는 결과는 random sampling 과 비슷합니다. 하지만 위에서 제안한 방법은 $$\alpha ^2 \times k^3$$ 번의 계산만으로도 잘 퍼져있는 initial points 를 선택할 수 있습니다. $$\alpha = 2$$ 라면 $$4 \times 10^9$$ 번의 계산만으로도 충분합니다. 
+더하여 계산도 빠릅니다. 우리가 1M 의 데이터에 대하여 k=1,000 으로 k-means 를 학습할 경우, k-means++ 은 $$n \times k$$, $$10^{9}$$ 의 거리 계산을 합니다. k-means++ 의 실제 비용은 거리 계산에 cumulative distribution function 에서의 random sampling 비용을 더해야 합니다. 다시 한 번 강조하지만, 이 계산으로 얻는 결과는 random sampling 과 비슷합니다. 하지만 위에서 제안한 방법은 $$\alpha \times k^2$$ 번의 계산만으로도 잘 퍼져있는 initial points 를 선택할 수 있습니다. $$\alpha = 2$$ 라면 $$2 \times 10^6$$ 번의 계산만으로도 충분합니다. 
 
 ## Performance
 
